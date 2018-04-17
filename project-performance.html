@@ -133,11 +133,11 @@ $(document).ready(function () {
 </div>
 <div id="pre-model-work" class="section level2">
 <h2>Pre-Model Work</h2>
-<p>We developed our own functions to be able to calculate the errors for our models. These functions include <strong>R-squared</strong>, <strong>Adjusted R-squared</strong> and the <strong>Root Mean Square Error (RMSE)</strong>. We will make use of these functions for our initial model and the future models to track fitness of our models and the performance of our models comared to each other.</p>
+<p>We developed our own functions to be able to calculate the errors for our model and our future models. These error functions include <strong>R-squared</strong>, <strong>Adjusted R-squared</strong> and the <strong>Root Mean Square Error (RMSE)</strong>. We will make use of these functions to track the fitness and the performance of our models, and we will be able to compare models to each other.</p>
 </div>
 <div id="initial-model" class="section level2">
 <h2>Initial Model</h2>
-<p>We first wanted to find out if Sales would be a good indicator to predict Credit Limits for our customers. We chose the Last Year's Sales (SalesLastYr) column and build a linear regression model with one independent variable. Our assumption is whether we can formulate the Credit Limit with a simple formula as the following:</p>
+<p>We wanted to see if Sales would be a good indicator to predict Credit Limits. We chose the Last Year's Sales (SalesLastYr) column and build a linear regression model with one independent variable. Our goal is to see whether we can formulate the Credit Limit with a simple equation as the following and whether this realtionship is good enough to get acceptable predictions for Credit Limits:</p>
 <p><span class="math display">\[Credit Limit = w*Previous Years Sales+b\]</span></p>
 <pre class="r"><code>model &lt;- lm(formula = CreditLimit ~ SalesLastYr, 
             data = dataset_train)</code></pre>
