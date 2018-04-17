@@ -128,7 +128,7 @@ $(document).ready(function () {
 
 <div id="project-setup" class="section level2">
 <h2>Project Setup</h2>
-<p>We chose to go with the ProjectTemplate package and structured our project accorgingly. With this setup, our data gets automatically loaded from the data directory and using the munge feature we also automatically build a <strong>training set</strong> and a <strong>test set</strong> by dividing the original dataset using a 70/30 ratio. To make sure that both the training and the test sets had a similar distribution, we have used the <code>sample.split()</code> function to have similar distributions over the <strong>CreditLimit</strong> variable, which we will perform predictions on.</p>
+<p>We chose to go with the ProjectTemplate package and structured our project accorgingly. With this setup, our data gets automatically loaded from the data directory and using the munge feature we also automatically build a <strong>training set</strong> and a <strong>test set</strong> by dividing the original dataset using a 70/30 ratio. To make sure that both the training and the test sets have similar distributions, we used the <code>sample.split()</code> function and split the data over the <strong>CreditLimit</strong> variable.</p>
 <p>We also set the seed to a fixed number so that we can produce the same sequence of random numbers between runs and our results are not effected by the changes in the datasets.</p>
 </div>
 <div id="pre-model-work" class="section level2">
