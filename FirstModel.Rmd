@@ -1,5 +1,10 @@
 ---
 title: "First Model"
+author:
+  - name: Hakan Egeli
+  - name: Soumyendu Sarkar
+date: 'April 17, 2018'
+
 output: html_document
 ---
 
