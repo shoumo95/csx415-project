@@ -115,13 +115,13 @@ print(modelSummary)
 
 The `summary()` results of this model trained using the **training set** shows that both the intercept (b) and the coefficient (w) are significant (P values are much less than 0.05). This might be a good start but how good of a fit is this model to our data?
 
-R-squared paramater indicats the the fitness of a model and we want this value to be closer to 1, aka we want the ratio of the sum of the square of the residuals ($SS_r$) over the sum of the square of the averages ($SS_t$) to be small so that $R^2$ becomes larger.
+R-squared paramater indicates the the fitness of a model and we want this value to be closer to 1, aka we want the ratio of the sum of the square of the residuals ($SS_r$) over the sum of the square of the averages ($SS_t$) to be small so that $R^2$ becomes larger.
 
 $$R^2 = 1 - SS_r/SS_t$$ 
 
 The value 0.03102 for the $R^2$ seemed low which is indicating that the model is not a good fit. And at this time we are not concerned with the Adjusted $R^2$ since we have only one independent variable in our model.
 
-The three of the indicators that we are planning on using for this model and the next models that we are planning on building are; $R^2$, Adjusted $R^2$ and the RMSE and here is a recap of these three indicators for our training model:
+The three of the indicators that we are planning on using for this model and the next models that we are planning on building are; $R^2$, Adjusted $R^2$ and the RMSE and below is a recap of these three indicators for our **training model**:
 
 ```{r, echo=FALSE, include = FALSE}
 y <- dataset_train$CreditLimit
