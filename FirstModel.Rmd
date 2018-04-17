@@ -1,0 +1,81 @@
+---
+title: "FirstModel"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, echo=FALSE, include = FALSE}
+library('ProjectTemplate')
+load.project()
+```
+
+## First Model
+
+Our simplest model is a linear regression with one independent variable. We chose previous year's sales as potential indicator for the customer Credit Limit.
+
+```{r}
+model <- lm(formula = CreditLimit ~ SalesLastYr, 
+            data = dataset)
+
+summary(model)
+```
+Manually calculated error functions
+
+```{r}
+
+y <- dataset$CreditLimit
+y_hat <- predict(model, dataset)
+
+# calculate R-squared
+ss_res <- sum((y - y_hat)^2)
+ss_tot <- sum((y-mean(y))^2)
+
+R2 <- 1 - (ss_res/ss_tot)
+
+# calculate Adjusted R-squared
+n <- nrow(dataset)
+p <- 1
+R2_adj <- 1 - (1 - R2)*((n - 1)/(n - p - 1))
+
+# calculate Root Mean Squared - long way
+mse <- (1/nrow(dataset)) * sum((y - y_hat)^2)
+rmse_manual = sqrt(mse)
+
+# calculate Root Mean Squared - easy way
+rmse <- sqrt(mean((y - y_hat)^2))
+```
+
+Data insights
+
+```{r}
+table(dataset$CreditLimit)
+```
+
+```{r}
+summary(dataset$CreditLimit)
+```
+
+```{r}
+quantile(dataset$CreditLimit)
+```
+
+
+```{r}
+sd(dataset$CreditLimit)
+```
+
+
+```{r}
+plot(density(dataset$CreditLimit))
+
+```
+
+
+```{r}
+plot(density(dataset$TotalSalesLast12Mo))
+```
+
