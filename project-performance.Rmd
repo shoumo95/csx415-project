@@ -102,8 +102,7 @@ We wanted to see if Sales would be a good indicator to predict Credit Limits. We
 $$Credit Limit = w*Previous Years Sales+b$$ 
 
 ```{r}
-model <- lm(formula = CreditLimit ~ SalesLastYr, 
-            data = dataset_train)
+model <- lm(formula = CreditLimit ~ SalesLastYr, data = dataset_train)
 ```
 
 
@@ -121,7 +120,7 @@ $$R^2 = 1 - SS_r/SS_t$$
 
 The value 0.03102 for the $R^2$ seemed low which is indicating that the model is not a good fit. And at this time we are not concerned with the Adjusted $R^2$ since we have only one independent variable in our model.
 
-The three of the indicators that we are planning on using for this model and the next models that we are planning on building are; $R^2$, Adjusted $R^2$ and the RMSE and below is a recap of these three indicators for our **training model**:
+The three of the indicators that we are planning on using for this model and for all of our future models are; $R^2$, Adjusted $R^2$ and the RMSE and below is a recap of these three indicators for our **trained model**:
 
 ```{r, echo=FALSE, include = FALSE}
 y <- dataset_train$CreditLimit
@@ -152,13 +151,13 @@ cat('Abs diff between summary$adj.r.squared and RSquaredAdjsuted() is less than 
 
 ```
 
+And below are the results of the same three indicators for our model using the **test set**:
+
 ```{r, echo=FALSE, include = FALSE}
 y <- dataset_test$CreditLimit
 y_hat <- predict(model, dataset_test)
 
 ```
-
-And below are the results of the same three indicators for our test set:
 
 ```{r, echo=FALSE}
 # calculate R-squared
