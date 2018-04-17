@@ -1,5 +1,5 @@
 ---
-title: "FirstModel"
+title: "First Model"
 output: html_document
 ---
 
@@ -90,7 +90,7 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 }
 ```
 
-## First Model
+## Initial Model
 
 We first wanted to find out if Sales would be a good indicator to predict Credit Limits for our customers. We chose the Last Year's Sales (SalesLastYr) column and build a linear regression model with one independent variable. Our assumption is whether we can formulate the Credit Limit with a simple formula as the following:
 
@@ -174,7 +174,7 @@ The $R^2$ value is slightly better for the test set than the training set but in
 
 ## Data Insights
 
-We have performed other exploratory analysis on our data and we began our examination with the Sales numbers for the **Last Calender Year**. We looked at the min, max, std dev and the quintiles to understand the data better as well as to be able to do a comparison between the training and the test sets.
+We have performed other exploratory analysis on our data and we began our examination with the **Sales** numbers for the **Last Calender Year**. We looked at the min, max, std dev and the quintiles to understand the data better as well as to be able to do a comparison between the training and the test sets.
 
 #### Training Set Summary
 
@@ -194,7 +194,7 @@ summary(dataset_test$SalesLastYr)
 ```{r, echo=FALSE}
 cat('Std Dev.', sd(dataset_test$SalesLastYr))
 ```
-Both in the training set and the test set these numbers seemed to be close to each other and we do notice that the Sales numbers are cluestred more towards the left of the scale. To visulaize this better we have created a distogram of the sales numbers for the traning set and the test set so that we can do a visual side by side analysis.
+Both in the training set and the test set these numbers seemed to be close to each other and we do notice that the Sales numbers are clustred more towards the left of the scale. To visulaize this better we have created a distogram of the sales numbers for the traning set and the test set so that we can do a visual side by side analysis.
 
 #### Comparison of Distribution of Sales Between the Training Set and the Test Set
 
@@ -216,6 +216,9 @@ hist_test <- ggplot() +
 ```{r, echo=FALSE}
 multiplot(hist_train, hist_test, cols=2)
 ```
+Upon visual inspection of the **Sales** data between the training and the test sets, we do see that they are distributed similarly.
+
+We also wanted to see how the distrubution of Last Year's Sales looked like compared to the distribution of Credit Limits for the same data points.
 
 ```{r, echo=FALSE}
 ggplot() +
@@ -234,7 +237,11 @@ ggplot() +
   ylab('Density')
 ```
 
+The Sales data looks like a normal distribution and we were hoping to see the same for the plot of the Credit Limits for our tranining data.
+
 ### Performance of the Model
+
+To understand the correlation between these two variables and how our model repsresents this data, we have plotted the **Credit Limit vs. Last Year's Sales** and also plotted a line representing our model.
 
 ```{r, echo=FALSE}
 ggplot() + 
