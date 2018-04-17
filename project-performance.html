@@ -139,8 +139,7 @@ $(document).ready(function () {
 <h2>Initial Model</h2>
 <p>We wanted to see if Sales would be a good indicator to predict Credit Limits. We chose the Last Year's Sales (SalesLastYr) column and build a linear regression model with one independent variable. Our goal is to see whether we can formulate the Credit Limit with a simple equation as the following and whether this realtionship is good enough to get acceptable predictions for Credit Limits:</p>
 <p><span class="math display">\[Credit Limit = w*Previous Years Sales+b\]</span></p>
-<pre class="r"><code>model &lt;- lm(formula = CreditLimit ~ SalesLastYr, 
-            data = dataset_train)</code></pre>
+<pre class="r"><code>model &lt;- lm(formula = CreditLimit ~ SalesLastYr, data = dataset_train)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = CreditLimit ~ SalesLastYr, data = dataset_train)
@@ -163,11 +162,11 @@ $(document).ready(function () {
 <p>R-squared paramater indicates the the fitness of a model and we want this value to be closer to 1, aka we want the ratio of the sum of the square of the residuals (<span class="math inline">\(SS_r\)</span>) over the sum of the square of the averages (<span class="math inline">\(SS_t\)</span>) to be small so that <span class="math inline">\(R^2\)</span> becomes larger.</p>
 <p><span class="math display">\[R^2 = 1 - SS_r/SS_t\]</span></p>
 <p>The value 0.03102 for the <span class="math inline">\(R^2\)</span> seemed low which is indicating that the model is not a good fit. And at this time we are not concerned with the Adjusted <span class="math inline">\(R^2\)</span> since we have only one independent variable in our model.</p>
-<p>The three of the indicators that we are planning on using for this model and the next models that we are planning on building are; <span class="math inline">\(R^2\)</span>, Adjusted <span class="math inline">\(R^2\)</span> and the RMSE and below is a recap of these three indicators for our <strong>training model</strong>:</p>
+<p>The three of the indicators that we are planning on using for this model and for all of our future models are; <span class="math inline">\(R^2\)</span>, Adjusted <span class="math inline">\(R^2\)</span> and the RMSE and below is a recap of these three indicators for our <strong>trained model</strong>:</p>
 <pre><code>## R Squared:  0.03101796</code></pre>
 <pre><code>## R Squared (Adjusted):  0.03034035</code></pre>
 <pre><code>## Root Mean Square Error:  4312.198</code></pre>
-<p>And below are the results of the same three indicators for our test set:</p>
+<p>And below are the results of the same three indicators for our model using the <strong>test set</strong>:</p>
 <pre><code>## R Squared:  0.07942551</code></pre>
 <pre><code>## R Squared (Adjusted):  0.07791884</code></pre>
 <pre><code>## Root Mean Square Error:  4106.185</code></pre>
