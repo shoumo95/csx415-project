@@ -160,10 +160,10 @@ $(document).ready(function () {
 ## Multiple R-squared:  0.03102,    Adjusted R-squared:  0.03034 
 ## F-statistic: 45.78 on 1 and 1430 DF,  p-value: 1.928e-11</code></pre>
 <p>The <code>summary()</code> results of this model trained using the <strong>training set</strong> shows that both the intercept (b) and the coefficient (w) are significant (P values are much less than 0.05). This might be a good start but how good of a fit is this model to our data?</p>
-<p>R-squared paramater indicats the the fitness of a model and we want this value to be closer to 1, aka we want the ratio of the sum of the square of the residuals (<span class="math inline">\(SS_r\)</span>) over the sum of the square of the averages (<span class="math inline">\(SS_t\)</span>) to be small so that <span class="math inline">\(R^2\)</span> becomes larger.</p>
+<p>R-squared paramater indicates the the fitness of a model and we want this value to be closer to 1, aka we want the ratio of the sum of the square of the residuals (<span class="math inline">\(SS_r\)</span>) over the sum of the square of the averages (<span class="math inline">\(SS_t\)</span>) to be small so that <span class="math inline">\(R^2\)</span> becomes larger.</p>
 <p><span class="math display">\[R^2 = 1 - SS_r/SS_t\]</span></p>
 <p>The value 0.03102 for the <span class="math inline">\(R^2\)</span> seemed low which is indicating that the model is not a good fit. And at this time we are not concerned with the Adjusted <span class="math inline">\(R^2\)</span> since we have only one independent variable in our model.</p>
-<p>The three of the indicators that we are planning on using for this model and the next models that we are planning on building are; <span class="math inline">\(R^2\)</span>, Adjusted <span class="math inline">\(R^2\)</span> and the RMSE and here is a recap of these three indicators for our training model:</p>
+<p>The three of the indicators that we are planning on using for this model and the next models that we are planning on building are; <span class="math inline">\(R^2\)</span>, Adjusted <span class="math inline">\(R^2\)</span> and the RMSE and below is a recap of these three indicators for our <strong>training model</strong>:</p>
 <pre><code>## R Squared:  0.03101796</code></pre>
 <pre><code>## R Squared (Adjusted):  0.03034035</code></pre>
 <pre><code>## Root Mean Square Error:  4312.198</code></pre>
