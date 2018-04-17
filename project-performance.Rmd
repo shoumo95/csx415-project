@@ -178,7 +178,7 @@ The $R^2$ value is slightly better for the test set than the training set but in
 
 ## Data Insights
 
-We have performed other exploratory analysis on our data and we began our examination with the **Sales** numbers for the **Last Calender Year**. We looked at the min, max, std dev and the quintiles to understand the data better as well as to be able to do a comparison between the training and the test sets.
+We have performed other exploratory analysis on our data and we began our examination with the **Sales** numbers for the last calender year. We looked at the min, max, std dev and the quintiles to understand the spread of the data as well as to be able to do a comparison between the training and the test sets.
 
 #### Training Set Summary
 
@@ -198,7 +198,8 @@ summary(dataset_test$SalesLastYr)
 ```{r, echo=FALSE}
 cat('Std Dev.', sd(dataset_test$SalesLastYr))
 ```
-Both in the training set and the test set these numbers seemed to be close to each other and we do notice that the Sales numbers are clustred more towards the left of the scale. To visulaize this better we have created a distogram of the sales numbers for the traning set and the test set so that we can do a visual side by side analysis.
+
+Both in the training set and the test set these numbers seemed to be close to each other and we do notice that the Sales numbers are clustred more towards the left of the scale. To visulaize this better, we have created a distogram of the sales numbers for the traning set and the test set so that we can do a side by side analysis.
 
 #### Comparison of Distribution of Sales Between the Training Set and the Test Set
 
