@@ -79,9 +79,13 @@ plot(density(dataset$CreditLimit))
 plot(density(dataset$SalesLastYr))
 ```
 ```{r}
+hist(dataset$SalesLastYr, breaks = 25)
+```
+
+```{r}
 ggplot() + 
   geom_point(aes(x = dataset$SalesLastYr, y = dataset$CreditLimit), color = 'red') +
-  # geom_line(aes(x = dataset$SalesLastYr, y = predict(model, newdata = dataset)), color = 'blue') +
+  geom_line(aes(x = dataset$SalesLastYr, y = predict(model, newdata = dataset)), color = 'blue') +
   ggtitle('Last Year Sales vs Credit Limit') +
   xlab('Sales') + 
   ylab('Credit Limit')
