@@ -172,24 +172,30 @@ cat('Root Mean Square Error: ', rmse, "\n")
 
 The $R^2$ value is slightly better for the test set than the training set but in both cases these values still indicate not a good fit. The RSME values for both the raining and the test sets seems to be close to each other.
 
-## Data insights
+## Data Insights
 
-We have performed other explotory analysis on the data. We began our examination with the Sales numbers for the last year, looked at the min, max, sd and the quintiles both to get a feel for the data as well as to be able to do a comparison between the test and the training sets.
+We have performed other exploratory analysis on our data and we began our examination with the Sales numbers for the last year. We looked at the min, max, std dev and the quintiles to understand the data better as well as to be able to do a comparison between the training and the test sets.
 
-```{r}
+#### Training Set Summary
+
+```{r, echo=FALSE}
 summary(dataset_train$SalesLastYr)
 ```
 
-```{r}
-sd(dataset_train$SalesLastYr)
+```{r, echo=FALSE}
+cat('Std Dev.', sd(dataset_train$SalesLastYr))
 ```
 
-```{r}
+#### Test Set Summary
+
+```{r, echo=FALSE}
 summary(dataset_test$SalesLastYr)
 ```
-```{r}
-sd(dataset_test$SalesLastYr)
+```{r, echo=FALSE}
+cat('Std Dev.', sd(dataset_test$SalesLastYr))
 ```
+
+#### Comparison of Distribution of Sales Between the Training Set and the Test Set
 
 ```{r, echo=FALSE}
 hist_train <- ggplot() +
@@ -227,7 +233,7 @@ ggplot() +
   ylab('Density')
 ```
 
-
+### Performance of the Model
 
 ```{r, echo=FALSE}
 ggplot() + 
@@ -238,3 +244,5 @@ ggplot() +
   xlab('Last Year\'s Sales') + 
   ylab('Credit Limit')
 ```
+
+### Next Step
