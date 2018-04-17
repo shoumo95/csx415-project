@@ -221,6 +221,7 @@ hist_test <- ggplot() +
 ```{r, echo=FALSE}
 multiplot(hist_train, hist_test, cols=2)
 ```
+
 Upon visual inspection of the **Sales** data between the training and the test sets, we do see that they are distributed similarly.
 
 We also wanted to see how the distrubution of Last Year&apos;s Sales looked like compared to the distribution of Credit Limits for the same data points.
@@ -246,7 +247,7 @@ The Sales data looks like a normal distribution and we were hoping to see the sa
 
 ## Performance of the Model
 
-To understand the correlation between these two variables and how our model repsresents this data, we have plotted the **Credit Limit vs. Last Year&apos;s Sales** and also plotted a line representing our model.
+To better understand the correlation between these two variables and how our model repsresents this data, we have plotted the **Credit Limit vs. Last Year&apos;s Sales** and also plotted a line representing our model.
 
 ```{r, echo=FALSE}
 ggplot() + 
@@ -260,10 +261,14 @@ ggplot() +
 
 From the plot of the data Credit Limit vs the Last Year&apos;s Sales, we do see that the two variables are not correlated and that is why our linear model is not performing well.
 
-It is possible that the Credit Limit cannot be explained by one varaible and a linear relationship might still exist using other independent variables. It is also possible that the relationships are non-linear and we might have to build non-linear models to explain the data.
+It is possible that the Credit Limit cannot be explained by one varaible and a linear relationship might still exist using other independent variables. It is also possible that the relationships are non-linear and we might have to try non-linear models to explain the data.
 
 ## Next Step
 
 We will try to improve our linear model by examining all other variables that we have in our dataset and use a **Backward Elimitaion** to find out the most significant variables which might help us to build a better model. As we add more variables to describe our model we will also utilize the Adjusted $R^2$ predictor to account for the impact of the added variables tot he $R^2$ value.
 
-Future steps might also include adding non-linear terms to the model or building other non-linear models such as **Decision Tree** or take advantage of ensemble learning by building a model usning **Random Forest**.
+Future steps might also include adding non-linear terms to the model or building other non-linear models such as **Decision Tree** or take advantage of ensemble learning by building a model using **Random Forest**.
+
+We will evaluate the performance of these models by comparing the RMSE values to see which model will be able to reduce the error the most.
+
+
