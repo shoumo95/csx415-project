@@ -128,7 +128,7 @@ $(document).ready(function () {
 
 <div id="project-setup" class="section level2">
 <h2>Project Setup</h2>
-<p>We chose to go with the ProjectTemplate package and structured our project accorgingly. With this setup, our data gets automatically loaded from the data directory and using the munge feature we also automatically build a <strong>training set</strong> and a <strong>test set</strong> by dividing the original dataset using a 70/30 ratio. To make sure that both the training and the test sets have similar distributions, we used the <code>sample.split()</code> function and split the data over the <strong>CreditLimit</strong> variable.</p>
+<p>We chose to go with the ProjectTemplate package and structured our project accordingly. With this setup, our data gets automatically loaded from the data directory and using the munge feature we also automatically build a <strong>training set</strong> and a <strong>test set</strong> by dividing the original dataset using a 70/30 ratio. To make sure that both the training and the test sets have similar distributions, we used the <code>sample.split()</code> function and split the data over the <strong>CreditLimit</strong> variable.</p>
 <p>We also set the seed to a fixed number so that we can produce the same sequence of random numbers between runs and our results are not effected by the changes in the datasets.</p>
 </div>
 <div id="pre-model-work" class="section level2">
@@ -186,7 +186,7 @@ $(document).ready(function () {
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   -2227    1961    5206   11486   12215  353229</code></pre>
 <pre><code>## Std Dev. 21839.5</code></pre>
-<p>Both in the training set and the test set these numbers seemed to be close to each other and we do notice that the Sales numbers are clustred more towards the left of the scale. To visulaize this better, we have created a distogram of the sales numbers for the traning set and the test set so that we can do a side by side analysis.</p>
+<p>Both in the training set and the test set these numbers seemed to be close to each other and we do notice that the Sales numbers are clustred more towards the left of the scale. To visulaize this better, we have created a histogram of the sales numbers for the traning set and the test set so that we can do a side by side analysis.</p>
 </div>
 <div id="comparison-of-distribution-of-sales-between-the-training-set-and-the-test-set" class="section level4">
 <h4>Comparison of Distribution of Sales Between the Training Set and the Test Set</h4>
@@ -207,8 +207,8 @@ $(document).ready(function () {
 </div>
 <div id="next-step" class="section level2">
 <h2>Next Step</h2>
-<p>We will try to improve our linear model by examining all other variables that we have in our dataset and use a <strong>Backward Elimitaion</strong> to find out the most significant variables which might help us to build a better model. As we add more variables to describe our model we will also utilize the Adjusted <span class="math inline">\(R^2\)</span> predictor to account for the impact of the added variables tot he <span class="math inline">\(R^2\)</span> value.</p>
-<p>Future steps might also include adding non-linear terms to the model or building other non-linear models such as <strong>Decision Tree</strong> or take advantage of ensemble learning by building a model using <strong>Random Forest</strong>.</p>
+<p>We will try to improve our linear model by examining all other variables that we have in our dataset and use a <strong>Backward Elimitaion</strong> to find out the most significant variables which might help us to build a better model. As we add more variables to describe our model we will also utilize the Adjusted <span class="math inline">\(R^2\)</span> predictor to account for the impact of the added variables to the <span class="math inline">\(R^2\)</span> value.</p>
+<p>Future steps might also include adding non-linear terms to the model or building other non-linear models such as one which uses a <strong>Decision Tree</strong> or take advantage of ensemble learning by building a model using <strong>Random Forest</strong>.</p>
 <p>We will evaluate the performance of these models by comparing the RMSE values to see which model will be able to reduce the error the most.</p>
 </div>
 
