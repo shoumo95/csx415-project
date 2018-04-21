@@ -1,0 +1,39 @@
+---
+title: "Second Model"
+author:
+  - name: Hakan Egeli
+  - name: Soumyendu Sarkar
+date: 'April 21, 2018'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE, include = FALSE}
+
+# load the project. This will autoload the data and also create training and test datasets
+library('ProjectTemplate')
+load.project()
+
+```
+
+```{r, echo=FALSE}
+ggplot(dataset, aes(x = AvgDaysOfPayCategory, y = CreditLimit, fill = AvgDaysOfPayCategory)) + 
+  geom_boxplot(outlier.color = 'blue', outlier.shape = 1) +
+  scale_y_log10() +
+  stat_summary(fun.y = mean, geom = "point", shape = 1, size = 1, color = "white") +
+  theme(legend.position = "") +
+  ggtitle('Avg Days of Pay vs Credit Limit') +
+  xlab('Avg Days of Pay') + 
+  ylab('Credit Limit')
+```
+
+```{r, echo=FALSE}
+ggplot() + 
+  geom_histogram(aes(ZeroMinScale(dataset$SalesLastYr, na.rm = TRUE)), bins = 40) +
+  ggtitle('Avg Days of Pay vs Credit Limit') +
+  xlab('Avg Days of Pay') + 
+  ylab('Credit Limit')
+```
