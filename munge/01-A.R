@@ -2,7 +2,7 @@
 set.seed(415)
 
 # CustomerData should be auto loaded so select the features/independent variables from the Customerdata
-dataset <- CustomerData[,2:21]
+dataset <- CustomerData[,9:38]
 
 # split the dataset into training and test sets
 split = sample.split(dataset$CreditLimit, SplitRatio = 0.7)
