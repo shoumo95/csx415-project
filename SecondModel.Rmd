@@ -20,14 +20,14 @@ load.project()
 ```
 
 ```{r, echo=FALSE}
-ggplot(dataset, aes(x = AvgDaysOfPayCategory, y = CreditLimit, fill = AvgDaysOfPayCategory)) + 
+ggplot(dataset, aes(x = AvgDaysOfPayCategory, y = MedianIncomeHouseholds, fill = AvgDaysOfPayCategory)) + 
   geom_boxplot(outlier.color = 'blue', outlier.shape = 1) +
   scale_y_log10() +
   stat_summary(fun.y = mean, geom = "point", shape = 1, size = 1, color = "white") +
   theme(legend.position = "") +
   ggtitle('Avg Days of Pay vs Credit Limit') +
   xlab('Avg Days of Pay') + 
-  ylab('Credit Limit')
+  ylab('MedianIncomeHouseholds')
 ```
 
 ```{r, echo=FALSE}
@@ -39,13 +39,20 @@ ggplot() +
 ```
 
 ```{r, echo=FALSE}
+
 library(rpart)
-model <- rpart(CreditLimit ~ ., data = dataset_train, control = rpart.control(cp = 0.005))
+library(rattle)
+
 ```
 
 ```{r, echo=FALSE}
 
-library(rattle)
+model <- rpart(CreditLimit ~ ., data = dataset_train, control = rpart.control(cp = 0.005))
+
+```
+
+```{r, echo=FALSE}
+
 fancyRpartPlot(model)
 
 #plot(model)
@@ -172,17 +179,19 @@ summary(model)
 
 ```{r, echo=FALSE}
 
+library(stats4)
+library(splines)
 library(VGAM)
 
 ```
 
 ```{r, echo=FALSE}
 
-dataset_train_alt <- dataset_train
+dataset_train_alt <- CustomerData.A
 
 dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
 
-model <- vglm(CreditLimit ~ SalesLastYr + PlainBandSalesLast12Mo, family = multinomial, data = dataset_train_alt)
+model <- vglm(CreditLimit ~ DesignBandSalesLast12Mo +  SalesLastYr + TotalSalesLast12Mo, family = multinomial, data = dataset_train_alt)
 
 ```
 
