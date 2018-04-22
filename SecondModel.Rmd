@@ -37,3 +37,159 @@ ggplot() +
   xlab('Avg Days of Pay') + 
   ylab('Credit Limit')
 ```
+
+```{r, echo=FALSE}
+library(rpart)
+model <- rpart(CreditLimit ~ ., data = dataset_train, control = rpart.control(cp = 0.005))
+```
+
+```{r, echo=FALSE}
+
+library(rattle)
+fancyRpartPlot(model)
+
+#plot(model)
+#text(model, use.n = T)
+```
+
+```{r, echo=FALSE}
+
+summary(model)
+
+```
+
+```{r, echo=FALSE}
+
+model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + MedianIncomeHouseholds + SalesCurrentYr + PlainBandSalesLast12Mo + MedianEarnings + RuralUrbanContinuumCode, data = dataset_train, control = rpart.control(cp = 0.015))
+
+```
+
+
+```{r, echo=FALSE}
+
+fancyRpartPlot(model)
+
+```
+
+```{r, echo=FALSE}
+
+model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo + MedianEarnings, data = dataset_train, control = rpart.control(cp = 0.0125))
+
+```
+
+```{r, echo=FALSE}
+
+fancyRpartPlot(model)
+
+```
+
+```{r, echo=FALSE}
+
+summary(model)
+
+```
+
+```{r, echo=FALSE}
+
+aggregate(DesignBandSalesLast12Mo ~ CreditLimit, data = dataset_train, FUN = length)
+
+```
+
+```{r, echo=FALSE}
+dataset_train_alt <- dataset_train
+
+dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
+
+model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo, data = dataset_train_alt, control = rpart.control(cp = 0.005), method="class")
+
+```
+
+```{r, echo=FALSE}
+
+fancyRpartPlot(model)
+
+# pdf("tree.pdf")
+# fancyRpartPlot(model)
+# dev.off()
+
+```
+
+```{r, echo=FALSE}
+
+plotcp(model)
+
+```
+
+```{r, echo=FALSE}
+model$cptable[which.min(model$cptable[,"xerror"]),"CP"]
+
+printcp(model)
+#model <- prune(model, cp = model$cptable[which.min(model$cptable[,"xerror"]),"CP"])
+
+#fancyRpartPlot(model, uniform=TRUE, main="Pruned Classification Tree")
+
+```
+
+```{r, echo=FALSE}
+
+model <- lm(formula = CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPay + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + MedianIncomeHouseholds + SalesCurrentYr + PlainBandSalesLast12Mo + MedianEarnings + RuralUrbanContinuumCode, data = dataset_train)
+
+```
+
+
+```{r, echo=FALSE}
+
+summary(model)
+
+```
+
+
+```{r, echo=FALSE}
+
+model <- lm(formula = CreditLimit ~ AvgDaysOfPay + MedianIncomeHouseholds + SalesCurrentYr + MedianEarnings, data = dataset_train)
+
+```
+
+
+```{r, echo=FALSE}
+
+summary(model)
+
+```
+
+```{r, echo=FALSE}
+
+model <- lm(formula = CreditLimit ~ (DesignBandSalesLast12Mo + SalesLastYr + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo + AlternativeMetalSalesLast12Mo:PlainBandSalesLast12Mo), data = dataset_train)
+
+```
+
+
+```{r, echo=FALSE}
+
+summary(model)
+
+```
+
+```{r, echo=FALSE}
+
+library(VGAM)
+
+```
+
+```{r, echo=FALSE}
+
+dataset_train_alt <- dataset_train
+
+dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
+
+model <- vglm(CreditLimit ~ SalesLastYr + PlainBandSalesLast12Mo, family = multinomial, data = dataset_train_alt)
+
+```
+
+```{r, echo=FALSE}
+
+summary(model)
+
+```
+
+
