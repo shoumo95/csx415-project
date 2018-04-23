@@ -25,6 +25,7 @@ load.project()
 library(rpart)
 library(rattle)
 library(caret)
+#library(reshape2) needed for mesh but no longer using it
 
 ```
 
@@ -89,43 +90,14 @@ ggplot() +
   geom_histogram(aes(dataset$CreditLimit), bins = 40) +
   ggtitle('Avg Days of Pay vs Credit Limit') +
   xlab('Avg Days of Pay') + 
-  ylab('Credit Limit')
+  ylab('Distribution')
 ```
+
+# examine the relevance of all the dependent variables using a Decision Tree
 
 ```{r, echo=FALSE}
 
-model <- rpart(CreditLimit ~ ., data = dataset_train, control = rpart.control(cp = 0.005))
-
-```
-
-```{r, echo=FALSE}
-
-fancyRpartPlot(model)
-
-```
-
-```{r, echo=FALSE}
-
-summary(model)
-
-```
-
-```{r, echo=FALSE}
-
-model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + MedianIncomeHouseholds + SalesCurrentYr + PlainBandSalesLast12Mo + MedianEarnings + RuralUrbanContinuumCode, data = dataset_train, control = rpart.control(cp = 0.015))
-
-```
-
-
-```{r, echo=FALSE}
-
-fancyRpartPlot(model)
-
-```
-
-```{r, echo=FALSE}
-
-model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo + MedianEarnings, data = dataset_train, control = rpart.control(cp = 0.0125))
+model <- rpart(CreditLimit ~ ., data = dataset_train)
 
 ```
 
@@ -141,30 +113,7 @@ summary(model)
 
 ```
 
-```{r, echo=FALSE}
-
-aggregate(DesignBandSalesLast12Mo ~ CreditLimit, data = dataset_train, FUN = length)
-
-```
-
-```{r, echo=FALSE}
-dataset_train_alt <- dataset_train
-
-dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
-
-model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo, data = dataset_train_alt, control = rpart.control(cp = 0.005), method="class")
-
-```
-
-```{r, echo=FALSE}
-
-fancyRpartPlot(model)
-
-# pdf("tree.pdf")
-# fancyRpartPlot(model)
-# dev.off()
-
-```
+# what is the best cp to use?
 
 ```{r, echo=FALSE}
 
@@ -174,19 +123,109 @@ plotcp(model)
 
 ```{r, echo=FALSE}
 
-predictions <- predict(model, dataset_train_alt, type = "class")
+model$cptable[which.min(model$cptable[,"xerror"]),"CP"]
 
-confusionMatrix(dataset_train_alt$CreditLimit, predictions)
+```
+
+# select the top relevant variables and revise our linear model
+
+```{r, echo=FALSE}
+
+model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + MedianIncomeHouseholds + SalesCurrentYr + PlainBandSalesLast12Mo + MedianEarnings + RuralUrbanContinuumCode, data = dataset_train, control = rpart.control(cp = 0.01))
 
 ```
 
 ```{r, echo=FALSE}
 
-model$cptable[which.min(model$cptable[,"xerror"]),"CP"]
+fancyRpartPlot(model)
+
+```
+
+# Backward Elimination; remove the least relevant (highest p) variable and rebuild the model
+
+```{r, echo=FALSE}
+
+model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo + MedianEarnings, data = dataset_train, control = rpart.control(cp = 0.01))
+
+```
+
+```{r, echo=FALSE}
+
+fancyRpartPlot(model)
+
+```
+
+```{r, echo=FALSE}
+
+summary(model)
+
+```
+
+```{r, echo=FALSE}
+
+# aggregate(DesignBandSalesLast12Mo ~ CreditLimit, data = dataset_train, FUN = length)
+
+```
+
+# build a model based on sales related variables
+
+```{r, echo=FALSE}
+dataset_train_alt <- dataset_train
+
+dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
+
+model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo, data = dataset_train_alt, control = rpart.control(cp = 0.001), method="class")
+
+```
+
+```{r, echo=FALSE}
+
+fancyRpartPlot(model)
+
+```
+
+```{r, echo=FALSE, include = FALSE}
+# way to print the treeto a PDF document
+
+# pdf("tree.pdf")
+# fancyRpartPlot(model)
+# dev.off()
+
+```
+
+
+```{r, echo=FALSE}
+
+predictions <- predict(model, dataset_train_alt, type = "class")
+
+```
+
+# build a confusion matrix
+
+```{r, echo=FALSE}
+
+cm <- confusionMatrix(dataset_train_alt$CreditLimit, predictions)
+
+ggplot(data = data.frame(cm$table), aes(x=Prediction, y=Reference)) +
+  geom_tile(aes(fill=Freq)) + 
+  scale_fill_gradient(low = "white", high = "steelblue") +
+  theme(axis.text.x=element_text(angle=90,hjust=1)) +
+  xlab("Predictions") +
+  ylab("Ground Truth (Observations)") +
+  geom_text(aes(label = Freq), size = 2) +
+  ggtitle("Decison Tree Plot of Confusion Matrix")
+
+```
+
+
+
+```{r, echo=FALSE}
 
 printcp(model)
 
 ```
+
+# build a linear model using the same relevant variables which we have initially used in our decision tree
 
 ```{r, echo=FALSE}
 
@@ -201,6 +240,7 @@ summary(model)
 
 ```
 
+# examine a variation of a linear model using non-sales variables
 
 ```{r, echo=FALSE}
 
@@ -215,29 +255,11 @@ summary(model)
 
 ```
 
-```{r, echo=FALSE}
-
-model <- lm(formula = CreditLimit ~ (DesignBandSalesLast12Mo + SalesLastYr + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo + AlternativeMetalSalesLast12Mo:PlainBandSalesLast12Mo), data = dataset_train)
-
-```
-
+# ??? (we were examining the impact of standartizing )
 
 ```{r, echo=FALSE}
 
-summary(model)
-
-```
-
-```{r, echo=FALSE}
-
-#library(stats4)
-#library(splines)
-
-```
-
-```{r, echo=FALSE}
-
-dataset_train_alt <- CustomerData.A
+dataset_train_alt <- dataset_train
 
 #dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
 
@@ -251,22 +273,7 @@ summary(model)
 
 ```
 
-```{r, echo=FALSE}
-
-dataset_train_alt <- CustomerData.A
-
-#dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
-
-model <- glm(CreditLimit ~ 0 + DesignBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo + DiamondBandSalesLast12Mo, family = gaussian, data=dataset_train_alt)
-
-
-```
-
-```{r, echo=FALSE}
-
-summary(model)
-
-```
+# linear models using different "family" parameters
 
 ```{r, echo=FALSE}
 
@@ -303,6 +310,7 @@ model <- glm(CreditLimit ~ 0 + RuralUrbanContinuumCode + UrbanInfluenceCode + To
 summary(model)
 
 ```
+
 ```{r, echo=FALSE}
 
 dataset_train_alt <- dataset_train
@@ -320,6 +328,8 @@ model <- glm(CreditLimit ~ 0 + RuralUrbanContinuumCode + UrbanInfluenceCode + To
 summary(model)
 
 ```
+
+# how do these models compare to each other and to the first "naive" model?
 
 ```{r, echo=FALSE}
 
