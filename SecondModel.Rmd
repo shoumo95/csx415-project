@@ -11,6 +11,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
 ```{r, echo=FALSE, include = FALSE}
 
 # load the project. This will autoload the data and also create training and test datasets
@@ -18,6 +19,59 @@ library('ProjectTemplate')
 load.project()
 
 ```
+
+```{r, echo=FALSE, include=FALSE}
+
+library(rpart)
+library(rattle)
+library(caret)
+
+```
+
+
+## Perform some explortory data analysis.
+
+- we looked at the dtree with all variables
+- we choos the top variables
+- we did iterated the dtree
+
+- we took the same variables and reiterated out lm
+
+- we took out the sales data to ceate an alternate model which does not depend on sales information
+
+- Median Income and Median Income households which we obtained **census data** played a significant role
+
+## Definitely plot (histogram) any response variables.
+##Plot at your predictors.
+
+d-tree plots
+
+multiple univariable plots for lm
+
+##Begin the analysis:
+
+##For analysis/explanatory/exploratory projects start by
+
+##For ML projects
+
+##Build a linear model use lm for regression and/or glm( family=binomial. ... ) for classification
+
+##Evaluate your linear model using your model evaluation RMarkdown document, if you are clever you can reuse the template and version it very quickly.
+
+##Knit this to model-performance-linear.[html|pdf|md] where you are keeping your assets
+
+##Make sure you know who to interpret a linear model! Let me know if we have to cover this.
+
+##Build a tree model (rpart)
+
+##plot the tree paying particular attention to the first few nodes, do they make sense?
+
+##Evaluate your tree with you model evaluation RMarkdown document. Knit this to model-performance-rpart.[html|pdf|md]
+
+##Has your model(s) met the model success criteria?
+
+
+
 
 ```{r, echo=FALSE}
 ggplot(dataset, aes(x = AvgDaysOfPayCategory, y = MedianIncomeHouseholds, fill = AvgDaysOfPayCategory)) + 
@@ -32,17 +86,10 @@ ggplot(dataset, aes(x = AvgDaysOfPayCategory, y = MedianIncomeHouseholds, fill =
 
 ```{r, echo=FALSE}
 ggplot() + 
-  geom_histogram(aes(ZeroMinScale(dataset$SalesLastYr, na.rm = TRUE)), bins = 40) +
+  geom_histogram(aes(dataset$CreditLimit), bins = 40) +
   ggtitle('Avg Days of Pay vs Credit Limit') +
   xlab('Avg Days of Pay') + 
   ylab('Credit Limit')
-```
-
-```{r, echo=FALSE}
-
-library(rpart)
-library(rattle)
-
 ```
 
 ```{r, echo=FALSE}
@@ -55,8 +102,6 @@ model <- rpart(CreditLimit ~ ., data = dataset_train, control = rpart.control(cp
 
 fancyRpartPlot(model)
 
-#plot(model)
-#text(model, use.n = T)
 ```
 
 ```{r, echo=FALSE}
@@ -128,12 +173,18 @@ plotcp(model)
 ```
 
 ```{r, echo=FALSE}
+
+predictions <- predict(model, dataset_train_alt, type = "class")
+
+confusionMatrix(dataset_train_alt$CreditLimit, predictions)
+
+```
+
+```{r, echo=FALSE}
+
 model$cptable[which.min(model$cptable[,"xerror"]),"CP"]
 
 printcp(model)
-#model <- prune(model, cp = model$cptable[which.min(model$cptable[,"xerror"]),"CP"])
-
-#fancyRpartPlot(model, uniform=TRUE, main="Pruned Classification Tree")
 
 ```
 
@@ -179,9 +230,8 @@ summary(model)
 
 ```{r, echo=FALSE}
 
-library(stats4)
-library(splines)
-library(VGAM)
+#library(stats4)
+#library(splines)
 
 ```
 
@@ -189,9 +239,9 @@ library(VGAM)
 
 dataset_train_alt <- CustomerData.A
 
-dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
+#dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
 
-model <- vglm(CreditLimit ~ DesignBandSalesLast12Mo +  SalesLastYr + TotalSalesLast12Mo, family = multinomial, data = dataset_train_alt)
+model <- glm(CreditLimit ~ DesignBandSalesLast12Mo + SalesLastYr + AlternativeMetalSalesLast12Mo + MedianIncomeHouseholds + SalesCurrentYr + PlainBandSalesLast12Mo, family = gaussian, data=dataset_train_alt)
 
 ```
 
@@ -200,5 +250,90 @@ model <- vglm(CreditLimit ~ DesignBandSalesLast12Mo +  SalesLastYr + TotalSalesL
 summary(model)
 
 ```
+
+```{r, echo=FALSE}
+
+dataset_train_alt <- CustomerData.A
+
+#dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
+
+model <- glm(CreditLimit ~ 0 + DesignBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo + DiamondBandSalesLast12Mo, family = gaussian, data=dataset_train_alt)
+
+
+```
+
+```{r, echo=FALSE}
+
+summary(model)
+
+```
+
+```{r, echo=FALSE}
+
+dataset_train_alt <- dataset_train
+
+#dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
+
+model <- glm(CreditLimit ~ 0 + DesignBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo + DiamondBandSalesLast12Mo, family = gaussian, data=dataset_train_alt)
+
+
+```
+
+
+```{r, echo=FALSE}
+
+summary(model)
+
+```
+
+```{r, echo=FALSE}
+
+dataset_train_alt <- dataset_train
+
+#dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
+
+model <- glm(CreditLimit ~ 0 + RuralUrbanContinuumCode + UrbanInfluenceCode + TotalPopulation + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState, family = gaussian, data=dataset_train_alt)
+
+
+```
+
+
+```{r, echo=FALSE}
+
+summary(model)
+
+```
+```{r, echo=FALSE}
+
+dataset_train_alt <- dataset_train
+
+#dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
+
+model <- glm(CreditLimit ~ 0 + RuralUrbanContinuumCode + UrbanInfluenceCode + TotalPopulation + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState, family = poisson, data=dataset_train_alt)
+
+
+```
+
+
+```{r, echo=FALSE}
+
+summary(model)
+
+```
+
+```{r, echo=FALSE}
+
+predictions <- predict(model, dataset_train_alt)
+
+summary(predictions)
+#helper.RMSE(dataset_train_alt$CreditLimit[is.na(predictions)==FALSE], predictions[is.na(predictions)==FALSE])
+
+helper.RSquared(dataset_train_alt$CreditLimit[is.na(predictions)==FALSE], predictions[is.na(predictions)==FALSE])
+
+```
+
+
+
+
 
 
