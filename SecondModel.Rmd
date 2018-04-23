@@ -113,6 +113,12 @@ summary(model)
 
 ```
 
+```{r, echo=FALSE, results='asis'}
+#library(knitr)
+#kable(model$variable.importance)
+
+```
+
 # what is the best cp to use?
 
 ```{r, echo=FALSE}
@@ -292,6 +298,12 @@ model <- glm(CreditLimit ~ 0 + DesignBandSalesLast12Mo + AlternativeMetalSalesLa
 summary(model)
 
 ```
+```{r, echo=FALSE}
+
+ggplot(data = dataset_train, aes(x = CreditLimit)) + geom_histogram(binwidth = 2000) + facet_wrap(~AvgDaysOfPayCategory)
+
+```
+
 
 ```{r, echo=FALSE}
 
