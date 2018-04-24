@@ -1,9 +1,9 @@
 ---
-title: "Second Model"
+title: "Model Performance - linear"
 author:
   - name: Hakan Egeli
   - name: Soumyendu Sarkar
-date: 'April 21, 2018'
+date: 'April 24, 2018'
 output: html_document
 ---
 
@@ -22,8 +22,6 @@ load.project()
 
 ```{r, echo=FALSE, include=FALSE}
 
-library(rpart)
-library(rattle)
 library(caret)
 
 require(gridExtra)
@@ -205,21 +203,14 @@ grid.arrange(g1, g2, ncol=2)
 
 ```
 
-# Decision Tree Model
-
-## examine the relevance of all the dependent variables using a Decision Tree
+# build a linear model using all the variables (except JBT Rating) to examine variable revelance
 
 ```{r, echo=FALSE}
 
-model <- rpart(CreditLimit ~ ., data = dataset_train)
+model <- lm(formula = CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + AvgDaysOfPayCategory + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + AvgAmtPastDue + ReturnedPaymentCount + MaxReturnedPaymentAmt + RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState, data = dataset_train)
 
 ```
 
-```{r, echo=FALSE}
-
-fancyRpartPlot(model)
-
-```
 
 ```{r, echo=FALSE}
 
@@ -228,41 +219,14 @@ summary(model)
 ```
 
 
-# what is the best cp to use?
+# remove the intercept
 
 ```{r, echo=FALSE}
 
-plotcp(model)
+model <- lm(formula = CreditLimit ~ 1 + SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + AvgDaysOfPayCategory + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + AvgAmtPastDue + ReturnedPaymentCount + MaxReturnedPaymentAmt + RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState - 1, data = dataset_train)
 
 ```
 
-```{r, echo=FALSE}
-
-model$cptable[which.min(model$cptable[,"xerror"]),"CP"]
-
-```
-
-# select the top relevant variables and revise our linear model
-
-```{r, echo=FALSE}
-model$variable.importance
-#importance(model)
-
-```
-
-We have eliminated AvgDaysOfPay, AvgAmtPastDue, MaxDaysPastDue
-
-```{r, echo=FALSE}
-
-model <- rpart(CreditLimit ~ AvgDaysOfPayCategory + DesignBandSalesLast12Mo + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + MedianIncomeHouseholds + SalesCurrentYr + PlainBandSalesLast12Mo + MedianEarnings + TotalHouseholds + TotalPopulation + NumberOfJewelryStores + RuralUrbanContinuumCode, data = dataset_train, control = rpart.control(cp = 0.0169))
-
-```
-
-```{r, echo=FALSE}
-
-fancyRpartPlot(model)
-
-```
 
 ```{r, echo=FALSE}
 
@@ -270,86 +234,145 @@ summary(model)
 
 ```
 
-# Backward Elimination; remove the least relevant (highest p) variable and rebuild the model
 
-SalesLastYr            TotalSalesLast12Mo                SalesCurrentYr       DesignBandSalesLast12Mo        PlainBandSalesLast12Mo AlternativeMetalSalesLast12Mo 
-                           24                            21                            11                            11                             9                             8 
-         AvgDaysOfPayCategory        MedianIncomeHouseholds
+# remove AvgDaysOfPayCategory
 
 ```{r, echo=FALSE}
 
-model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo + MedianIncomeHouseholds, data = dataset_train, control = rpart.control(cp = 0.01))
-
-```
-
-```{r, echo=FALSE}
-
-fancyRpartPlot(model)
-
-```
-
-```{r, echo=FALSE}
-
-printcp(model)
-
-```
-
-Relative error : 19489749 * 0.77040
-
-# build a model based on sales related variables
-
-```{r, echo=FALSE}
-dataset_train_alt <- dataset_train
-
-dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
-
-model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo, data = dataset_train_alt, control = rpart.control(cp = 0.002), method="class")
-
-```
-
-```{r, echo=FALSE}
-
-fancyRpartPlot(model)
+model <- lm(formula = CreditLimit ~ 1 + SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + AvgAmtPastDue + ReturnedPaymentCount + MaxReturnedPaymentAmt + RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState - 1, data = dataset_train)
 
 ```
 
 
 ```{r, echo=FALSE}
 
-predictions <- predict(model, dataset_train_alt, type = "class")
+summary(model)
 
 ```
 
-# build a confusion matrix
+
+# remove AvgAmtPastDue
 
 ```{r, echo=FALSE}
 
-cm <- confusionMatrix(dataset_train_alt$CreditLimit, predictions)
-
-ggplot(data = data.frame(cm$table), aes(x=Prediction, y=Reference)) +
-  geom_tile(aes(fill=Freq)) + 
-  scale_fill_gradient(low = "white", high = "steelblue") +
-  theme(axis.text.x=element_text(angle=90,hjust=1)) +
-  xlab("Predictions") +
-  ylab("Ground Truth (Observations)") +
-  geom_text(aes(label = Freq), size = 2) +
-  ggtitle("Decison Tree Plot of Confusion Matrix")
+model <- lm(formula = CreditLimit ~ 1 + SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + ReturnedPaymentCount + MaxReturnedPaymentAmt + RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState - 1, data = dataset_train)
 
 ```
+
 
 ```{r, echo=FALSE}
 
-print(cm)
+summary(model)
 
 ```
+
+
+# remove NumberOfJewelryStores, 
+Residual standard error: 4254 on 1366 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.4575,	Adjusted R-squared:  0.4479 
+F-statistic: 47.99 on 24 and 1366 DF,  p-value: < 2.2e-16
+
+
+#then TotalPopulation, 
+Residual standard error: 4252 on 1367 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.4574,	Adjusted R-squared:  0.4483 
+F-statistic: 50.11 on 23 and 1367 DF,  p-value: < 2.2e-16
+
+#then AlternativeMetalSalesLast12Mo, 
+Residual standard error: 4251 on 1368 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.4574,	Adjusted R-squared:  0.4487 
+F-statistic: 52.43 on 22 and 1368 DF,  p-value: < 2.2e-16
+
+#then TotalSalesLast12Mo, 
+Residual standard error: 4249 on 1369 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.4574,	Adjusted R-squared:  0.4491 
+F-statistic: 54.96 on 21 and 1369 DF,  p-value: < 2.2e-16
+
+#then DiamondBandSalesLast12Mo
+Residual standard error: 4248 on 1370 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.4574,	Adjusted R-squared:  0.4495 
+F-statistic: 57.75 on 20 and 1370 DF,  p-value: < 2.2e-16
+
+#then UrbanInfluenceCode
+Residual standard error: 4246 on 1371 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.4574,	Adjusted R-squared:  0.4499 
+F-statistic: 60.83 on 19 and 1371 DF,  p-value: < 2.2e-16
+
+#then MedianRetailTradeEarnings
+Residual standard error: 4245 on 1372 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.4574,	Adjusted R-squared:  0.4502 
+F-statistic: 64.24 on 18 and 1372 DF,  p-value: < 2.2e-16
+
+#then MaxReturnedPaymentAmt
+Residual standard error: 4244 on 1373 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.4573,	Adjusted R-squared:  0.4506 
+F-statistic: 68.05 on 17 and 1373 DF,  p-value: < 2.2e-16
+
+#then NumberOfJewelryStoresState
+Residual standard error: 4243 on 1374 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.4572,	Adjusted R-squared:  0.4508 
+F-statistic: 72.32 on 16 and 1374 DF,  p-value: < 2.2e-16
+
+#then JewelryStoreSalesState
+Residual standard error: 4242 on 1375 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.4571,	Adjusted R-squared:  0.4511 
+F-statistic: 77.17 on 15 and 1375 DF,  p-value: < 2.2e-16
+
+#then MaxAmtPastDue
+Residual standard error: 4241 on 1376 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.4569,	Adjusted R-squared:  0.4514 
+F-statistic: 82.69 on 14 and 1376 DF,  p-value: < 2.2e-16
+
+#then NumberOfStoreLocations
+Residual standard error: 4240 on 1377 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.4567,	Adjusted R-squared:  0.4516 
+F-statistic: 89.03 on 13 and 1377 DF,  p-value: < 2.2e-16
+
+#then BuyingGroupMember
+Residual standard error: 4239 on 1378 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.4564,	Adjusted R-squared:  0.4517 
+F-statistic: 96.42 on 12 and 1378 DF,  p-value: < 2.2e-16
+
+#then ReturnedPaymentCount
+Residual standard error: 4240 on 1379 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.456,	Adjusted R-squared:  0.4517 
+F-statistic: 105.1 on 11 and 1379 DF,  p-value: < 2.2e-16
+
+#then MaxDaysPastDue
+Residual standard error: 4240 on 1380 degrees of freedom
+  (11 observations deleted due to missingness)
+Multiple R-squared:  0.4555,	Adjusted R-squared:  0.4516 
+F-statistic: 115.4 on 10 and 1380 DF,  p-value: < 2.2e-16
+
+# added MaxDaysPastDue back
+
 
 ```{r, echo=FALSE}
 
-printcp(model)
+model <- lm(formula = CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + AvgDaysOfPay + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + TotalHouseholds + MedianIncomeHouseholds + MaxDaysPastDue - 1, data = dataset_train)
 
 ```
 
-Relative Error : 0.67309 * 0.62884
+
+```{r, echo=FALSE}
+
+summary(model)
+
+```
 
 
 # build a linear model using the same relevant variables which we have initially used in our decision tree
@@ -382,53 +405,12 @@ summary(model)
 
 ```
 
-# ??? (we were examining the impact of standartizing )
-
-```{r, echo=FALSE}
-
-dataset_train_alt <- dataset_train
-
-#dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
-
-model <- glm(CreditLimit ~ DesignBandSalesLast12Mo + SalesLastYr + AlternativeMetalSalesLast12Mo + MedianIncomeHouseholds + SalesCurrentYr + PlainBandSalesLast12Mo, family = gaussian, data=dataset_train_alt)
-
-```
-
-```{r, echo=FALSE}
-
-summary(model)
-
-```
 
 # linear models using different "family" parameters
 
 ```{r, echo=FALSE}
 
-dataset_train_alt <- dataset_train
-
-#dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
-
-model <- glm(CreditLimit ~ 0 + DesignBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo + DiamondBandSalesLast12Mo, family = gaussian, data=dataset_train_alt)
-
-
-```
-
-
-```{r, echo=FALSE}
-
-summary(model)
-
-```
-
-
-
-```{r, echo=FALSE}
-
-dataset_train_alt <- dataset_train
-
-#dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
-
-model <- glm(CreditLimit ~ 0 + RuralUrbanContinuumCode + UrbanInfluenceCode + TotalPopulation + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState, family = gaussian, data=dataset_train_alt)
+model <- glm(CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + AvgDaysOfPay + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + TotalHouseholds + MedianIncomeHouseholds + MaxDaysPastDue - 1, family = gaussian, data=dataset_train)
 
 
 ```
@@ -442,11 +424,7 @@ summary(model)
 
 ```{r, echo=FALSE}
 
-dataset_train_alt <- dataset_train
-
-#dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
-
-model <- glm(CreditLimit ~ 0 + RuralUrbanContinuumCode + UrbanInfluenceCode + TotalPopulation + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState, family = poisson, data=dataset_train_alt)
+model <- glm(CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + AvgDaysOfPay + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + TotalHouseholds + MedianIncomeHouseholds + MaxDaysPastDue - 1, family = poisson, data=dataset_train)
 
 
 ```
@@ -457,17 +435,15 @@ model <- glm(CreditLimit ~ 0 + RuralUrbanContinuumCode + UrbanInfluenceCode + To
 summary(model)
 
 ```
+
 
 # how do these models compare to each other and to the first "naive" model?
 
 ```{r, echo=FALSE}
 
-predictions <- predict(model, dataset_train_alt)
+predictions <- predict(model, dataset_train)
 
 summary(predictions)
-#helper.RMSE(dataset_train_alt$CreditLimit[is.na(predictions)==FALSE], predictions[is.na(predictions)==FALSE])
-
-helper.RSquared(dataset_train_alt$CreditLimit[is.na(predictions)==FALSE], predictions[is.na(predictions)==FALSE])
 
 ```
 
