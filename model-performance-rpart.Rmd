@@ -30,57 +30,9 @@ require(gridExtra)
 
 ```
 
-
-## Perform some explortory data analysis.
-
-- we looked at the dtree with all variables
-- we choos the top variables
-- we did iterated the dtree
-
-- we took the same variables and reiterated out lm
-
-- we took out the sales data to ceate an alternate model which does not depend on sales information
-
-- Median Income and Median Income households which we obtained **census data** played a significant role
-
-## Definitely plot (histogram) any response variables.
-##Plot at your predictors.
-
-d-tree plots
-
-multiple univariable plots for lm
-
-##Begin the analysis:
-
-##For analysis/explanatory/exploratory projects start by
-
-##For ML projects
-
-##Build a linear model use lm for regression and/or glm( family=binomial. ... ) for classification
-
-##Evaluate your linear model using your model evaluation RMarkdown document, if you are clever you can reuse the template and version it very quickly.
-
-##Knit this to model-performance-linear.[html|pdf|md] where you are keeping your assets
-
-##Make sure you know who to interpret a linear model! Let me know if we have to cover this.
-
-##Build a tree model (rpart)
-
-##plot the tree paying particular attention to the first few nodes, do they make sense?
-
-##Evaluate your tree with you model evaluation RMarkdown document. Knit this to model-performance-rpart.[html|pdf|md]
-
-##Has your model(s) met the model success criteria?
-
-
-### Credit Limit vs Sales Numbers
-
-
-
-
 # Decision Tree Model
 
-## examine the relevance of all the dependent variables using a Decision Tree
+Similart to building our intial linear model, we have examined the relevance of all the dependent variables. We identified the most relevant variables so that we can build our initial decision tree model accordingly.
 
 ```{r, echo=FALSE}
 
@@ -90,18 +42,21 @@ model <- rpart(CreditLimit ~ ., data = dataset_train)
 
 ```{r, echo=FALSE}
 
-fancyRpartPlot(model)
-
-```
-
-```{r, echo=FALSE}
-
 summary(model)
 
 ```
 
+We also did a quick plot of our decision tree to visualize the model's output.
 
-# what is the best cp to use?
+```{r, echo=FALSE}
+
+fancyRpartPlot(model)
+
+```
+
+### What is the best cp to use?
+
+Examining the model results, we wanted to determine the best cp value to use for our model to optimize it. To do that, we did a plot of the cp values and extracted the min cp value.
 
 ```{r, echo=FALSE}
 
@@ -111,21 +66,21 @@ plotcp(model)
 
 ```{r, echo=FALSE}
 
-model$cptable[which.min(model$cptable[,"xerror"]),"CP"]
+cat("Min cp value: ", model$cptable[which.min(model$cptable[,"xerror"]),"CP"])
 
 ```
 
-# select the top relevant variables and revise our linear model
+### What are the most relevant variables?
 
 ```{r, echo=FALSE}
+
 model$variable.importance
-#importance(model)
 
 ```
 
-We have eliminated AvgDaysOfPay, AvgAmtPastDue, MaxDaysPastDue
+We took a close look at the most relevant variables and we have eliminated JBT Rating (as stated in our linear model, we want to predict credit limits for the customers that do not have a credit rating so we do not want this variable to influence our model), Credit Limit Lock, AvgDaysOfPay (Avg Days of Pay Category is already included), AvgAmtPastDue (we felt like this might not be a variable that we can obtain from a new customer), MaxDaysPastDue (again, this might not be a parameter that we can obtain from a potential new customer), and we ended up with the following:
 
-```{r, echo=FALSE}
+```{r}
 
 model <- rpart(CreditLimit ~ AvgDaysOfPayCategory + DesignBandSalesLast12Mo + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + MedianIncomeHouseholds + SalesCurrentYr + PlainBandSalesLast12Mo + MedianEarnings + TotalHouseholds + TotalPopulation + NumberOfJewelryStores + RuralUrbanContinuumCode, data = dataset_train, control = rpart.control(cp = 0.0169))
 
@@ -143,11 +98,9 @@ summary(model)
 
 ```
 
-# Backward Elimination; remove the least relevant (highest p) variable and rebuild the model
+### Backward Elimitaion to find the significant coefficients
 
-SalesLastYr            TotalSalesLast12Mo                SalesCurrentYr       DesignBandSalesLast12Mo        PlainBandSalesLast12Mo AlternativeMetalSalesLast12Mo 
-                           24                            21                            11                            11                             9                             8 
-         AvgDaysOfPayCategory        MedianIncomeHouseholds
+We perfomed a Backward Elimination; remove the least relevant (highest p) variables (MedianEarnings, TotalHouseholds, NumberOfJewelryStores, TotalPopulation, RuralUrbanContinuumCode) and rebuild the model.
 
 ```{r, echo=FALSE}
 
@@ -167,37 +120,44 @@ printcp(model)
 
 ```
 
-Relative error : 19489749 * 0.77040
-
-# build a model based on sales related variables
-
 ```{r, echo=FALSE}
+
+cat("Relative Error: 19489749 * 0.77040 = ", 19489749 * 0.77040)
+
+```
+
+### Credit Limit as a class
+
+We wanted to see the impact on the decision tree model if we converted our Credit Limit values from numerical continious values to categorical values. So we set a new field and a copy of our training set and factorized the Credit Limit field.
+
+```{r}
 dataset_train_alt <- dataset_train
 
 dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
 
-model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo, data = dataset_train_alt, control = rpart.control(cp = 0.002), method="class")
+model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo + MedianIncomeHouseholds, data = dataset_train_alt, control = rpart.control(cp = 0.002), method="class")
 
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 
 fancyRpartPlot(model)
 
 ```
 
+# Model Performance 
 
-```{r, echo=FALSE}
+We built a confusion matrix to evaluate this model's performance
+
+```{r}
 
 predictions <- predict(model, dataset_train_alt, type = "class")
 
+cm <- confusionMatrix(dataset_train_alt$CreditLimit, predictions)
+
 ```
 
-# build a confusion matrix
-
-```{r, echo=FALSE}
-
-cm <- confusionMatrix(dataset_train_alt$CreditLimit, predictions)
+```{r, echo=FALSE, warning=FALSE}
 
 ggplot(data = data.frame(cm$table), aes(x=Prediction, y=Reference)) +
   geom_tile(aes(fill=Freq)) + 
@@ -212,9 +172,16 @@ ggplot(data = data.frame(cm$table), aes(x=Prediction, y=Reference)) +
 
 ```{r, echo=FALSE}
 
-print(cm)
+print(cm$overall)
 
 ```
+
+```{r, echo=FALSE}
+
+print(cm$byClass)
+
+```
+
 
 ```{r, echo=FALSE}
 
@@ -222,7 +189,12 @@ printcp(model)
 
 ```
 
-Relative Error : 0.67309 * 0.62884
+```{r, echo=FALSE}
+
+cat("Relative Error: 0.65111 * 0.67309 = ", 0.65111 * 0.67309)
+
+```
 
 
+Even though the model where we have converted the **Credit Limit** to a categorical value performed better than the one using continuous values, the Accuracy of the better model is very low. We will next try to take the variables actually used in this decision tree and try them on a linear model next to see if there can be any improvement made to the liner model based on what we learned from the decision tree model.
 
