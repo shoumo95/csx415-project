@@ -143,6 +143,17 @@ ggplot(data = dataset, aes(x = CreditLimit)) + geom_histogram(binwidth = 2000) +
 
 ```
 
+We have examined our dataset for near zero variance parameters and identified the following variables to be near zero:
+
+```{r, echo=FALSE}
+
+nzv <- nearZeroVar(dataset, saveMetrics= TRUE)
+print(nzv[nzv$nzv,][1:5,])
+
+```
+
+We have observed that the near zero variance parameters were returns related and We did not further investigate the remaining Returns related variables in our dataset. 
+
 ## Non-Sales Attributes and Possible Correlations
 
 We enhanced our dataset by bringing in Census data for **Retail Trade: Geographic Area Series: Summary Statistics for the U.S., States, Metro Areas, Counties, and Places**, **Annual Estimates of the Resident Population**, **MEDIAN INCOME IN THE PAST 12 MONTHS (IN 2016 INFLATION-ADJUSTED DOLLARS)**, **TOTAL POPULATION**, and **INDUSTRY BY MEDIAN EARNINGS IN THE PAST 12 MONTHS (IN 2016 INFLATION-ADJUSTED DOLLARS) FOR THE CIVILIAN EMPLOYED POPULATION 16 YEARS AND OVER** and mapped these values to our customer records via StateFIPS, CountyFIPS and CBSA Codes (for metro areas).
