@@ -80,7 +80,7 @@ model$variable.importance
 
 We took a close look at the most relevant variables and we have eliminated JBT Rating (as stated in our linear model, we want to predict credit limits for the customers that do not have a credit rating so we do not want this variable to influence our model), Credit Limit Lock, AvgDaysOfPay (Avg Days of Pay Category is already included), AvgAmtPastDue (we felt like this might not be a variable that we can obtain from a new customer), MaxDaysPastDue (again, this might not be a parameter that we can obtain from a potential new customer), and we ended up with the following:
 
-```{r}
+```{r, echo=FALSE}
 
 model <- rpart(CreditLimit ~ AvgDaysOfPayCategory + DesignBandSalesLast12Mo + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + MedianIncomeHouseholds + SalesCurrentYr + PlainBandSalesLast12Mo + MedianEarnings + TotalHouseholds + TotalPopulation + NumberOfJewelryStores + RuralUrbanContinuumCode, data = dataset_train, control = rpart.control(cp = 0.0169))
 
