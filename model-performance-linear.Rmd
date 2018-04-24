@@ -341,10 +341,14 @@ Multiple R-squared:  0.4827,	Adjusted R-squared:  0.4774
 F-statistic: 92.43 on 14 and 1387 DF,  p-value: < 2.2e-16
 
 # added ReturnedPaymentCount, this is our model
+Residual standard error: 4124 on 1386 degrees of freedom
+Multiple R-squared:  0.4832,	Adjusted R-squared:  0.4776 
+F-statistic: 86.39 on 15 and 1386 DF,  p-value: < 2.2e-16
+
 
 ```{r, echo=FALSE}
 
-model <- lm(formula = CreditLimit ~ 1 + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data = dataset_train)
+model <- lm(formula = CreditLimit ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data = dataset_train)
 
 summary(model)
 
@@ -378,7 +382,7 @@ summary(model)
 
 ```{r, echo=FALSE}
 
-model <- glm(CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + AvgDaysOfPay + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + TotalHouseholds + MedianIncomeHouseholds + MaxDaysPastDue - 1, family = gaussian, data=dataset_train)
+model <- glm(CreditLimit ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, family = gaussian, data=dataset_train)
 
 summary(model)
 
@@ -391,28 +395,6 @@ predictions <- predict(model, dataset_train)
 summary(predictions)
 
 ```
-
-
-```{r, echo=FALSE}
-
-model <- glm(CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + AvgDaysOfPay + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + TotalHouseholds + MedianIncomeHouseholds + MaxDaysPastDue - 1, family = poisson, data=dataset_train)
-
-summary(model)
-
-```
-
-
-
-# how do these models compare to each other and to the first "naive" model?
-
-```{r, echo=FALSE}
-
-predictions <- predict(model, dataset_train)
-
-summary(predictions)
-
-```
-
 
 
 
