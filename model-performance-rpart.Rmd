@@ -1,0 +1,228 @@
+---
+title: "Model Performance - rpart"
+author:
+  - name: Hakan Egeli
+  - name: Soumyendu Sarkar
+date: 'April 24, 2018'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, echo=FALSE, include = FALSE}
+
+# load the project. This will autoload the data and also create training and test datasets
+library('ProjectTemplate')
+load.project()
+
+```
+
+```{r, echo=FALSE, include=FALSE}
+
+library(rpart)
+library(rattle)
+library(caret)
+
+require(gridExtra)
+
+```
+
+
+## Perform some explortory data analysis.
+
+- we looked at the dtree with all variables
+- we choos the top variables
+- we did iterated the dtree
+
+- we took the same variables and reiterated out lm
+
+- we took out the sales data to ceate an alternate model which does not depend on sales information
+
+- Median Income and Median Income households which we obtained **census data** played a significant role
+
+## Definitely plot (histogram) any response variables.
+##Plot at your predictors.
+
+d-tree plots
+
+multiple univariable plots for lm
+
+##Begin the analysis:
+
+##For analysis/explanatory/exploratory projects start by
+
+##For ML projects
+
+##Build a linear model use lm for regression and/or glm( family=binomial. ... ) for classification
+
+##Evaluate your linear model using your model evaluation RMarkdown document, if you are clever you can reuse the template and version it very quickly.
+
+##Knit this to model-performance-linear.[html|pdf|md] where you are keeping your assets
+
+##Make sure you know who to interpret a linear model! Let me know if we have to cover this.
+
+##Build a tree model (rpart)
+
+##plot the tree paying particular attention to the first few nodes, do they make sense?
+
+##Evaluate your tree with you model evaluation RMarkdown document. Knit this to model-performance-rpart.[html|pdf|md]
+
+##Has your model(s) met the model success criteria?
+
+
+### Credit Limit vs Sales Numbers
+
+
+
+
+# Decision Tree Model
+
+## examine the relevance of all the dependent variables using a Decision Tree
+
+```{r, echo=FALSE}
+
+model <- rpart(CreditLimit ~ ., data = dataset_train)
+
+```
+
+```{r, echo=FALSE}
+
+fancyRpartPlot(model)
+
+```
+
+```{r, echo=FALSE}
+
+summary(model)
+
+```
+
+
+# what is the best cp to use?
+
+```{r, echo=FALSE}
+
+plotcp(model)
+
+```
+
+```{r, echo=FALSE}
+
+model$cptable[which.min(model$cptable[,"xerror"]),"CP"]
+
+```
+
+# select the top relevant variables and revise our linear model
+
+```{r, echo=FALSE}
+model$variable.importance
+#importance(model)
+
+```
+
+We have eliminated AvgDaysOfPay, AvgAmtPastDue, MaxDaysPastDue
+
+```{r, echo=FALSE}
+
+model <- rpart(CreditLimit ~ AvgDaysOfPayCategory + DesignBandSalesLast12Mo + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + MedianIncomeHouseholds + SalesCurrentYr + PlainBandSalesLast12Mo + MedianEarnings + TotalHouseholds + TotalPopulation + NumberOfJewelryStores + RuralUrbanContinuumCode, data = dataset_train, control = rpart.control(cp = 0.0169))
+
+```
+
+```{r, echo=FALSE}
+
+fancyRpartPlot(model)
+
+```
+
+```{r, echo=FALSE}
+
+summary(model)
+
+```
+
+# Backward Elimination; remove the least relevant (highest p) variable and rebuild the model
+
+SalesLastYr            TotalSalesLast12Mo                SalesCurrentYr       DesignBandSalesLast12Mo        PlainBandSalesLast12Mo AlternativeMetalSalesLast12Mo 
+                           24                            21                            11                            11                             9                             8 
+         AvgDaysOfPayCategory        MedianIncomeHouseholds
+
+```{r, echo=FALSE}
+
+model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo + MedianIncomeHouseholds, data = dataset_train, control = rpart.control(cp = 0.01))
+
+```
+
+```{r, echo=FALSE}
+
+fancyRpartPlot(model)
+
+```
+
+```{r, echo=FALSE}
+
+printcp(model)
+
+```
+
+Relative error : 19489749 * 0.77040
+
+# build a model based on sales related variables
+
+```{r, echo=FALSE}
+dataset_train_alt <- dataset_train
+
+dataset_train_alt$CreditLimit <- factor(dataset_train_alt$CreditLimit) 
+
+model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo, data = dataset_train_alt, control = rpart.control(cp = 0.002), method="class")
+
+```
+
+```{r, echo=FALSE}
+
+fancyRpartPlot(model)
+
+```
+
+
+```{r, echo=FALSE}
+
+predictions <- predict(model, dataset_train_alt, type = "class")
+
+```
+
+# build a confusion matrix
+
+```{r, echo=FALSE}
+
+cm <- confusionMatrix(dataset_train_alt$CreditLimit, predictions)
+
+ggplot(data = data.frame(cm$table), aes(x=Prediction, y=Reference)) +
+  geom_tile(aes(fill=Freq)) + 
+  scale_fill_gradient(low = "white", high = "steelblue") +
+  theme(axis.text.x=element_text(angle=90,hjust=1)) +
+  xlab("Predictions") +
+  ylab("Ground Truth (Observations)") +
+  geom_text(aes(label = Freq), size = 2) +
+  ggtitle("Decison Tree Plot of Confusion Matrix")
+
+```
+
+```{r, echo=FALSE}
+
+print(cm)
+
+```
+
+```{r, echo=FALSE}
+
+printcp(model)
+
+```
+
+Relative Error : 0.67309 * 0.62884
+
+
+
