@@ -3,6 +3,9 @@
 library('ProjectTemplate')
 For project organization and automation of several task (auto loading libraries and data munging)
 
+library(caTools)
+For splitting training and test data (needed by sample.split())
+
 library(ggplot2)
 For charts and plotting
 
