@@ -176,7 +176,7 @@ ggplot(dataset, aes(x = AvgDaysOfPayCategory, y = MedianIncomeHouseholds, color 
   geom_jitter() +
   stat_summary(fun.y = mean, geom = "point", shape = 1, size = 2, color = "red") +
   theme(legend.position = "") +
-  ggtitle('Avg Days of Pay vs Credit Limit') +
+  ggtitle('Avg Days of Pay vs Median Income Households') +
   xlab('Avg Days of Pay') + 
   ylab('Median Income Households')
 ```
@@ -195,7 +195,7 @@ g2 <- ggplot() +
   geom_point(aes(x = dataset$TotalPopulation, y = dataset$NumberOfJewelryStores), color = 'blue') +
   scale_x_continuous(breaks=c(5000000, 10000000, 15000000, 20000000), labels=c("5M", "10M", "15M", "20M")) +
   scale_y_continuous(breaks=c(1000, 2000, 3000, 4000, 5000), labels=c("1K", "2K", "3K", "4K", "5K")) +
-  ggtitle('Corr Total Population vs # Stores') +
+  ggtitle('Total Population vs # Stores') +
   xlab('Total Population') + 
   ylab('# Jewelry Stores')
 
@@ -209,11 +209,6 @@ grid.arrange(g1, g2, ncol=2)
 
 model <- lm(formula = CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + AvgDaysOfPayCategory + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + AvgAmtPastDue + ReturnedPaymentCount + MaxReturnedPaymentAmt + RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState, data = dataset_train)
 
-```
-
-
-```{r, echo=FALSE}
-
 summary(model)
 
 ```
@@ -225,15 +220,9 @@ summary(model)
 
 model <- lm(formula = CreditLimit ~ 1 + SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + AvgDaysOfPayCategory + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + AvgAmtPastDue + ReturnedPaymentCount + MaxReturnedPaymentAmt + RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState - 1, data = dataset_train)
 
-```
-
-
-```{r, echo=FALSE}
-
 summary(model)
 
 ```
-
 
 # remove AvgDaysOfPayCategory
 
@@ -241,10 +230,121 @@ summary(model)
 
 model <- lm(formula = CreditLimit ~ 1 + SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + AvgAmtPastDue + ReturnedPaymentCount + MaxReturnedPaymentAmt + RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState - 1, data = dataset_train)
 
+summary(model)
+
 ```
 
 
+# remove the TotalHouseholds
+Residual standard error: 4189 on 1309 degrees of freedom
+  (61 observations deleted due to missingness)
+Multiple R-squared:  0.4831,	Adjusted R-squared:  0.4708 
+F-statistic: 39.46 on 31 and 1309 DF,  p-value: < 2.2e-16
+
+# TotalPopulation
+Residual standard error: 4187 on 1310 degrees of freedom
+  (61 observations deleted due to missingness)
+Multiple R-squared:  0.4831,	Adjusted R-squared:  0.4713 
+F-statistic: 40.81 on 30 and 1310 DF,  p-value: < 2.2e-16
+
+# MaxAmtPastDue
+Residual standard error: 4186 on 1311 degrees of freedom
+  (61 observations deleted due to missingness)
+Multiple R-squared:  0.4831,	Adjusted R-squared:  0.4717 
+F-statistic: 42.25 on 29 and 1311 DF,  p-value: < 2.2e-16
+
+# AlternativeMetalSalesLast12Mo
+Residual standard error: 4184 on 1312 degrees of freedom
+  (61 observations deleted due to missingness)
+Multiple R-squared:  0.4831,	Adjusted R-squared:  0.472 
+F-statistic: 43.79 on 28 and 1312 DF,  p-value: < 2.2e-16
+
+# TotalSalesLast12Mo
+Residual standard error: 4183 on 1313 degrees of freedom
+  (61 observations deleted due to missingness)
+Multiple R-squared:  0.483,	Adjusted R-squared:  0.4724 
+F-statistic: 45.44 on 27 and 1313 DF,  p-value: < 2.2e-16
+
+# UrbanInfluenceCode
+Residual standard error: 4181 on 1314 degrees of freedom
+  (61 observations deleted due to missingness)
+Multiple R-squared:  0.483,	Adjusted R-squared:  0.4728 
+F-statistic: 47.21 on 26 and 1314 DF,  p-value: < 2.2e-16
+
+# MaxDaysPastDue
+Residual standard error: 4180 on 1315 degrees of freedom
+  (61 observations deleted due to missingness)
+Multiple R-squared:  0.483,	Adjusted R-squared:  0.4731 
+F-statistic: 49.13 on 25 and 1315 DF,  p-value: < 2.2e-16
+
+# DiamondBandSalesLast12Mo
+Residual standard error: 4179 on 1316 degrees of freedom
+  (61 observations deleted due to missingness)
+Multiple R-squared:  0.4829,	Adjusted R-squared:  0.4735 
+F-statistic: 51.21 on 24 and 1316 DF,  p-value: < 2.2e-16
+
+# MaxReturnedPaymentAmt
+Residual standard error: 4177 on 1317 degrees of freedom
+  (61 observations deleted due to missingness)
+Multiple R-squared:  0.4828,	Adjusted R-squared:  0.4738 
+F-statistic: 53.46 on 23 and 1317 DF,  p-value: < 2.2e-16
+
+# AvgDaysOfPay
+Residual standard error: 4162 on 1329 degrees of freedom
+  (50 observations deleted due to missingness)
+Multiple R-squared:  0.4826,	Adjusted R-squared:  0.474 
+F-statistic: 56.34 on 22 and 1329 DF,  p-value: < 2.2e-16
+
+# NumberOfJewelryStoresState
+Residual standard error: 4161 on 1330 degrees of freedom
+  (50 observations deleted due to missingness)
+Multiple R-squared:  0.4825,	Adjusted R-squared:  0.4743 
+F-statistic: 59.05 on 21 and 1330 DF,  p-value: < 2.2e-16
+
+# JewelryStoreSalesState
+Residual standard error: 4159 on 1331 degrees of freedom
+  (50 observations deleted due to missingness)
+Multiple R-squared:  0.4824,	Adjusted R-squared:  0.4746 
+F-statistic: 62.03 on 20 and 1331 DF,  p-value: < 2.2e-16
+
+# AvgAmtPastDue
+Residual standard error: 4158 on 1332 degrees of freedom
+  (50 observations deleted due to missingness)
+Multiple R-squared:  0.4823,	Adjusted R-squared:  0.4749 
+F-statistic: 65.31 on 19 and 1332 DF,  p-value: < 2.2e-16
+
+# MedianRetailTradeEarnings
+Residual standard error: 4158 on 1333 degrees of freedom
+  (50 observations deleted due to missingness)
+Multiple R-squared:  0.482,	Adjusted R-squared:  0.475 
+F-statistic: 68.91 on 18 and 1333 DF,  p-value: < 2.2e-16
+
+# PlainBandSalesLast12Mo
+Residual standard error: 4158 on 1334 degrees of freedom
+  (50 observations deleted due to missingness)
+Multiple R-squared:  0.4817,	Adjusted R-squared:  0.4751 
+F-statistic: 72.93 on 17 and 1334 DF,  p-value: < 2.2e-16
+
+# NumberOfJewelryStores
+Residual standard error: 4125 on 1385 degrees of freedom
+Multiple R-squared:  0.4834,	Adjusted R-squared:  0.4774 
+F-statistic:    81 on 16 and 1385 DF,  p-value: < 2.2e-16
+
+# BuyingGroupMember
+Residual standard error: 4124 on 1386 degrees of freedom
+Multiple R-squared:  0.4832,	Adjusted R-squared:  0.4776 
+F-statistic: 86.39 on 15 and 1386 DF,  p-value: < 2.2e-16
+
+# ReturnedPaymentCount
+Residual standard error: 4125 on 1387 degrees of freedom
+Multiple R-squared:  0.4827,	Adjusted R-squared:  0.4774 
+F-statistic: 92.43 on 14 and 1387 DF,  p-value: < 2.2e-16
+
+# added ReturnedPaymentCount, this is our model
+
 ```{r, echo=FALSE}
+
+model <- lm(formula = CreditLimit ~ 1 + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data = dataset_train)
 
 summary(model)
 
@@ -252,27 +352,16 @@ summary(model)
 
 
 # remove AvgAmtPastDue
-
-```{r, echo=FALSE}
-
-model <- lm(formula = CreditLimit ~ 1 + SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + ReturnedPaymentCount + MaxReturnedPaymentAmt + RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState - 1, data = dataset_train)
-
-```
-
-
-```{r, echo=FALSE}
-
-summary(model)
-
-```
-
+Residual standard error: 4287 on 1315 degrees of freedom
+  (61 observations deleted due to missingness)
+Multiple R-squared:  0.4562,	Adjusted R-squared:  0.4459 
+F-statistic: 44.13 on 25 and 1315 DF,  p-value: < 2.2e-16
 
 # remove NumberOfJewelryStores, 
 Residual standard error: 4254 on 1366 degrees of freedom
   (11 observations deleted due to missingness)
 Multiple R-squared:  0.4575,	Adjusted R-squared:  0.4479 
 F-statistic: 47.99 on 24 and 1366 DF,  p-value: < 2.2e-16
-
 
 #then TotalPopulation, 
 Residual standard error: 4252 on 1367 degrees of freedom
@@ -358,21 +447,18 @@ Residual standard error: 4240 on 1380 degrees of freedom
 Multiple R-squared:  0.4555,	Adjusted R-squared:  0.4516 
 F-statistic: 115.4 on 10 and 1380 DF,  p-value: < 2.2e-16
 
-# added MaxDaysPastDue back
+# added MaxDaysPastDue back. this is our linear model
 
 
 ```{r, echo=FALSE}
 
 model <- lm(formula = CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + AvgDaysOfPay + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + TotalHouseholds + MedianIncomeHouseholds + MaxDaysPastDue - 1, data = dataset_train)
 
-```
-
-
-```{r, echo=FALSE}
-
 summary(model)
 
 ```
+
+
 
 
 # build a linear model using the same relevant variables which we have initially used in our decision tree
@@ -381,25 +467,16 @@ summary(model)
 
 model <- lm(formula = CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPay + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + MedianIncomeHouseholds + SalesCurrentYr + PlainBandSalesLast12Mo + MedianEarnings + RuralUrbanContinuumCode, data = dataset_train)
 
-```
-
-
-```{r, echo=FALSE}
-
 summary(model)
 
 ```
+
 
 # examine a variation of a linear model using non-sales variables
 
 ```{r, echo=FALSE}
 
 model <- lm(formula = CreditLimit ~ AvgDaysOfPay + MedianIncomeHouseholds + SalesCurrentYr + MedianEarnings, data = dataset_train)
-
-```
-
-
-```{r, echo=FALSE}
 
 summary(model)
 
@@ -412,29 +489,27 @@ summary(model)
 
 model <- glm(CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + AvgDaysOfPay + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + TotalHouseholds + MedianIncomeHouseholds + MaxDaysPastDue - 1, family = gaussian, data=dataset_train)
 
-
-```
-
-
-```{r, echo=FALSE}
-
 summary(model)
 
 ```
+
+```{r, echo=FALSE}
+
+predictions <- predict(model, dataset_train)
+
+summary(predictions)
+
+```
+
 
 ```{r, echo=FALSE}
 
 model <- glm(CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + AvgDaysOfPay + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + TotalHouseholds + MedianIncomeHouseholds + MaxDaysPastDue - 1, family = poisson, data=dataset_train)
 
-
-```
-
-
-```{r, echo=FALSE}
-
 summary(model)
 
 ```
+
 
 
 # how do these models compare to each other and to the first "naive" model?
