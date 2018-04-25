@@ -28,7 +28,7 @@ require(gridExtra)
 
 ```
 
-# Explortory Data Analysis.
+# Exploratory Data Analysis.
 
 ## Sales Attributes and Possible Correlations
 
