@@ -21,6 +21,9 @@ load.project()
 dataset_train$CreditLimitCategory <- factor(dataset_train$CreditLimit)
 dataset_test$CreditLimitCategory <- factor(dataset_test$CreditLimit)
 
+levels(dataset_train$CreditLimitCategory) <- make.names(levels(factor(dataset_train$CreditLimitCategory)))
+levels(dataset_test$CreditLimitCategory) <- make.names(levels(factor(dataset_test$CreditLimitCategory)))
+
 ```
 
 ```{r, echo=FALSE, include=FALSE}
@@ -103,7 +106,7 @@ u = union(predictions, dataset_test$CreditLimitCategory)
 t = table(factor(predictions, u), factor(dataset_test$CreditLimitCategory, u))
 cm <- confusionMatrix(t)
 
-cm$table
+#cm$table
 
 ```
 
@@ -121,12 +124,12 @@ cm$overall
 
 ```{r}
 
-control <- trainControl(method="cv", number=5)
+control <- trainControl(method="repeatedcv", number=5, repeats = 3, classProbs = TRUE)
 
-model <- train(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds, data=dataset_test, method="multinom", metric="Accuracy", trControl=control, maxit=600)
+model <- train(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds, data=dataset_test, method="multinom", metric="ROC", trControl=control, maxit=600)
 
 # display results
-print(model)
+print(model$results)
 
 ```
 
