@@ -1,0 +1,132 @@
+---
+title: "Model Performance - linear"
+author:
+  - name: Hakan Egeli
+  - name: Soumyendu Sarkar
+date: 'April 24, 2018'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, echo=FALSE, include = FALSE}
+
+# load the project. This will autoload the data and also create training and test datasets
+library('ProjectTemplate')
+load.project()
+
+dataset_train$CreditLimitCategory <- factor(dataset_train$CreditLimit)
+dataset_test$CreditLimitCategory <- factor(dataset_test$CreditLimit)
+
+```
+
+```{r, echo=FALSE, include=FALSE}
+
+library(caret)
+
+require(gridExtra)
+
+```
+
+
+# Linear Model After Backward Elimitaion Process
+
+```{r}
+
+model <- lm(formula = CreditLimit ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data = dataset_train)
+
+summary(model)
+
+```
+
+$RMSE$ value for our test dataset:
+
+```{r, echo=FALSE, include = FALSE}
+y <- dataset_test$CreditLimit
+y_hat <- predict(model, dataset_test)
+
+```
+
+```{r, echo=FALSE}
+# calculate Root Mean Squared error
+rmse <- helper.RMSE(y, y_hat)
+cat('Root Mean Square Error: ', rmse, "\n")
+
+```
+
+# Build Generalized Linear Model
+
+We wanted to test and try different "family" parameters and other optimization parameters in our next iterations so we decided to verify if the results of the `lm()` function and the `glm()` function matched.
+
+```{r, echo=FALSE}
+
+model <- glm(CreditLimit ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, family = gaussian, data=dataset_train)
+
+summary(model)
+
+```
+
+```{r, echo=FALSE, include = FALSE}
+y <- dataset_test$CreditLimit
+y_hat <- predict(model, dataset_test)
+
+```
+
+```{r, echo=FALSE}
+# calculate Root Mean Squared error
+rmse <- helper.RMSE(y, y_hat)
+cat('Root Mean Square Error: ', rmse, "\n")
+
+```
+
+```{r, echo=FALSE}
+library(nnet)
+
+model <- multinom(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds, data=dataset_train, maxit=1500, trace=T)
+
+#model <- multinom(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + AvgDaysOfPayCategory + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + AvgAmtPastDue + RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState, data=dataset_train, maxit=3000, trace=T)
+
+# summary(model)
+
+```
+
+```{r}
+
+predictions <- predict(model, dataset_test, type = "class")
+
+#t <- table(predictions, dataset_test$CreditLimitCategory)
+
+u = union(predictions, dataset_test$CreditLimitCategory)
+t = table(factor(predictions, u), factor(dataset_test$CreditLimitCategory, u))
+cm <- confusionMatrix(t)
+
+cm$table
+
+```
+
+```{r}
+
+cm$overall
+
+```
+
+
+
+
+
+
+
+```{r}
+
+control <- trainControl(method="cv", number=5)
+
+model <- train(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds, data=dataset_test, method="multinom", metric="Accuracy", trControl=control, maxit=600)
+
+# display results
+print(model)
+
+```
+
