@@ -21,8 +21,8 @@ load.project()
 dataset_train$CreditLimitCategory <- factor(dataset_train$CreditLimit)
 dataset_test$CreditLimitCategory <- factor(dataset_test$CreditLimit)
 
-levels(dataset_train$CreditLimitCategory) <- make.names(levels(factor(dataset_train$CreditLimitCategory)))
-levels(dataset_test$CreditLimitCategory) <- make.names(levels(factor(dataset_test$CreditLimitCategory)))
+levels(dataset_train$CreditLimitCategory) <- make.names(levels(factor(dataset$CreditLimit)))
+levels(dataset_test$CreditLimitCategory) <- make.names(levels(factor(dataset$CreditLimit)))
 
 ```
 
@@ -88,9 +88,7 @@ cat('Root Mean Square Error: ', rmse, "\n")
 ```{r, echo=FALSE}
 library(nnet)
 
-model <- multinom(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds, data=dataset_train, maxit=1500, trace=T)
-
-#model <- multinom(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + AvgDaysOfPayCategory + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + AvgAmtPastDue + RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState, data=dataset_train, maxit=3000, trace=T)
+model <- multinom(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, maxit=1500, trace=T)
 
 # summary(model)
 
@@ -98,15 +96,14 @@ model <- multinom(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + DesignBan
 
 ```{r}
 
-predictions <- predict(model, dataset_test, type = "class")
+predictions <- predict(model, newdata=dataset_test, type="class")
 
-#t <- table(predictions, dataset_test$CreditLimitCategory)
+t <- table(predictions, dataset_test$CreditLimitCategory)
 
-u = union(predictions, dataset_test$CreditLimitCategory)
-t = table(factor(predictions, u), factor(dataset_test$CreditLimitCategory, u))
-cm <- confusionMatrix(t)
+#cm <- confusionMatrix(data=predictions, reference=dataset_test$CreditLimitCategory)
+cm <- confusionMatrix(data=t)
 
-#cm$table
+cm$table
 
 ```
 
@@ -116,7 +113,11 @@ cm$overall
 
 ```
 
+```{r}
 
+postResample(dataset_test$CreditLimitCategory, predictions)
+
+```
 
 
 
@@ -124,12 +125,29 @@ cm$overall
 
 ```{r}
 
-control <- trainControl(method="repeatedcv", number=5, repeats = 3, classProbs = TRUE)
+control <- trainControl(method="repeatedcv", number=5, repeats=3, classProbs=TRUE)
 
-model <- train(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds, data=dataset_test, method="multinom", metric="ROC", trControl=control, maxit=600)
+model <- train(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="multinom", metric="Kappa", trControl=control, maxit=600)
 
 # display results
 print(model$results)
 
 ```
 
+```{r}
+
+predictions <- predict(model, newdata=dataset_test)
+
+t <- table(predictions, dataset_test$CreditLimitCategory)
+
+#cm <- confusionMatrix(data=predictions, reference=dataset_test$CreditLimitCategory)
+cm <- confusionMatrix(data=t)
+
+cm$overall
+
+```
+```{r}
+
+postResample(dataset_test$CreditLimitCategory, predictions)
+
+```
