@@ -1,15 +1,93 @@
 ---
 title: "Model Performance - linear"
 author:
-  - name: Hakan Egeli
   - name: Soumyendu Sarkar
-date: 'April 24, 2018'
+  - name: Hakan Egeli
+date: 'April 29, 2018'
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+
+# install anaconda python 3.x
+# install.packages("reticulate")
+# devtools::install_github("rstudio/keras")
+# library(keras)
+# install_keras()
+# install.packages("keras")
+# keras::install_keras()
+
+
+```{r, echo=FALSE, include = FALSE}
+
+library(keras)
+mnist <- dataset_mnist()
+x_train <- mnist$train$x
+y_train <- mnist$train$y
+x_test <- mnist$test$x
+y_test <- mnist$test$y
+
+
+# reshape
+x_train <- array_reshape(x_train, c(nrow(x_train), 784))
+x_test <- array_reshape(x_test, c(nrow(x_test), 784))
+# rescale
+x_train <- x_train / 255
+x_test <- x_test / 255
+
+
+y_train <- to_categorical(y_train, 10)
+y_test <- to_categorical(y_test, 10)
+
+
+model <- keras_model_sequential() 
+model %>% 
+  layer_dense(units = 256, activation = 'relu', input_shape = c(784)) %>% 
+  layer_dropout(rate = 0.4) %>% 
+  layer_dense(units = 128, activation = 'relu') %>%
+  layer_dropout(rate = 0.3) %>%
+  layer_dense(units = 10, activation = 'softmax')
+
+
+summary(model)
+
+
+model %>% compile(
+  loss = 'categorical_crossentropy',
+  optimizer = optimizer_rmsprop(),
+  metrics = c('accuracy')
+)
+
+
+# tensorboard("logs/run_a")
+
+history <- model %>% fit(
+  x_train, y_train, 
+  epochs = 30, batch_size = 128, 
+  verbose = 1,
+#  callbacks = callback_tensorboard("logs/run_a"),
+  validation_split = 0.2
+)
+
+#tensorboard(c("logs/run_a"))
+
+model %>% evaluate(x_test, y_test)
+
+model %>% predict_classes(x_test)
+
+
+plot(history)
+
+
+history_df <- as.data.frame(history)
+str(history_df)
+
+
+```
+
 
 
 ```{r, echo=FALSE, include = FALSE}
@@ -36,7 +114,87 @@ dataset_test <- subset(dataset_test, SalesCurrentYr < 80000)
 levels(dataset_train$CreditLimitCategory) <- make.names(levels(factor(dataset$CreditLimit)))
 levels(dataset_test$CreditLimitCategory) <- make.names(levels(factor(dataset$CreditLimit)))
 
+
+filter_x_1 <- c("SalesCurrentYr", "SalesLastYr", "DesignBandSalesLast12Mo", "NumberOfStoreLocations", "ReturnedPaymentCount", "RuralUrbanContinuumCode", "MetroIndicator", "MedianEarnings", "MedianIncomeHouseholds")
+
+filter_y_1 <- c("CreditLimit")
+
+x_train_aux <- dataset_train[filter_x_1]
+y_train_aux <- dataset_train[filter_y_1]
+
+x_test_aux <- dataset_test[filter_x_1]
+y_test_aux <- dataset_test[filter_y_1]
+
+x_train_aux[, 1:3] = scale(x_train_aux[, 1:3])
+x_train_aux[, 8:9] = scale(x_train_aux[, 8:9])
+
+x_test_aux[, 1:3] = scale(x_test_aux[, 1:3])
+x_test_aux[, 8:9] = scale(x_test_aux[, 8:9])
+
+x_train <- matrix(unlist(x_train_aux), ncol = 9, byrow = TRUE)
+x_test <- matrix(unlist(x_test_aux), ncol = 9, byrow = TRUE)
+
+y_train <- matrix(unlist(y_train_aux), ncol = 1, byrow = TRUE)
+y_test <- matrix(unlist(y_test_aux), ncol = 1, byrow = TRUE)
+
+
 ```
+
+
+
+
+```{r, echo=FALSE, include = FALSE}
+
+library(keras)
+
+
+model <- keras_model_sequential() 
+model %>% 
+  layer_dense(units = 256, activation = 'relu', input_shape = ncol(x_train)) %>% 
+  layer_dropout(rate = 0.2) %>% 
+  layer_dense(units = 128, activation = 'relu') %>%
+  layer_dropout(rate = 0.2) %>%
+  layer_dense(units = 10, activation = 'relu') %>%
+  layer_dropout(rate = 0.2) %>%
+  layer_dense(units = 1) %>%
+
+summary(model)
+
+
+model %>% compile(
+  loss = 'mean_squared_error',
+  optimizer = optimizer_adam(),
+  metrics = c('accuracy')
+)
+
+
+# tensorboard("logs/run_a")
+
+history <- model %>% fit(
+  as.matrix(x_train), y_train, 
+  epochs = 30, batch_size = 128, 
+  verbose = 1,
+#  callbacks = callback_tensorboard("logs/run_a"),
+  validation_split = 0.2
+)
+
+#tensorboard(c("logs/run_a"))
+
+model %>% evaluate(x_test, y_test)
+
+model %>% predict_classes(x_test)
+
+
+plot(history)
+
+
+history_df <- as.data.frame(history)
+str(history_df)
+
+
+```
+
+
 
 ```{r, echo=FALSE, include=FALSE}
 
