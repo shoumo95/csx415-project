@@ -12,6 +12,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
+THIS IS UNFINISHED WORK IN PROGRESS - PLEASE DO NOT EVALUATE
+
+THIS IS JUST SAVED HERE SO THAT MULTIPLE GITHUB ACCOUNTS CAN ACCESS
+
 # install anaconda python 3.x
 # install.packages("reticulate")
 # devtools::install_github("rstudio/keras")
@@ -23,12 +27,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r, echo=FALSE, include = FALSE}
 
+---
 library(keras)
 mnist <- dataset_mnist()
 x_train <- mnist$train$x
 y_train <- mnist$train$y
 x_test <- mnist$test$x
 y_test <- mnist$test$y
+---
 
 
 # reshape
