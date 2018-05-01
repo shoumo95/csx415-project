@@ -16,13 +16,6 @@ THIS IS UNFINISHED WORK IN PROGRESS - PLEASE DO NOT EVALUATE
 
 THIS IS JUST SAVED HERE SO THAT MULTIPLE GITHUB ACCOUNTS CAN ACCESS
 
-# install anaconda python 3.x
-# install.packages("reticulate")
-# devtools::install_github("rstudio/keras")
-# library(keras)
-# install_keras()
-# install.packages("keras")
-# keras::install_keras()
 
 
 ```{r, echo=FALSE, include = FALSE}
