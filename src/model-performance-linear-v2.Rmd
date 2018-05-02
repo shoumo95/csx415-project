@@ -37,8 +37,15 @@ library(nnet)
 
 # Model After Backward Elimitaion Process
 
-## Linear Regression
+## Regression Models
 
+```{r, echo=FALSE, warning=FALSE}
+
+control <- trainControl(method="repeatedcv", number=5, repeats=1)
+
+model_glm_naive <- train(CreditLimit ~ SalesLastYr, data=dataset_train, method="glm", metric="RMSE", trControl=control)
+
+```
 
 ```{r, echo=FALSE, warning=FALSE}
 
@@ -57,26 +64,40 @@ model_glm <- train(CreditLimit ~ SalesCurrentYr + SalesLastYr + DesignBandSalesL
 
 ```{r, echo=FALSE, warning=FALSE}
 
-df <- data.frame()
+metric.regression.create <- function(){
+  setNames(data.frame(matrix(ncol = 4, nrow = 0)), c("RMSE", "RMSESD", "Rsquared", "RsquaredSD"))
+}
 
-model <- model_glm_int
-rownames(model$results) <- c("glm w/ intercept")
+metric.regression.append <- function(df, model, row_name){
+  df_tmp <- metric.regression.create()
+  df_tmp <- bind_rows(df_tmp, c(RMSE=mean(model$resample[["RMSE"]]),
+                                RMSESD=sd(model$resample[["RMSE"]]),
+                                Rsquared=mean(model$resample[["Rsquared"]]),
+                                RsquaredSD=sd(model$resample[["Rsquared"]])))
+  rownames(df_tmp) <- c(row_name)
+  rbind(df, df_tmp)
+}
 
-df <- rbind(df, model$results)
+df <- metric.regression.create()
+df <- metric.regression.append(df, model_glm_naive, "glm naive")
+df <- metric.regression.append(df, model_glm_int, "glm w/ intercept")
+df <- metric.regression.append(df, model_glm, "glm w/o intercept")
 
-
-model <- model_glm
-rownames(model$results) <- c("glm w/o intercept")
-
-df <- rbind(df, model$results)
-
-
-df$parameter <- NULL
-df[,c("RMSE", "RMSESD", "Rsquared", "RsquaredSD", "MAE", "MAESD")]
+df
 
 ```
 
-## Logistic Regression
+## Regression Tests Accuracy
+
+```{r, warning=FALSE}
+
+predictions <- predict(model_glm, newdata=dataset_test)
+postResample(dataset_test$CreditLimit, predictions)
+
+```
+
+
+## Classification Models
 
 ```{r, echo=FALSE, warning=FALSE}
 
@@ -115,12 +136,12 @@ model_multinom <- train(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + Des
 
 ```{r, echo=FALSE, warning=FALSE}
 
-matric.classification.create <- function(){
+metric.classification.create <- function(){
   setNames(data.frame(matrix(ncol = 4, nrow = 0)), c("Accuracy", "AccuracySD", "Kappa", "KappaSD"))
 }
 
-matric.classification.append <- function(df, model, row_name){
-  df_tmp <- matric.classification.create()
+metric.classification.append <- function(df, model, row_name){
+  df_tmp <- metric.classification.create()
   df_tmp <- bind_rows(df_tmp, c(Accuracy=mean(model$resample[["Accuracy"]]),
                                 AccuracySD=sd(model$resample[["Accuracy"]]),
                                 Kappa=mean(model$resample[["Kappa"]]),
@@ -129,17 +150,17 @@ matric.classification.append <- function(df, model, row_name){
   rbind(df, df_tmp)
 }
 
-df <- matric.classification.create()
-df <- matric.classification.append(df, model_rpart, "rpart")
-df <- matric.classification.append(df, model_multinom, "multi")
-df <- matric.classification.append(df, model_lda, "lda")
-df <- matric.classification.append(df, model_svmRad, "svmRad")
+df <- metric.classification.create()
+df <- metric.classification.append(df, model_rpart, "rpart")
+df <- metric.classification.append(df, model_multinom, "multi")
+df <- metric.classification.append(df, model_lda, "lda")
+df <- metric.classification.append(df, model_svmRad, "svmRad")
 
 df
 
 ```
 
-## Test Accuracy
+## Classification Test Accuracy
 
 ```{r, warning=FALSE}
 

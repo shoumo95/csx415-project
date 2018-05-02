@@ -128,22 +128,30 @@ $(document).ready(function () {
 
 <div id="model-after-backward-elimitaion-process" class="section level1">
 <h1>Model After Backward Elimitaion Process</h1>
-<div id="linear-regression" class="section level2">
-<h2>Linear Regression</h2>
-<pre><code>##                       RMSE   RMSESD  Rsquared RsquaredSD      MAE    MAESD
-## glm w/ intercept  4151.741 782.7127 0.1098384 0.02723848 2152.416 263.5922
-## glm w/o intercept 4149.076 674.7561 0.1199113 0.05676944 2145.786 174.3300</code></pre>
+<div id="regression-models" class="section level2">
+<h2>Regression Models</h2>
+<pre><code>##                       RMSE   RMSESD   Rsquared RsquaredSD
+## glm naive         4282.826 833.0867 0.05439149 0.04046401
+## glm w/ intercept  4149.076 674.7561 0.11991130 0.05676944
+## glm w/o intercept 4137.620 703.1423 0.10976376 0.02692983</code></pre>
 </div>
-<div id="logistic-regression" class="section level2">
-<h2>Logistic Regression</h2>
+</div>
+<div id="regression-tests-accuracy" class="section level1">
+<h1>Regression Tests Accuracy</h1>
+<pre class="r"><code>predictions &lt;- predict(model_glm, newdata=dataset_test)
+postResample(dataset_test$CreditLimit, predictions)</code></pre>
+<pre><code>##         RMSE     Rsquared          MAE 
+## 4.080404e+03 8.905105e-02 2.153903e+03</code></pre>
+<div id="classification-models" class="section level2">
+<h2>Classification Models</h2>
 <pre><code>##         Accuracy  AccuracySD     Kappa    KappaSD
-## rpart  0.4701676 0.004730535 0.2530758 0.00851835
-## multi  0.4390901 0.006710019 0.2100620 0.01002626
-## lda    0.4248349 0.011597866 0.2358748 0.01391327
-## svmRad 0.3723224 0.201709667 0.1879699 0.10244626</code></pre>
+## rpart  0.4733746 0.019037533 0.2444184 0.02753183
+## multi  0.4465986 0.003427772 0.2175909 0.01141656
+## lda    0.4236019 0.009099323 0.2336714 0.01370727
+## svmRad 0.3676757 0.205452783 0.1872860 0.10991868</code></pre>
 </div>
-<div id="test-accuracy" class="section level2">
-<h2>Test Accuracy</h2>
+<div id="classification-test-accuracy" class="section level2">
+<h2>Classification Test Accuracy</h2>
 <pre class="r"><code>predictions &lt;- predict(model_rpart, newdata=dataset_test)
 postResample(dataset_test$CreditLimitCategory, predictions)</code></pre>
 <pre><code>##  Accuracy     Kappa 
@@ -157,11 +165,11 @@ cm$overall</code></pre>
 <pre class="r"><code>predictions &lt;- predict(model_multinom, newdata=dataset_test)
 postResample(dataset_test$CreditLimitCategory, predictions)</code></pre>
 <pre><code>##  Accuracy     Kappa 
-## 0.4373402 0.1967579</code></pre>
+## 0.4373402 0.1948256</code></pre>
 <pre class="r"><code>cm &lt;- confusionMatrix(data=table(predictions, dataset_test$CreditLimitCategory))
 cm$overall</code></pre>
 <pre><code>##       Accuracy          Kappa  AccuracyLower  AccuracyUpper   AccuracyNull 
-##   4.373402e-01   1.967579e-01   3.875301e-01   4.881058e-01   3.350384e-01 
+##   4.373402e-01   1.948256e-01   3.875301e-01   4.881058e-01   3.350384e-01 
 ## AccuracyPValue  McnemarPValue 
 ##   1.649306e-05            NaN</code></pre>
 </div>
