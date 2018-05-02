@@ -4,8 +4,12 @@ set.seed(415)
 # CustomerData should be auto loaded so select the features/independent variables from the Customerdata
 dataset <- CustomerData[,9:38]
 
-# split the dataset into training and test sets
-split = sample.split(dataset$CreditLimit, SplitRatio = 0.7)
+# create categorical values for the credit limit for logistic regression models
+dataset$CreditLimitCategory <- factor(dataset$CreditLimit)
+levels(dataset$CreditLimitCategory) <- make.names(levels(factor(dataset$CreditLimit)))
 
-dataset_train = subset(dataset, split == TRUE) 
-dataset_test = subset(dataset, split == FALSE)
+# split the dataset into training and test sets
+trainIndex <- createDataPartition(dataset$CreditLimitCategory, p=0.80, list=FALSE)
+
+dataset_train = dataset[trainIndex,]
+dataset_test = dataset[-trainIndex,]
