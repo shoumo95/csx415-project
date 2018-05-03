@@ -7,7 +7,7 @@ date: 'April 24, 2018'
 knit: (function(inputFile, encoding) { 
       rmarkdown::render(inputFile,
                         encoding=encoding, 
-                        output_file=file.path(dirname(inputFile), '../docs/', 'model-performance-linear-v2.html')) })
+                        output_file=file.path(dirname(inputFile), '../reports/', 'model-performance-linear-v2.html')) })
 output: html_document
 ---
 
