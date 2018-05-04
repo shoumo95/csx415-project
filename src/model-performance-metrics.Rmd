@@ -223,7 +223,7 @@ cm$overall
 
 ```{r, echo=FALSE, warning=FALSE}
 
-model_rf <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset, method="rf", metric="Accuracy", trControl=control, tuneGrid=data.frame(.mtry=19))
+model_rf <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset, method="rf", metric="Accuracy", tuneGrid=data.frame(.mtry=19))
 
 ```
 
@@ -231,6 +231,22 @@ model_rf <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCur
 ```{r, echo=FALSE, warning=FALSE}
 
 model_rf$results
+
+```
+
+```{r, echo=FALSE}
+
+saveRDS(model_rf, "../data/final_model.rds")
+
+```
+
+```{r, echo=FALSE}
+
+model_loaded <- readRDS("../data/final_model.rds")
+
+predictions <- predict(model_loaded, newdata=dataset_test)
+cm <- confusionMatrix(data=table(predictions, dataset_test$CreditLimitCategory))
+cm
 
 ```
 
