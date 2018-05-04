@@ -51,13 +51,13 @@ model_glm_naive <- train(CreditLimit ~ SalesLastYr, data=dataset_train, method="
 
 control <- trainControl(method="repeatedcv", number=5, repeats=1)
 
-model_glm_int <- train(CreditLimit ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds, data=dataset_train, method="glm", metric="RMSE", trControl=control)
+model_glm_int <- train(CreditLimit ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds, data=dataset_train, method="glm", metric="RMSE", trControl=control)
 
 ```
 
 ```{r, echo=FALSE, warning=FALSE}
 
-model_glm <- train(CreditLimit ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="glm", metric="RMSE", trControl=control)
+model_glm <- train(CreditLimit ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="glm", metric="RMSE", trControl=control)
 
 ```
 
@@ -98,39 +98,64 @@ postResample(dataset_test$CreditLimit, predictions)
 
 
 ## Classification Models
-
 ```{r, echo=FALSE, warning=FALSE}
 
-control <- trainControl(method="repeatedcv", number=5, repeats=1)
-
-model_lda <- train(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="lda", metric="Accuracy", trControl=control)
+control <- trainControl(method="repeatedcv", number=5, repeats=1, allowParallel=TRUE)
 
 ```
 
 ```{r, echo=FALSE, warning=FALSE}
 
-model_svmRad <- train(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="svmRadial", metric="Accuracy", trControl=control)
+model_steplda <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="stepLDA", metric="Accuracy", trControl=control, trace=FALSE)
 
 ```
 
 ```{r, echo=FALSE, warning=FALSE}
 
-#model_glmLogit <- train(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="glm", metric="Accuracy", preProcess=c("center", "scale"), trControl=control)
+model_svmRad <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="svmRadial", metric="Accuracy", trControl=control)
 
 ```
 
 ```{r, echo=FALSE, warning=FALSE}
 
-model_rpart <- train(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="rpart", metric="Accuracy", trControl=control)
+#model_bag <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="bag", metric="Accuracy", preProc=c("center", "scale"), trControl=control)
 
 ```
 
+```{r, echo=FALSE, warning=FALSE}
+
+model_rpart <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="rpart", metric="Accuracy", trControl=control)
+
+```
 
 ```{r, echo=FALSE, warning=FALSE}
 
+model_rpart2 <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="rpart2", metric="Accuracy", trControl=control)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+model_rf <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="rf", metric="Accuracy", trControl=control)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+model_multinom <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="multinom", metric="Accuracy", trControl=control, maxit=600, trace=FALSE)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+model_avNNet <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="avNNet", metric="Accuracy", trControl=control, maxit=600, trace=FALSE)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
 control <- trainControl(method="repeatedcv", number=5, repeats=1, classProbs=TRUE)
 
-model_multinom <- train(CreditLimitCategory ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="multinom", metric="Accuracy", trControl=control, maxit=600, trace=FALSE)
+model_nnet <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="nnet", trControl=control, maxit=5000, trace=FALSE)
 
 ```
 
@@ -152,8 +177,12 @@ metric.classification.append <- function(df, model, row_name){
 
 df <- metric.classification.create()
 df <- metric.classification.append(df, model_rpart, "rpart")
+df <- metric.classification.append(df, model_rpart2, "rpart2")
+df <- metric.classification.append(df, model_rf, "rf")
 df <- metric.classification.append(df, model_multinom, "multi")
-df <- metric.classification.append(df, model_lda, "lda")
+df <- metric.classification.append(df, model_avNNet, "avNNet")
+df <- metric.classification.append(df, model_nnet, "nnet")
+df <- metric.classification.append(df, model_steplda, "steplda")
 df <- metric.classification.append(df, model_svmRad, "svmRad")
 
 df
@@ -164,13 +193,12 @@ df
 
 ```{r, warning=FALSE}
 
-predictions <- predict(model_rpart, newdata=dataset_test)
+predictions <- predict(model_rf, newdata=dataset_test)
 postResample(dataset_test$CreditLimitCategory, predictions)
 cm <- confusionMatrix(data=table(predictions, dataset_test$CreditLimitCategory))
 cm$overall
 
 ```
-
 
 ```{r, warning=FALSE}
 
@@ -178,6 +206,21 @@ predictions <- predict(model_multinom, newdata=dataset_test)
 postResample(dataset_test$CreditLimitCategory, predictions)
 cm <- confusionMatrix(data=table(predictions, dataset_test$CreditLimitCategory))
 cm$overall
+
+```
+
+## Winner
+
+```{r, echo=FALSE, warning=FALSE}
+
+model_rf <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset, method="rf", metric="Accuracy", trControl=control)
+
+```
+
+
+```{r, echo=FALSE, warning=FALSE}
+
+model_rf$results
 
 ```
 
