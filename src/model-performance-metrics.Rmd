@@ -242,7 +242,12 @@ saveRDS(model_rf, "../data/final_model.rds")
 
 ```{r, echo=FALSE}
 
-model_loaded <- readRDS("../data/final_model.rds")
+# we now replaced the below line with a package
+# model_loaded <- readRDS("../data/final_model.rds")
+library(CreditLimitModel)
+
+# getCreditModel is in the CreditLimitModel package
+model_loaded <- getCreditModel()
 
 predictions <- predict(model_loaded, newdata=dataset_test)
 cm <- confusionMatrix(data=table(predictions, dataset_test$CreditLimitCategory))
