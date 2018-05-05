@@ -6,5 +6,5 @@
 #' @examples
 #' getCreditModel()
 getCreditModel <- function(){
-  readRDS("../data/final_model.rds")
+  readRDS(system.file("extdata", "final_model.rds", package = "CreditLimitModel"))
 }

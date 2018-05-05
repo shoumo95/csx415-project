@@ -236,15 +236,21 @@ model_rf$results
 
 ```{r, echo=FALSE}
 
+# save the model as a file to be used in the model package
 saveRDS(model_rf, "../data/final_model.rds")
+
+# save the test data to be included in the model package
+save(dataset_test, file = "../data/creditlimittestdata.rda")
 
 ```
 
 ```{r, echo=FALSE}
 
+require(caret)
 # we now replaced the below line with a package
 # model_loaded <- readRDS("../data/final_model.rds")
 library(CreditLimitModel)
+data("creditlimittestdata")
 
 # getCreditModel is in the CreditLimitModel package
 model_loaded <- getCreditModel()
