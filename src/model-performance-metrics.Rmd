@@ -116,6 +116,24 @@ control <- trainControl(method="repeatedcv", number=5, repeats=2, classProbs=TRU
 
 ```{r, echo=FALSE, warning=FALSE}
 
+model_naive <- train(CreditLimitCategory ~ SalesLastYr, data=dataset_train, method="rpart", metric="Accuracy", trControl=control)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+model_rpart <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="rpart", metric="Accuracy", trControl=control)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+model_rpart2 <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="rpart2", metric="Accuracy", trControl=control)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
 model_steplda <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="stepLDA", metric="Accuracy", trControl=control, trace=FALSE)
 
 ```
@@ -132,17 +150,6 @@ model_svmRad <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + Sale
 
 ```
 
-```{r, echo=FALSE, warning=FALSE}
-
-model_rpart <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="rpart", metric="Accuracy", trControl=control)
-
-```
-
-```{r, echo=FALSE, warning=FALSE}
-
-model_rpart2 <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="rpart2", metric="Accuracy", trControl=control)
-
-```
 
 ```{r, echo=FALSE, warning=FALSE}
 
@@ -186,6 +193,7 @@ metric.classification.append <- function(df, model, row_name){
 }
 
 df <- metric.classification.create()
+df <- metric.classification.append(df, model_naive, "naive")
 df <- metric.classification.append(df, model_rpart, "rpart")
 df <- metric.classification.append(df, model_rpart2, "rpart2")
 df <- metric.classification.append(df, model_rf, "rf")
@@ -251,6 +259,7 @@ require(caret)
 # model_loaded <- readRDS("../data/final_model.rds")
 library(CreditLimitModel)
 data("creditlimittestdata")
+
 
 # getCreditModel is in the CreditLimitModel package
 model_loaded <- getCreditModel()
