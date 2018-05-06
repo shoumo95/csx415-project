@@ -2,14 +2,23 @@
 % Please edit documentation in R/getCreditModel.R
 \name{getCreditModel}
 \alias{getCreditModel}
-\title{A Model for Determining Customer Credit Limits}
+\title{Get the latest instance of the model for determining customer credit limits}
 \usage{
 getCreditModel()
+}
+\arguments{
+\item{none}{method does not require an input}
+}
+\value{
+This method will return a trainned model to be used in the predict() fucntion
 }
 \description{
 This function returns the most recent trained model for determining customer credit limits.
 }
 \examples{
-getCreditModel()
+
+data("creditlimittestdata")
+credit_limit_model <- getCreditModel()
+predictions <- predict(credit_limit_model, newdata=dataset_test)
+
 }
-\keyword{credit}
