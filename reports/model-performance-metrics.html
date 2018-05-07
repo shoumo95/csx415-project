@@ -126,10 +126,14 @@ $(document).ready(function () {
 </div>
 
 
+<pre><code>## Loading required package: foreach</code></pre>
+<pre><code>## Loading required package: iterators</code></pre>
+<pre><code>## Loading required package: parallel</code></pre>
 <div id="model-after-backward-elimitaion-process" class="section level1">
 <h1>Model After Backward Elimitaion Process</h1>
 <div id="regression-models" class="section level2">
 <h2>Regression Models</h2>
+<p>Comparison of linear models using the RMSE and <span class="math inline">\(R^2\)</span> with their respective standard deviations.</p>
 <pre><code>##                        RMSE   RMSESD   Rsquared RsquaredSD
 ## glm naive         1826.3618 22.24945 0.02545724 0.01236675
 ## glm w/ intercept   814.8101 56.01510 0.80593756 0.02870076
@@ -137,6 +141,7 @@ $(document).ready(function () {
 </div>
 <div id="regression-tests-accuracy" class="section level2">
 <h2>Regression Tests Accuracy</h2>
+<p>RMSE, <span class="math inline">\(R^2\)</span> and MAE results using the test dataset.</p>
 <pre class="r"><code>predictions &lt;- predict(model_glm, newdata=dataset_test)
 postResample(dataset_test$CreditLimit, predictions)</code></pre>
 <pre><code>##        RMSE    Rsquared         MAE 
@@ -145,92 +150,97 @@ postResample(dataset_test$CreditLimit, predictions)</code></pre>
 <div id="classification-models" class="section level2">
 <h2>Classification Models</h2>
 <pre><code>##  `stepwise classification', using 10-fold cross-validated correctness rate of method lda'.</code></pre>
-<pre><code>## 1109 observations of 36 variables in 5 classes; direction: both</code></pre>
-<pre><code>## stop criterion: improvement less than 5%.</code></pre>
-<pre><code>## correctness rate: 0.64834;  in: &quot;JBTRatingFIN1&quot;;  variables (1): JBTRatingFIN1 
-## correctness rate: 0.76556;  in: &quot;JBTRatingFIN2&quot;;  variables (2): JBTRatingFIN1, JBTRatingFIN2 
-## 
-##  hr.elapsed min.elapsed sec.elapsed 
-##        0.00        0.00        4.36</code></pre>
-<pre><code>##  `stepwise classification', using 10-fold cross-validated correctness rate of method lda'.</code></pre>
-<pre><code>## 1109 observations of 36 variables in 5 classes; direction: both</code></pre>
-<pre><code>## stop criterion: improvement less than 5%.</code></pre>
-<pre><code>## correctness rate: 0.65016;  in: &quot;JBTRatingFIN1&quot;;  variables (1): JBTRatingFIN1 
-## correctness rate: 0.77463;  in: &quot;JBTRatingFIN2&quot;;  variables (2): JBTRatingFIN1, JBTRatingFIN2 
-## 
-##  hr.elapsed min.elapsed sec.elapsed 
-##        0.00        0.00        6.13</code></pre>
-<pre><code>##  `stepwise classification', using 10-fold cross-validated correctness rate of method lda'.</code></pre>
-<pre><code>## 1110 observations of 36 variables in 5 classes; direction: both</code></pre>
-<pre><code>## stop criterion: improvement less than 5%.</code></pre>
-<pre><code>## correctness rate: 0.64955;  in: &quot;JBTRatingFIN1&quot;;  variables (1): JBTRatingFIN1 
-## correctness rate: 0.77658;  in: &quot;JBTRatingFIN2&quot;;  variables (2): JBTRatingFIN1, JBTRatingFIN2 
-## 
-##  hr.elapsed min.elapsed sec.elapsed 
-##        0.00        0.00        7.24</code></pre>
-<pre><code>##  `stepwise classification', using 10-fold cross-validated correctness rate of method lda'.</code></pre>
-<pre><code>## 1110 observations of 36 variables in 5 classes; direction: both</code></pre>
-<pre><code>## stop criterion: improvement less than 5%.</code></pre>
-<pre><code>## correctness rate: 0.64505;  in: &quot;JBTRatingFIN1&quot;;  variables (1): JBTRatingFIN1 
-## correctness rate: 0.77838;  in: &quot;JBTRatingFIN2&quot;;  variables (2): JBTRatingFIN1, JBTRatingFIN2 
-## 
-##  hr.elapsed min.elapsed sec.elapsed 
-##        0.00        0.00        4.73</code></pre>
-<pre><code>##  `stepwise classification', using 10-fold cross-validated correctness rate of method lda'.</code></pre>
-<pre><code>## 1110 observations of 36 variables in 5 classes; direction: both</code></pre>
-<pre><code>## stop criterion: improvement less than 5%.</code></pre>
-<pre><code>## correctness rate: 0.64775;  in: &quot;JBTRatingFIN1&quot;;  variables (1): JBTRatingFIN1 
-## correctness rate: 0.78018;  in: &quot;JBTRatingFIN2&quot;;  variables (2): JBTRatingFIN1, JBTRatingFIN2 
-## 
-##  hr.elapsed min.elapsed sec.elapsed 
-##        0.00        0.00        4.52</code></pre>
-<pre><code>##  `stepwise classification', using 10-fold cross-validated correctness rate of method lda'.</code></pre>
 <pre><code>## 1387 observations of 36 variables in 5 classes; direction: both</code></pre>
 <pre><code>## stop criterion: improvement less than 5%.</code></pre>
-<pre><code>## correctness rate: 0.64814;  in: &quot;JBTRatingFIN1&quot;;  variables (1): JBTRatingFIN1 
-## correctness rate: 0.77502;  in: &quot;JBTRatingFIN2&quot;;  variables (2): JBTRatingFIN1, JBTRatingFIN2 
+<pre><code>## correctness rate: 0.64816;  in: &quot;JBTRatingFIN1&quot;;  variables (1): JBTRatingFIN1 
+## correctness rate: 0.77509;  in: &quot;JBTRatingFIN2&quot;;  variables (2): JBTRatingFIN1, JBTRatingFIN2 
 ## 
 ##  hr.elapsed min.elapsed sec.elapsed 
-##        0.00        0.00        4.82</code></pre>
-<pre><code>##          Accuracy AccuracySD     Kappa    KappaSD
-## rpart   0.7916162 0.02237601 0.7005542 0.03497149
-## rpart2  0.8485746 0.01022681 0.7856788 0.01499044
-## rf      0.9177955 0.01816023 0.8866371 0.02494518
-## multi   0.8637431 0.01821714 0.8102482 0.02496040
-## avNNet  0.6913279 0.18747968 0.5295326 0.31191576
-## nnet    0.6411131 0.24349127 0.4634088 0.38749721
-## steplda 0.7750253 0.02278377 0.6740544 0.03374662
-## svmRad  0.8557931 0.01005959 0.7963774 0.01333938</code></pre>
+##        0.00        0.00        5.32</code></pre>
+<pre><code>##          Accuracy AccuracySD      Kappa    KappaSD
+## naive   0.3843140 0.02521650 0.07303731 0.03786193
+## rpart   0.7955615 0.02963593 0.70746932 0.04497468
+## rpart2  0.8500429 0.01263215 0.78838439 0.01758826
+## rf      0.9188855 0.01255818 0.88789140 0.01752448
+## multi   0.8608481 0.01701753 0.80619578 0.02387905
+## avNNet  0.7389650 0.13599977 0.61319239 0.21807622
+## nnet    0.7584729 0.20737357 0.64366295 0.32786877
+## steplda 0.7750370 0.01604022 0.67411808 0.02365950
+## svmRad  0.7901886 0.02585029 0.71712785 0.03352866</code></pre>
+<p>After comparing our Naive version of our classification model to other models that we built using Decision Tree (<strong>rpart</strong> and <strong>raprt2</strong>), Random Forest (<strong>rf</strong>), Multinomial Log-linear Model via Neural Networks (<strong>multinom</strong>), Single-hidden-layer Neural Network (<strong>nnet</strong>), Neural Networks Using Model Averaging (<strong>avNNet</strong>), Linear Discriminant Analysis with Stepwise Feature Selection (<strong>stepLDA</strong>), Support Vector Machines with Radial Basis Function Kernel (<strong>svmRad</strong>) we found that the Random Forest model was the one with the best Accuracy and the highest Kappa value. The second best model was Multinomial Log-liner model. So, we cheched these two models against the test data to evaluate their metric.</p>
 </div>
 <div id="classification-test-accuracy" class="section level2">
 <h2>Classification Test Accuracy</h2>
+<p>Random Rorest model against the test data:</p>
 <pre class="r"><code>predictions &lt;- predict(model_rf, newdata=dataset_test)
 postResample(dataset_test$CreditLimitCategory, predictions)</code></pre>
 <pre><code>##  Accuracy     Kappa 
-## 0.9333333 0.9078301</code></pre>
+## 0.9333333 0.9079861</code></pre>
 <pre class="r"><code>cm &lt;- confusionMatrix(data=table(predictions, dataset_test$CreditLimitCategory))
 cm$overall</code></pre>
 <pre><code>##       Accuracy          Kappa  AccuracyLower  AccuracyUpper   AccuracyNull 
-##   9.333333e-01   9.078301e-01   9.016442e-01   9.572730e-01   3.768116e-01 
+##   9.333333e-01   9.079861e-01   9.016442e-01   9.572730e-01   3.768116e-01 
 ## AccuracyPValue  McnemarPValue 
 ##  2.748101e-106            NaN</code></pre>
-<pre class="r"><code>predictions &lt;- predict(model_multinom, newdata=dataset_test)
+<p>Multinomial Log-liner model against the test data:</p>
+<pre class="r"><code>predictions &lt;- predict(model_nnet, newdata=dataset_test)
 postResample(dataset_test$CreditLimitCategory, predictions)</code></pre>
 <pre><code>##  Accuracy     Kappa 
-## 0.8637681 0.8101777</code></pre>
+## 0.9188406 0.8871719</code></pre>
 <pre class="r"><code>cm &lt;- confusionMatrix(data=table(predictions, dataset_test$CreditLimitCategory))
 cm$overall</code></pre>
 <pre><code>##       Accuracy          Kappa  AccuracyLower  AccuracyUpper   AccuracyNull 
-##   8.637681e-01   8.101777e-01   8.229881e-01   8.981555e-01   3.768116e-01 
+##   9.188406e-01   8.871719e-01   8.848377e-01   9.453940e-01   3.768116e-01 
 ## AccuracyPValue  McnemarPValue 
-##   3.264473e-78            NaN</code></pre>
+##  9.777432e-100            NaN</code></pre>
 </div>
-<div id="winner" class="section level2">
-<h2>Winner</h2>
-<pre><code>##   mtry  Accuracy     Kappa  AccuracySD     KappaSD
-## 1    2 0.8371775 0.7672949 0.011200281 0.016497769
-## 2   19 0.9249488 0.8964725 0.009732879 0.013427978
-## 3   36 0.9180190 0.8868640 0.006565871 0.008870855</code></pre>
+<div id="final-model" class="section level2">
+<h2>Final model</h2>
+<p>From the last two model tests, we have confirmed that the model built using the random forest was the one with the best accuracy and bet Kappa value.</p>
+<p>We re-trainned the model using the entire dataset in order to save this model and create a package.</p>
+<pre class="r"><code>model_rf &lt;- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset, method=&quot;rf&quot;, metric=&quot;Accuracy&quot;, tuneGrid=data.frame(.mtry=19))</code></pre>
+<pre><code>##   mtry  Accuracy     Kappa AccuracySD    KappaSD
+## 1   19 0.9204885 0.8902564 0.01056458 0.01413382</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##            
+## predictions  X0 X1000 X2000 X3000 X5000
+##       X0     25     0     0     0     0
+##       X1000   0   103     0     0     0
+##       X2000   0     0    25     0     0
+##       X3000   0     0     0    62     0
+##       X5000   0     0     0     0   130
+## 
+## Overall Statistics
+##                                      
+##                Accuracy : 1          
+##                  95% CI : (0.9894, 1)
+##     No Information Rate : 0.3768     
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16  
+##                                      
+##                   Kappa : 1          
+##  Mcnemar's Test P-Value : NA         
+## 
+## Statistics by Class:
+## 
+##                      Class: X0 Class: X1000 Class: X2000 Class: X3000
+## Sensitivity            1.00000       1.0000      1.00000       1.0000
+## Specificity            1.00000       1.0000      1.00000       1.0000
+## Pos Pred Value         1.00000       1.0000      1.00000       1.0000
+## Neg Pred Value         1.00000       1.0000      1.00000       1.0000
+## Prevalence             0.07246       0.2986      0.07246       0.1797
+## Detection Rate         0.07246       0.2986      0.07246       0.1797
+## Detection Prevalence   0.07246       0.2986      0.07246       0.1797
+## Balanced Accuracy      1.00000       1.0000      1.00000       1.0000
+##                      Class: X5000
+## Sensitivity                1.0000
+## Specificity                1.0000
+## Pos Pred Value             1.0000
+## Neg Pred Value             1.0000
+## Prevalence                 0.3768
+## Detection Rate             0.3768
+## Detection Prevalence       0.3768
+## Balanced Accuracy          1.0000</code></pre>
 </div>
 </div>
 
