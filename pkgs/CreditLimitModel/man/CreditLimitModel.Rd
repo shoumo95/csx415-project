@@ -11,7 +11,7 @@ The CreditLimitModel package provides a model for predicting credit limits for c
 \section{CreditLimitModel functions}{
 
 The CreditLimitModel functions ...
-  The only function you're likely to need from \pkg{CreditLimitModel} is
+  The only function you will need from \pkg{CreditLimitModel} is
   \code{\link{getCreditModel}}.
 }
 

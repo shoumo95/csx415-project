@@ -5,7 +5,7 @@
 #'
 #' @section CreditLimitModel functions:
 #' The CreditLimitModel functions ...
-#'   The only function you're likely to need from \pkg{CreditLimitModel} is
+#'   The only function you will need from \pkg{CreditLimitModel} is
 #'   \code{\link{getCreditModel}}.
 #'
 #' @docType package
