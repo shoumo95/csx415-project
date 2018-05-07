@@ -3,6 +3,8 @@ describe("CreditModel", {
   describe("model object", {
     it("is a training model", {
 
+      require(caret)
+
       credit_limit_model <- getCreditModel()
 
       # check the class of the loaded model
@@ -16,6 +18,8 @@ describe("CreditModel", {
   })
   describe("model outcome", {
     it("can preditict", {
+
+      require(caret)
 
       data("creditlimittestdata")
 
