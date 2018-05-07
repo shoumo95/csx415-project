@@ -1,5 +1,5 @@
 ---
-title: "Model Performance - linear"
+title: "Model Performance - metrics"
 author:
   - name: Hakan Egeli
   - name: Soumyendu Sarkar
@@ -36,7 +36,7 @@ library(nnet)
 
 ```
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 # optional parallelism to be used by caret's trainControl 
 library(doParallel);
@@ -141,9 +141,15 @@ model_rpart2 <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + Sale
 
 ```
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 model_steplda <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="stepLDA", metric="Accuracy", trControl=control, trace=FALSE)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+model_svmLinear <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="svmLinear", metric="Accuracy", trControl=control)
 
 ```
 
@@ -153,6 +159,11 @@ model_svmRad <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + Sale
 
 ```
 
+```{r, echo=FALSE, warning=FALSE}
+
+model_svmPoly <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="svmPoly", metric="Accuracy", trControl=control)
+
+```
 
 ```{r, echo=FALSE, warning=FALSE}
 
@@ -204,9 +215,11 @@ df <- metric.classification.append(df, model_multinom, "multi")
 df <- metric.classification.append(df, model_avNNet, "avNNet")
 df <- metric.classification.append(df, model_nnet, "nnet")
 df <- metric.classification.append(df, model_steplda, "steplda")
+df <- metric.classification.append(df, model_svmLinear, "svmLinear")
 df <- metric.classification.append(df, model_svmRad, "svmRad")
+df <- metric.classification.append(df, model_svmPoly, "svmPoly")
 
-df
+df[with(df, order(-Accuracy)),]
 
 ```
 
@@ -255,17 +268,17 @@ model_rf$results
 
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, include=FALSE}
 
 # save the model as a file to be used in the model package
-saveRDS(model_rf, "../data/final_model.rds")
+#saveRDS(model_rf, "../data/final_model.rds")
 
 # save the test data to be included in the model package
-save(dataset_test, file = "../data/creditlimittestdata.rda")
+#save(dataset_test, file = "../data/creditlimittestdata.rda")
 
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, include=FALSE}
 
 require(caret)
 require(randomForest)
