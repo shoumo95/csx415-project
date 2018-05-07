@@ -268,6 +268,7 @@ save(dataset_test, file = "../data/creditlimittestdata.rda")
 ```{r, echo=FALSE}
 
 require(caret)
+require(randomForest)
 # we now replaced the below line with a package
 # model_loaded <- readRDS("../data/final_model.rds")
 
