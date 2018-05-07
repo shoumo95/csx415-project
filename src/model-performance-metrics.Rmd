@@ -31,11 +31,12 @@ setwd(cwd)
 
 ```{r, echo=FALSE}
 
+# for multinom and nnet methods
 library(nnet)
 
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 
 # optional parallelism to be used by caret's trainControl 
 library(doParallel);
@@ -53,24 +54,30 @@ registerDoParallel(cl)
 
 control <- trainControl(method="repeatedcv", number=5, repeats=1)
 
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+# generalized linear naive model only using the Sales Last Year
 model_glm_naive <- train(CreditLimit ~ SalesLastYr, data=dataset_train, method="glm", metric="RMSE", trControl=control)
 
 ```
 
 ```{r, echo=FALSE, warning=FALSE}
 
-control <- trainControl(method="repeatedcv", number=5, repeats=1)
-
+# generalized linear model with the significant independent variables, with the intercept
 model_glm_int <- train(CreditLimit ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds, data=dataset_train, method="glm", metric="RMSE", trControl=control)
 
 ```
 
 ```{r, echo=FALSE, warning=FALSE}
 
+# generalized linear model with the significant independent variables, without the intercept
 model_glm <- train(CreditLimit ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="glm", metric="RMSE", trControl=control)
 
 ```
 
+Comparison of linear models using the RMSE and $R^2$ with their respective standard deviations.
 
 ```{r, echo=FALSE, warning=FALSE}
 
@@ -99,6 +106,8 @@ df
 
 ## Regression Tests Accuracy
 
+RMSE, $R^2$ and MAE results using the test dataset.
+
 ```{r, warning=FALSE}
 
 predictions <- predict(model_glm, newdata=dataset_test)
@@ -106,8 +115,8 @@ postResample(dataset_test$CreditLimit, predictions)
 
 ```
 
-
 ## Classification Models
+
 ```{r, echo=FALSE, warning=FALSE}
 
 control <- trainControl(method="repeatedcv", number=5, repeats=2, classProbs=TRUE, allowParallel=TRUE)
@@ -141,12 +150,6 @@ model_steplda <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + Sal
 ```{r, echo=FALSE, warning=FALSE}
 
 model_svmRad <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="svmRadial", metric="Accuracy", trControl=control)
-
-```
-
-```{r, echo=FALSE, warning=FALSE}
-
-#model_bag <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="bag", metric="Accuracy", preProc=c("center", "scale"), trControl=control)
 
 ```
 
@@ -207,7 +210,11 @@ df
 
 ```
 
+After comparing our Naive version of our classification model to other models that we built using Decision Tree (**rpart** and **raprt2**), Random Forest (**rf**), Multinomial Log-linear Model via Neural Networks (**multinom**), Single-hidden-layer Neural Network (**nnet**), Neural Networks Using Model Averaging (**avNNet**), Linear Discriminant Analysis with Stepwise Feature Selection (**stepLDA**), Support Vector Machines with Radial Basis Function Kernel (**svmRad**) we found that the Random Forest model was the one with the best Accuracy and the highest Kappa value. The second best model was Multinomial Log-liner model. So, we cheched these two models against the test data to evaluate their metric.
+
 ## Classification Test Accuracy
+
+Random Rorest model against the test data:
 
 ```{r, warning=FALSE}
 
@@ -218,6 +225,8 @@ cm$overall
 
 ```
 
+Multinomial Log-liner model against the test data:
+
 ```{r, warning=FALSE}
 
 predictions <- predict(model_nnet, newdata=dataset_test)
@@ -227,9 +236,13 @@ cm$overall
 
 ```
 
-## Winner
+## Final model
 
-```{r, echo=FALSE, warning=FALSE}
+From the last two model tests, we have confirmed that the model built using the random forest was the one with the best accuracy and bet Kappa value.
+
+We re-trainned the model using the entire dataset in order to save this model and create a package.
+
+```{r}
 
 model_rf <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset, method="rf", metric="Accuracy", tuneGrid=data.frame(.mtry=19))
 
