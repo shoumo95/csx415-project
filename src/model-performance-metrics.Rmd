@@ -282,15 +282,12 @@ model_rf$results
 
 require(caret)
 require(randomForest)
-# we now replaced the below line with a package
-# model_loaded <- readRDS("../data/final_model.rds")
 
 # install.packages("./pkgs/CreditLimitModel", repos = NULL, type = "source")
 library(CreditLimitModel)
 data("creditlimittestdata")
 
-
-# getCreditModel is in the CreditLimitModel package
+# getCreditModel() from the CreditLimitModel package returns the latest version of the model
 model_loaded <- getCreditModel()
 
 predictions <- predict(model_loaded, newdata=dataset_test)
