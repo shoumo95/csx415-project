@@ -4,7 +4,10 @@ author:
   - name: Hakan Egeli
   - name: Soumyendu Sarkar
 date: 'April 17, 2018'
-
+knit: (function(inputFile, encoding) { 
+      rmarkdown::render(inputFile,
+                        encoding=encoding, 
+                        output_file=file.path(dirname(inputFile), '../reports/', 'project-performance.html')) })
 output: html_document
 ---
 
@@ -20,36 +23,20 @@ We also set the seed to a fixed number so that we can produce the same sequence 
 
 ```{r, echo=FALSE, include = FALSE}
 
+cwd <- getwd()
+
 # load the project. This will autoload the data and also create training and test datasets
+setwd("..")
 library('ProjectTemplate')
 load.project()
+
+setwd(cwd)
 
 ```
 
 ## Pre-Model Work
 
 We developed our own functions to be able to calculate the errors for our model and our future models. These error functions include **R-squared**, **Adjusted R-squared** and the **Root Mean Square Error (RMSE)**. We will make use of these functions to track the fitness and the performance of our models, and we will be able to compare models to each other.
-
-```{r, echo=FALSE, include = FALSE}
-
-# define some of the error estimaste functions here to be used later
-
-RSquared <- function(observed, predicted){
-
-  ss_res <- sum((observed - predicted)^2)
-  ss_tot <- sum((observed - mean(observed))^2)
-  
-  1 - (ss_res/ss_tot)
-}
-
-RSquaredAdjsuted <- function(R2, n, p){
-  1 - (1 - R2)*((n - 1)/(n - p - 1))
-}
-
-RMSE <- function(observed, predicted){
-  sqrt(mean((observed - predicted)^2))
-}
-```
 
 ```{r, echo=FALSE, include = FALSE}
 #
@@ -130,15 +117,15 @@ y_hat <- predict(model, dataset_train)
 
 ```{r, echo=FALSE}
 # calculate R-squared
-R2 <- RSquared(y, y_hat)
+R2 <- helper.RSquared(y, y_hat)
 cat('R Squared: ', R2, "\n")
 
 # calculate Adjusted R-squared
-R2Adj <- RSquaredAdjsuted(R2, length(y), 1)
+R2Adj <- helper.RSquaredAdjsuted(R2, length(y), 1)
 cat('R Squared (Adjusted): ', R2Adj, "\n")
 
 # calculate Root Mean Squared error
-rmse <- RMSE(y, y_hat)
+rmse <- helper.RMSE(y, y_hat)
 cat('Root Mean Square Error: ', rmse, "\n")
 
 ```
@@ -161,15 +148,15 @@ y_hat <- predict(model, dataset_test)
 
 ```{r, echo=FALSE}
 # calculate R-squared
-R2 <- RSquared(y, y_hat)
+R2 <- helper.RSquared(y, y_hat)
 cat('R Squared: ', R2, "\n")
 
 # calculate Adjusted R-squared
-R2Adj <- RSquaredAdjsuted(R2, length(y), 1)
+R2Adj <- helper.RSquaredAdjsuted(R2, length(y), 1)
 cat('R Squared (Adjusted): ', R2Adj, "\n")
 
 # calculate Root Mean Squared error
-rmse <- RMSE(y, y_hat)
+rmse <- helper.RMSE(y, y_hat)
 cat('Root Mean Square Error: ', rmse, "\n")
 
 ```
