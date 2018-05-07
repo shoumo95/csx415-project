@@ -257,6 +257,8 @@ save(dataset_test, file = "../data/creditlimittestdata.rda")
 require(caret)
 # we now replaced the below line with a package
 # model_loaded <- readRDS("../data/final_model.rds")
+
+# install.packages("./pkgs/CreditLimitModel", repos = NULL, type = "source")
 library(CreditLimitModel)
 data("creditlimittestdata")
 
