@@ -36,6 +36,8 @@ require(gridExtra)
 require(caret)
 require(randomForest)
 
+library(Hmisc)
+
 # for multinom and nnet methods
 library(nnet)
 
@@ -206,13 +208,45 @@ data <- data.frame(naive=model_naive$resample$Accuracy,
                    nnet=model_nnet$resample$Accuracy)
 data <- gather(data, model, accuracy, naive:nnet)
 
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
 ggplot(data, aes(x = model, y = accuracy, fill = model)) + 
-  geom_boxplot(outlier.size = 0) +
-  stat_summary(fun.y = mean, geom = "point", shape = 1, size = 1, color = "white") +
+  stat_summary(fun.y = mean, geom = "point") +
+  stat_summary(fun.data = mean_sdl, fun.args = list(mult=2), geom = "errorbar", width = 0.1) +
   theme(legend.position = "") +
   ggtitle('Accuracy Confidence Interval') +
   xlab('Model') + 
   ylab('Accuracy')
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+data <- data.frame(naive=model_naive$resample$Kappa,
+                   rpart=model_rpart$resample$Kappa,
+                   rpart2=model_rpart2$resample$Kappa,
+                   steplda=model_steplda$resample$Kappa,
+                   svmLinear=model_svmLinear$resample$Kappa,
+                   svmRad=model_svmRad$resample$Kappa,
+                   svmPoly=model_svmPoly$resample$Kappa,
+                   rf=model_rf$resample$Kappa,
+                   multinom=model_multinom$resample$Kappa,
+                   avNNet=model_avNNet$resample$Kappa,
+                   nnet=model_nnet$resample$Kappa)
+data <- gather(data, model, kappa, naive:nnet)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(data, aes(x = model, y = kappa, fill = model)) + 
+  stat_summary(fun.y = mean, geom = "point") +
+  stat_summary(fun.data = mean_sdl, fun.args = list(mult=2), geom = "errorbar", width = 0.1) +
+  theme(legend.position = "") +
+  ggtitle('Kappa Confidence Interval') +
+  xlab('Model') + 
+  ylab('Kappa')
 
 ```
 
