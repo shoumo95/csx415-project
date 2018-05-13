@@ -1,1 +1,8 @@
-Here you can store any output reports, such as HTML or LaTeX versions of tables, that you produce. Sweave or brew documents should also go in the `reports` directory.
+# Model Reports
+
+* Formal Problem Statemet (FPS.Rmd)
+* Exploratory Data Analysis (EDA.Rmd)
+* Feature Selection (feature-selection.Rmd)
+* Model Training and Validation
+* Model Performance and Tuning
+* Project Performance
