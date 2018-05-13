@@ -214,7 +214,7 @@ data <- gather(data, model, accuracy, naive:nnet)
 
 ggplot(data, aes(x = model, y = accuracy, fill = model)) + 
   stat_summary(fun.y = mean, geom = "point") +
-  stat_summary(fun.data = mean_sdl, fun.args = list(mult=2), geom = "errorbar", width = 0.1) +
+  stat_summary(fun.data = mean_sdl, geom = "errorbar", width = 0.1) +
   theme(legend.position = "") +
   ggtitle('Accuracy Confidence Interval') +
   xlab('Model') + 
@@ -242,7 +242,7 @@ data <- gather(data, model, kappa, naive:nnet)
 
 ggplot(data, aes(x = model, y = kappa, fill = model)) + 
   stat_summary(fun.y = mean, geom = "point") +
-  stat_summary(fun.data = mean_sdl, fun.args = list(mult=2), geom = "errorbar", width = 0.1) +
+  stat_summary(fun.data = mean_sdl, geom = "errorbar", width = 0.1) +
   theme(legend.position = "") +
   ggtitle('Kappa Confidence Interval') +
   xlab('Model') + 
