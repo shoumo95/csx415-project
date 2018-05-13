@@ -7,7 +7,7 @@ date: 'May 8, 2018'
 knit: (function(inputFile, encoding) { 
       rmarkdown::render(inputFile,
                         encoding=encoding, 
-                        output_file=file.path(dirname(inputFile), '../reports/', 'model-training-and-validation.html')) })
+                        output_file=file.path(dirname(inputFile), '../reports/', 'step-04-training-and-validation.html')) })
 output: html_document
 ---
 
@@ -42,7 +42,6 @@ library(Hmisc)
 library(nnet)
 
 ```
-
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -154,7 +153,7 @@ df <- metric.create()
 
 ```{r, echo=FALSE, warning=FALSE}
 
-control <- trainControl(method="repeatedcv", number=5, repeats=2, classProbs=TRUE, allowParallel=TRUE)
+control <- trainControl(method="repeatedcv", number=5, repeats=3, classProbs=TRUE, allowParallel=TRUE)
 
 ```
 
