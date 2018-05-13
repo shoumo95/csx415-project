@@ -7,7 +7,7 @@ date: 'May 8, 2018'
 knit: (function(inputFile, encoding) { 
       rmarkdown::render(inputFile,
                         encoding=encoding, 
-                        output_file=file.path(dirname(inputFile), '../reports/', 'feature-selection.html')) })
+                        output_file=file.path(dirname(inputFile), '../reports/', 'step-03-feature-selection.html')) })
 output: html_document
 ---
 
