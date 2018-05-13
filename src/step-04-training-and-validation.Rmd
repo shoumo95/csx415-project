@@ -31,11 +31,13 @@ setwd(cwd)
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+require(e1071)
 require(ggplot2)
 require(gridExtra)
 require(caret)
 require(randomForest)
 
+library(ROCR)
 library(Hmisc)
 
 # for multinom and nnet methods
