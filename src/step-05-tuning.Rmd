@@ -1,0 +1,92 @@
+---
+title: "Model Tuning"
+author:
+  - name: Hakan Egeli
+  - name: Soumyendu Sarkar
+date: 'May 14, 2018'
+knit: (function(inputFile, encoding) { 
+      rmarkdown::render(inputFile,
+                        encoding=encoding, 
+                        output_file=file.path(dirname(inputFile), '../reports/', 'step-05-tuning.html')) })
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, root.dir = "..")
+```
+
+
+```{r, echo=FALSE, include = FALSE}
+
+# ProjectTemplate will autoload the data and also create training and test datasets
+
+cwd <- getwd()
+setwd("..")
+
+library('ProjectTemplate')
+load.project()
+
+setwd(cwd)
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+require(e1071)
+require(ggplot2)
+require(gridExtra)
+require(caret)
+require(randomForest)
+
+library(ROCR)
+library(Hmisc)
+
+# for multinom and nnet methods
+library(nnet)
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# optional parallelism to be used by caret's trainControl 
+library(doParallel);
+
+cl <- makeCluster(detectCores())
+registerDoParallel(cl)
+
+```
+
+## Tuning the Final Model
+
+```{r, echo=FALSE, warning=FALSE}
+
+control <- trainControl(method="repeatedcv", number=5, repeats=3, classProbs=TRUE, allowParallel=TRUE)
+
+```
+
+```{r}
+
+model_rf <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset, method="rf", metric="Accuracy", trControl=control, tuneGrid=data.frame(.mtry=19))
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+model_rf$results
+
+```
+
+```{r, echo=FALSE, include=FALSE}
+
+# save the model as a file to be used in the model package
+#saveRDS(model_rf, "../data/final_model.rds")
+
+# save the test data to be included in the model package
+#save(dataset_test, file = "../data/creditlimittestdata.rda")
+
+```
+
+```{r, echo=FALSE}
+
+stopCluster(cl)
+
+```

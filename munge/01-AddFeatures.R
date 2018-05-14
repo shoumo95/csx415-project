@@ -15,23 +15,26 @@ data <- merge(data, CBSACodeUrbanInfluenceCode, by.x = "GEO.id2", by.y = "CBSACo
 # calculate the means for each of the Urban Influence Codes
 UrbanInfluenceCode_means <- data %>%
   group_by(UrbanInfluenceCode) %>%
-  summarize(mean_RCPTOT = mean(RCPTOT, na.rm = TRUE))
+  summarise(mean_RCPTOT = mean(RCPTOT, na.rm = TRUE))
 
 # however, there are some urban influence codes which has no data at all. These are primarily non-urban areas. We will determine a non-urban mean and assign this mean to the other missing urban influence codes
 missing_mean <- mean(data$RCPTOT[data$UrbanInfluenceCode>2], na.rm = T)
 
 # prepare a full list of Urban Influence codes and means for these codes
+CustomerData$RCPTOT <- NULL 
 UrbanInfluenceCode_means <- CustomerData %>% select(UrbanInfluenceCode) %>% distinct() %>% arrange(UrbanInfluenceCode) %>%
   left_join(UrbanInfluenceCode_means, by="UrbanInfluenceCode", all.x = TRUE)
 
 # and also set the missing_mean to the urband influence codes with NA values
 UrbanInfluenceCode_means$mean_RCPTOT[is.na(UrbanInfluenceCode_means$mean_RCPTOT)] <- missing_mean
 
+merged <- NULL
+
 # add the RCPTOT field to the CustomerData dataset using a left join
 merged <- merge(CustomerData, data[,c("GEO.id2", "RCPTOT")], by.x = "CBSACode", by.y = "GEO.id2", all.x = TRUE)
 
 # and bring the UrbanInfluenceCode_means to the merged dataset so that we can use these means to substitute the missing RCPTOT
-merged <- merge(merged, UrbanInfluenceCode_means, by = "UrbanInfluenceCode", all.x = TRUE)
+merged <- merged %>% left_join(UrbanInfluenceCode_means, by="UrbanInfluenceCode", all.x = TRUE)
 
 # if RCPTOT is NA use the UrbanInfluenceCode_means, else keep it
 merged$RCPTOT = ifelse(is.na(merged$RCPTOT), merged$mean_RCPTOT, merged$RCPTOT)
@@ -81,3 +84,7 @@ column_names <- c("CustomerId",
 
 # assign all the columns plus the new RCPTOT column back to the Customer Data
 CustomerData <- merged[,column_names]
+
+# cleanup!
+merged <- NULL
+UrbanInfluenceCode_means <- NULL
