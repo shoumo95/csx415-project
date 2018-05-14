@@ -1,6 +1,6 @@
 # CSX415 Project: Assigning Credit Limits to New Accounts
 
-## Deployemnt
+## Deployment
 
 ### RStudio
 
