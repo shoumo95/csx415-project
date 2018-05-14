@@ -18,8 +18,8 @@ load.project()
 Following documents will provide additional information about the project and the artifacts:
 
 * ASSETS.md 
+* /deploy/README.md
 * /reports/README.md
-* /src/README.md
 
 ## Installation
 
