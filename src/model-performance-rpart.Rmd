@@ -27,7 +27,6 @@ load.project()
 ```{r, echo=FALSE, include=FALSE}
 
 library(rpart)
-library(rattle)
 library(caret)
 
 require(gridExtra)
