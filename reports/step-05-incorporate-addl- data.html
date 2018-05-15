@@ -129,10 +129,26 @@ $(document).ready(function () {
 <div id="additional-data" class="section level3">
 <h3>Additional Data</h3>
 <p>We have decided to add Retail Sales data from the U.S. Census Bureau, data set named <strong>Retail Trade: Geographic Area Series: Summary Statistics for the U.S., States, Metro Areas, Counties, and Places: 2012 (EC1244A1)</strong>. This dataset contains information on Number of Establishments, Sales, and Annual Payroll for various NAICS codes on economic census geographies (CBSACode).</p>
+<pre><code>data &lt;- ECN.2012.US.44A1.with.ann
+data &lt;- data2[data$NAICS.id==&quot;448310&quot;,]
+</code></pre>
 <p>CBSA Code, core-based statistical area, is a U.S. geographic area defined by the Office of Management and Budget (OMB) that consists of one or more counties (or equivalents) anchored by an urban center of at least 10,000 people plus adjacent counties that are socioeconomically tied to the urban center by commuting.</p>
 <p>We were primarily interested in the NAICS code 448310, Jewelry Stores and our original dataset already had CBSA Codes for each record. However, some of the entries for the Sales column in the EC1244A1 dataset contained a letter D instead of a numeric value in order to avoid disclosing data for individual companies. When we joined the two datasets we had to come up with a value to replece these “D” values.</p>
+<pre><code># RCPTOT values for some of the statistical areas are masked with the letter D for privacy reasons.
+# replace the D values with NA so that we can assign a numeric value to them
+data &lt;- data.frame(lapply(data, as.character), stringsAsFactors=FALSE)
+data$RCPTOT = as.numeric(data$RCPTOT)
+
+# get Urban Influence Codes to calculate missing store sales averages for each Influence group
+data &lt;- merge(data, CBSACodeUrbanInfluenceCode, by.x = &quot;GEO.id2&quot;, by.y = &quot;CBSACode&quot;, all.x = TRUE)
+</code></pre>
 <p>The standard approach here could have been replacing the “D” values with a <span class="math inline">\(mean\)</span> value for the Sales column, however the sales values from large cities would influence the mean in a way that this mean would be much higher than the largest sales value from some of the rural (non-urban) areas. Therefore, we have decided to map the CBSA codes to Urban Influence Codes (Urban Influence Codes form a classification scheme that distinguishes metropolitan counties by population size of their metro area, and nonmetropolitan counties by size of the largest city or town and proximity to metro and micropolitan areas, subdivided into two metro and 10 nonmetro categories, resulting in a 12-part county classification).</p>
 <p>Joining the EC1244A1 dataset for the NAICS code 448310 withe the Urban Influence Codes gave us the ability to calculate means for each Urban Influence Code and we had planned to use these means to replace missing values for the sales numbers when we join the EC1244A1 datase to our original dataset.</p>
+<pre><code># calculate the means for each of the Urban Influence Codes
+UrbanInfluenceCode_means &lt;- data %&gt;%
+  group_by(UrbanInfluenceCode) %&gt;%
+  summarise(mean_RCPTOT = mean(RCPTOT, na.rm = TRUE))
+</code></pre>
 <p><strong>Urban Influence Code Means for the EC1244A1 Dataset</strong></p>
 <pre><code>## # A tibble: 5 x 2
 ##   UrbanInfluenceCode mean_RCPTOT
@@ -143,6 +159,20 @@ $(document).ready(function () {
 ## 4                  5       2964.
 ## 5                  8       4592.</code></pre>
 <p>When we looked at the means above, we did see that Urban Influence Codes 1 (Large-in a metro area with at least 1 million residents or more) and 2 (Small-in a metro area with fewer than 1 million residents) had a much larger mean compared to the non-metro Urban Influence Codes. We also noticed that codes 4, 6, 7, 9, 10, 11 and 12 were missing Sales data and we couldn’t calculate a mean for those Urban Influence Codes. We have decided to take the mean of all non-metro sales records (excluding Urban Influence Codes 1 and 2) and use that mean to substitute for codes 4, 6, 7, 9, 10, 11 and 12. Our final mean substitution table became the following:</p>
+<pre><code># however, there are some urban influence codes which has no data at all. These are primarily non-urban areas. 
+# we will determine a non-urban mean and assign this mean to the other missing urban influence codes.
+missing_mean &lt;- mean(data$RCPTOT[data$UrbanInfluenceCode&gt;2], na.rm = T)
+
+# prepare a full list of Urban Influence codes and means for these codes
+UrbanInfluenceCode_means &lt;- CustomerData %&gt;% 
+  select(UrbanInfluenceCode) %&gt;% 
+  distinct() %&gt;% 
+  arrange(UrbanInfluenceCode) %&gt;%
+  left_join(UrbanInfluenceCode_means, by=&quot;UrbanInfluenceCode&quot;, all.x = TRUE)
+
+# and also set the missing_mean to the urband influence codes with NA values
+UrbanInfluenceCode_means$mean_RCPTOT[is.na(UrbanInfluenceCode_means$mean_RCPTOT)] &lt;- missing_mean
+</code></pre>
 <p><strong>Final Urban Influence Code Means for the EC1244A1 Dataset</strong></p>
 <pre><code>## # A tibble: 11 x 2
 ##    UrbanInfluenceCode mean_RCPTOT
