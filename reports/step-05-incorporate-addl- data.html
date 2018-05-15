@@ -189,6 +189,15 @@ UrbanInfluenceCode_means$mean_RCPTOT[is.na(UrbanInfluenceCode_means$mean_RCPTOT)
 ## 10                 11       3811.
 ## 11                 12       3811.</code></pre>
 <p>We substitued the missing Sales data in the EC1244A1 dataset (RCPTOT) with the mean_RCPTOT which we had calculated and then performed a join to our dataset and added this new column.</p>
+<pre><code># add the RCPTOT field to the CustomerData dataset using a left join
+merged &lt;- merge(CustomerData, data[,c(&quot;GEO.id2&quot;, &quot;RCPTOT&quot;)], by.x = &quot;CBSACode&quot;, by.y = &quot;GEO.id2&quot;, all.x = TRUE)
+
+# and bring the UrbanInfluenceCode_means to the merged dataset so that we can use these means to substitute the missing RCPTOT
+merged &lt;- merged %&gt;% left_join(UrbanInfluenceCode_means, by=&quot;UrbanInfluenceCode&quot;, all.x = TRUE)
+
+# if RCPTOT is NA use the UrbanInfluenceCode_means, else keep it
+merged$RCPTOT = ifelse(is.na(merged$RCPTOT), merged$mean_RCPTOT, merged$RCPTOT)
+</code></pre>
 <p>To see the impact of the new column we have tested it against the two top performing models that we had come up so far and reran our cross validations once without the new field and once with the new field for both of the models (Random Forest and Multinomial Regression Model via Neural Networks).</p>
 </div>
 <div id="adding-the-additional-data-field-to-two-top-performing-models" class="section level3">
