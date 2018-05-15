@@ -130,7 +130,7 @@ $(document).ready(function () {
 <h3>Additional Data</h3>
 <p>We have decided to add Retail Sales data from the U.S. Census Bureau, data set named <strong>Retail Trade: Geographic Area Series: Summary Statistics for the U.S., States, Metro Areas, Counties, and Places: 2012 (EC1244A1)</strong>. This dataset contains information on Number of Establishments, Sales, and Annual Payroll for various NAICS codes on economic census geographies (CBSACode).</p>
 <pre><code>data &lt;- ECN.2012.US.44A1.with.ann
-data &lt;- data2[data$NAICS.id==&quot;448310&quot;,]
+data &lt;- data[data$NAICS.id==&quot;448310&quot;,]
 </code></pre>
 <p>CBSA Code, core-based statistical area, is a U.S. geographic area defined by the Office of Management and Budget (OMB) that consists of one or more counties (or equivalents) anchored by an urban center of at least 10,000 people plus adjacent counties that are socioeconomically tied to the urban center by commuting.</p>
 <p>We were primarily interested in the NAICS code 448310, Jewelry Stores and our original dataset already had CBSA Codes for each record. However, some of the entries for the Sales column in the EC1244A1 dataset contained a letter D instead of a numeric value in order to avoid disclosing data for individual companies. When we joined the two datasets we had to come up with a value to replece these “D” values.</p>
@@ -208,7 +208,7 @@ UrbanInfluenceCode_means$mean_RCPTOT[is.na(UrbanInfluenceCode_means$mean_RCPTOT)
 </div>
 <div id="conclusion" class="section level3">
 <h3>Conclusion</h3>
-<p>From the results above, we did not see a significant improvement in the Accuracy or the Kappa values. The best perfoming model (rf) perfomed slighly worse and the other model (multinomial) perfomed slightly better. The only noticable change was in the confidence intervals, since the means for each metrics got slightly smaller for the models with newly added field, the interval also got smaller for those models.</p>
+<p>From the results above, we did not see a significant improvement in the Accuracy or the Kappa values. The best perfoming model (rf) and the other model (multinomial) perfomed slightly better. The only noticable change was in the confidence intervals, the interval got smaller for the rf model (due to decrease in standard deviation) and the interval got bigger for the multinomial.</p>
 </div>
 
 
