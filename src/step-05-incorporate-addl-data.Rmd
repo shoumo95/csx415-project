@@ -1,0 +1,216 @@
+---
+title: "Incorporate Additional Data"
+author:
+  - name: Hakan Egeli
+  - name: Soumyendu Sarkar
+date: 'May 14, 2018'
+knit: (function(inputFile, encoding) { 
+      rmarkdown::render(inputFile,
+                        encoding=encoding, 
+                        output_file=file.path(dirname(inputFile), '../reports/', 'step-05-incorporate-addl-
+                        data.html')) })
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, root.dir = "..")
+```
+
+
+```{r, echo=FALSE, include = FALSE}
+
+# ProjectTemplate will autoload the data and also create training and test datasets
+
+cwd <- getwd()
+setwd("..")
+
+library('ProjectTemplate')
+load.project()
+
+setwd(cwd)
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+require(e1071)
+require(ggplot2)
+require(gridExtra)
+require(caret)
+require(randomForest)
+
+library(ROCR)
+library(Hmisc)
+
+# for multinom and nnet methods
+library(nnet)
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# optional parallelism to be used by caret's trainControl 
+library(doParallel);
+
+cl <- makeCluster(detectCores())
+registerDoParallel(cl)
+
+```
+
+### Additional Data
+
+We have decided to add Retail Sales data from the U.S. Census Bureau, data set named **Retail Trade: Geographic Area Series: Summary Statistics for the U.S., States, Metro Areas, Counties, and Places: 2012 (EC1244A1)**. This dataset contains information on Number of Establishments, Sales, and Annual Payroll for various NAICS codes on economic census geographies (CBSACode).
+
+CBSA Code, core-based statistical area, is a U.S. geographic area defined by the Office of Management and Budget (OMB) that consists of one or more counties (or equivalents) anchored by an urban center of at least 10,000 people plus adjacent counties that are socioeconomically tied to the urban center by commuting.
+
+We were primarily interested in the NAICS code 448310, Jewelry Stores and our original dataset already had CBSA Codes for each record. However, some of the entries for the Sales column in the EC1244A1 dataset contained a letter D instead of a numeric value in order to avoid disclosing data for individual companies. When we joined the two datasets we had to come up with a value to replece these "D" values.
+
+The standard approach here could have been replacing the "D" values with a $mean$ value for the Sales column, however the sales values from large cities would influence the mean in a way that this mean would be much higher than the largest sales value from some of the rural (non-urban) areas. Therefore, we have decided to map the CBSA codes to Urban Influence Codes (Urban Influence Codes form a classification scheme that distinguishes metropolitan counties by population size of their metro area, and nonmetropolitan counties by size of the largest city or town and proximity to metro and micropolitan areas, subdivided into two metro and 10 nonmetro categories, resulting in a 12-part county classification).
+
+Joining the EC1244A1 dataset for the NAICS code 448310 withe the Urban Influence Codes gave us the ability to calculate means for each Urban Influence Code and we had planned to use these means to replace missing values for the sales numbers when we join the EC1244A1 datase to our original dataset.
+
+**Urban Influence Code Means for the EC1244A1 Dataset**
+
+```{r, echo=FALSE, warning=FALSE}
+UrbanInfluenceCode_means_start
+```
+
+When we looked at the means above, we did see that Urban Influence Codes 1 (Large-in a metro area with at least 1 million residents or more) and 2 (Small-in a metro area with fewer than 1 million residents) had a much larger mean compared to the non-metro Urban Influence Codes. We also noticed that codes 4, 6, 7, 9, 10, 11 and 12 were missing Sales data and we couldn't calculate a mean for those Urban Influence Codes. We have decided to take the mean of all non-metro sales records (excluding Urban Influence Codes 1 and 2) and use that mean to substitute for codes 4, 6, 7, 9, 10, 11 and 12. Our final mean substitution table became the following:
+
+**Final Urban Influence Code Means for the EC1244A1 Dataset**
+
+```{r, echo=FALSE, warning=FALSE}
+UrbanInfluenceCode_means
+```
+
+We substitued the missing Sales data in the EC1244A1 dataset (RCPTOT) with the mean_RCPTOT which we had calculated and then performed a join to our dataset and added this new column.
+
+To see the impact of the new column we have tested it against the two top performing models that we had come up so far and reran our cross validations once without the new field and once with the new field for both of the models (Random Forest and Multinomial Regression Model via Neural Networks).
+
+### Adding the Additional Data Field to Two Top Performing Models
+
+```{r, echo=FALSE, warning=FALSE}
+
+metric.create <- function(){
+  setNames(data.frame(matrix(ncol = 4, nrow = 0)), c("Accuracy", "AccuracySD", "Kappa", "KappaSD"))
+}
+
+metric.append <- function(df, model, row_name){
+  df_tmp <- metric.create()
+  df_tmp <- bind_rows(df_tmp, c(Accuracy=mean(model$resample[["Accuracy"]]),
+                                AccuracySD=sd(model$resample[["Accuracy"]]),
+                                Kappa=mean(model$resample[["Kappa"]]),
+                                KappaSD=sd(model$resample[["Kappa"]])))
+  rownames(df_tmp) <- c(row_name)
+  rbind(df, df_tmp)
+}
+
+df <- metric.create()
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+control <- trainControl(method="repeatedcv", number=5, repeats=3, classProbs=TRUE, allowParallel=TRUE)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+model_rf <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset, method="rf", metric="Accuracy", trControl=control, tuneGrid=data.frame(.mtry=19))
+
+df <- metric.append(df, model_rf, "rf")
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+model_rf_addl <- train(CreditLimitCategory ~ RCPTOT + JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset, method="rf", metric="Accuracy", trControl=control, tuneGrid=data.frame(.mtry=19))
+
+df <- metric.append(df, model_rf_addl, "rf w/ RCPTOT")
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+model_multinom <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="multinom", metric="Accuracy", trControl=control, maxit=600, trace=FALSE)
+
+df <- metric.append(df, model_multinom, "multi")
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+model_multinom_addl <- train(CreditLimitCategory ~ RCPTOT + JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="multinom", metric="Accuracy", trControl=control, maxit=600, trace=FALSE)
+
+df <- metric.append(df, model_multinom_addl, "multi w/ RCPTOT")
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+# display the metric for Accuracy and Kappa values
+df[with(df, order(-Accuracy)),]
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+data <- data.frame(rf=model_rf$resample$Accuracy,
+                   rf_RCPTOT=model_rf_addl$resample$Accuracy,
+                   multinom=model_multinom$resample$Accuracy,
+                   multinom_RCPTOT=model_multinom_addl$resample$Accuracy)
+data <- gather(data, model, accuracy, rf:multinom_RCPTOT)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(data, aes(x = model, y = accuracy, fill = model)) + 
+  stat_summary(fun.y = mean, geom = "point") +
+  stat_summary(fun.data = mean_sdl, geom = "errorbar", width = 0.1) +
+  theme(legend.position = "") +
+  ggtitle('Accuracy Confidence Interval') +
+  xlab('Model') + 
+  ylab('Accuracy')
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+data <- data.frame(rf=model_rf$resample$Kappa,
+                   rf_RCPTOT=model_rf_addl$resample$Kappa,
+                   multinom=model_multinom$resample$Kappa,
+                   multinom_RCPTOT=model_multinom_addl$resample$Kappa)
+data <- gather(data, model, kappa, rf:multinom_RCPTOT)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(data, aes(x = model, y = kappa, fill = model)) + 
+  stat_summary(fun.y = mean, geom = "point") +
+  stat_summary(fun.data = mean_sdl, geom = "errorbar", width = 0.1) +
+  theme(legend.position = "") +
+  ggtitle('Kappa Confidence Interval') +
+  xlab('Model') + 
+  ylab('Kappa')
+
+```
+
+### Conclusion
+
+From the results above, we did not see a significant improvement in the Accuracy or the Kappa values. The best perfoming model (rf) perfomed slighly worse and the other model (multinomial) perfomed slightly better. The only noticable change was in the confidence intervals, since the means for each metrics got slightly smaller for the models with newly added field, the interval also got smaller for those models.
+
+```{r, echo=FALSE, include=FALSE}
+
+# save the model as a file to be used in the model package
+#saveRDS(model_rf, "../data/final_model.rds")
+
+# save the test data to be included in the model package
+#save(dataset_test, file = "../data/creditlimittestdata.rda")
+
+```
+
+```{r, echo=FALSE}
+
+stopCluster(cl)
+
+```

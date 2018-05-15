@@ -225,14 +225,6 @@ df <- metric.append(df, model_rf, "rf")
 
 ```{r, echo=FALSE, warning=FALSE}
 
-model_rf2 <- train(CreditLimitCategory ~ RCPTOT + JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="rf", metric="Accuracy", trControl=control, tuneGrid=data.frame(.mtry=19))
-
-df <- metric.append(df, model_rf2, "rf2")
-
-```
-
-```{r, echo=FALSE, warning=FALSE}
-
 model_multinom <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="multinom", metric="Accuracy", trControl=control, maxit=600, trace=FALSE)
 
 df <- metric.append(df, model_multinom, "multi")
