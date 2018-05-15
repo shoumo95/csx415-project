@@ -356,6 +356,64 @@ ggplot(data = data.frame(cm$table), aes(x=Prediction, y=Reference)) +
   ggtitle("Random Forest Confusion Matrix")
 
 ```
+**ROC Curves**
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+predictions <- predict(model_rf, newdata=dataset_test, type = "prob")
+
+```
+
+```{r, echo=FALSE}
+df <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("class_name", "x.values", "y.values", "x.name", "y.name"))
+
+classifications <- as.character(model_rf$levels)
+
+for (classification in classifications) {
+
+  pred <- prediction(predictions[, classification], ifelse(dataset_test$CreditLimitCategory == classification, 1, 0)) 
+  perf <- performance(pred, "tpr", "fpr")
+
+  df <- bind_rows(df,tibble(class_name=classification,
+               x.values=perf@x.values[[1]],
+               y.values=perf@y.values[[1]],
+               x.name=perf@x.name,
+               y.name=perf@y.name))
+}
+
+ggplot(df) + 
+  geom_point(aes(x = x.values, y = y.values)) +
+  facet_wrap("class_name") + 
+  xlab(perf@x.name) + 
+  ylab(perf@y.name)
+
+```
+
+```{r, echo=FALSE}
+df <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("class_name", "x.values", "y.values", "x.name", "y.name"))
+
+classifications <- as.character(model_rf$levels)
+
+for (classification in classifications) {
+
+  pred <- prediction(predictions[, classification], ifelse(dataset_test$CreditLimitCategory == classification, 1, 0)) 
+  perf <- performance(pred, "sens", "spec")
+
+  df <- bind_rows(df,tibble(class_name=classification,
+               x.values=perf@x.values[[1]],
+               y.values=perf@y.values[[1]],
+               x.name=perf@x.name,
+               y.name=perf@y.name))
+}
+
+ggplot(df) + 
+  geom_point(aes(x = x.values, y = y.values)) +
+  facet_wrap("class_name") + 
+  xlab(perf@x.name) + 
+  ylab(perf@y.name)
+
+```
+
 
 Multinomial Regression model against the test data:
 
@@ -383,6 +441,64 @@ ggplot(data = data.frame(cm$table), aes(x=Prediction, y=Reference)) +
   ylab("Ground Truth (Observations)") +
   geom_text(aes(label = Freq), size = 2) +
   ggtitle("Multinomial Regression Confusion Matrix")
+
+```
+
+**ROC Curves**
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+predictions <- predict(model_nnet, newdata=dataset_test, type = "prob")
+
+```
+
+```{r, echo=FALSE}
+df <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("class_name", "x.values", "y.values", "x.name", "y.name"))
+
+classifications <- as.character(model_nnet$levels)
+
+for (classification in classifications) {
+
+  pred <- prediction(predictions[, classification], ifelse(dataset_test$CreditLimitCategory == classification, 1, 0)) 
+  perf <- performance(pred, "tpr", "fpr")
+
+  df <- bind_rows(df,tibble(class_name=classification,
+               x.values=perf@x.values[[1]],
+               y.values=perf@y.values[[1]],
+               x.name=perf@x.name,
+               y.name=perf@y.name))
+}
+
+ggplot(df) + 
+  geom_point(aes(x = x.values, y = y.values)) +
+  facet_wrap("class_name") + 
+  xlab(perf@x.name) + 
+  ylab(perf@y.name)
+
+```
+
+```{r, echo=FALSE}
+df <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("class_name", "x.values", "y.values", "x.name", "y.name"))
+
+classifications <- as.character(model_nnet$levels)
+
+for (classification in classifications) {
+
+  pred <- prediction(predictions[, classification], ifelse(dataset_test$CreditLimitCategory == classification, 1, 0)) 
+  perf <- performance(pred, "sens", "spec")
+
+  df <- bind_rows(df,tibble(class_name=classification,
+               x.values=perf@x.values[[1]],
+               y.values=perf@y.values[[1]],
+               x.name=perf@x.name,
+               y.name=perf@y.name))
+}
+
+ggplot(df) + 
+  geom_point(aes(x = x.values, y = y.values)) +
+  facet_wrap("class_name") + 
+  xlab(perf@x.name) + 
+  ylab(perf@y.name)
 
 ```
 

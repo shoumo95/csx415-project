@@ -88,6 +88,8 @@ To see the impact of the new column we have tested it against the two top perfor
 
 ### Adding the Additional Data Field to Two Top Performing Models
 
+**15 Fold Cross-Validation Accuracy and Kappa Results**
+
 ```{r, echo=FALSE, warning=FALSE}
 
 metric.create <- function(){
@@ -116,7 +118,7 @@ control <- trainControl(method="repeatedcv", number=5, repeats=3, classProbs=TRU
 
 ```{r, echo=FALSE, warning=FALSE}
 
-model_rf <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset, method="rf", metric="Accuracy", trControl=control, tuneGrid=data.frame(.mtry=19))
+model_rf <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="rf", metric="Accuracy", trControl=control, tuneGrid=data.frame(.mtry=19))
 
 df <- metric.append(df, model_rf, "rf")
 
@@ -124,7 +126,7 @@ df <- metric.append(df, model_rf, "rf")
 
 ```{r, echo=FALSE, warning=FALSE}
 
-model_rf_addl <- train(CreditLimitCategory ~ RCPTOT + JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset, method="rf", metric="Accuracy", trControl=control, tuneGrid=data.frame(.mtry=19))
+model_rf_addl <- train(CreditLimitCategory ~ RCPTOT + JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="rf", metric="Accuracy", trControl=control, tuneGrid=data.frame(.mtry=19))
 
 df <- metric.append(df, model_rf_addl, "rf w/ RCPTOT")
 
@@ -192,6 +194,72 @@ ggplot(data, aes(x = model, y = kappa, fill = model)) +
   ggtitle('Kappa Confidence Interval') +
   xlab('Model') + 
   ylab('Kappa')
+
+```
+
+**Test Set Sensitivity vs Specificity of rf w/o RCPTOT**
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+predictions <- predict(model_rf, newdata=dataset_test, type = "prob")
+
+```
+
+```{r, echo=FALSE}
+df <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("class_name", "x.values", "y.values", "x.name", "y.name"))
+
+classifications <- as.character(model_rf$levels)
+
+for (classification in classifications) {
+
+  pred <- prediction(predictions[, classification], ifelse(dataset_test$CreditLimitCategory == classification, 1, 0)) 
+  perf <- performance(pred, "sens", "spec")
+
+  df <- bind_rows(df,tibble(class_name=classification,
+               x.values=perf@x.values[[1]],
+               y.values=perf@y.values[[1]],
+               x.name=perf@x.name,
+               y.name=perf@y.name))
+}
+
+ggplot(df) + 
+  geom_point(aes(x = x.values, y = y.values)) +
+  facet_wrap("class_name") + 
+  xlab(perf@x.name) + 
+  ylab(perf@y.name)
+
+```
+
+**Test Set Sensitivity vs Specificity of rf w/ RCPTOT**
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+predictions <- predict(model_rf_addl, newdata=dataset_test, type = "prob")
+
+```
+
+```{r, echo=FALSE}
+df <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("class_name", "x.values", "y.values", "x.name", "y.name"))
+
+classifications <- as.character(model_rf$levels)
+
+for (classification in classifications) {
+
+  pred <- prediction(predictions[, classification], ifelse(dataset_test$CreditLimitCategory == classification, 1, 0)) 
+  perf <- performance(pred, "sens", "spec")
+
+  df <- bind_rows(df,tibble(class_name=classification,
+               x.values=perf@x.values[[1]],
+               y.values=perf@y.values[[1]],
+               x.name=perf@x.name,
+               y.name=perf@y.name))
+}
+
+ggplot(df) + 
+  geom_point(aes(x = x.values, y = y.values)) +
+  facet_wrap("class_name") + 
+  xlab(perf@x.name) + 
+  ylab(perf@y.name)
 
 ```
 
