@@ -17,6 +17,8 @@ UrbanInfluenceCode_means <- data %>%
   group_by(UrbanInfluenceCode) %>%
   summarise(mean_RCPTOT = mean(RCPTOT, na.rm = TRUE))
 
+UrbanInfluenceCode_means_start <- UrbanInfluenceCode_means
+
 # however, there are some urban influence codes which has no data at all. These are primarily non-urban areas. We will determine a non-urban mean and assign this mean to the other missing urban influence codes
 missing_mean <- mean(data$RCPTOT[data$UrbanInfluenceCode>2], na.rm = T)
 
@@ -87,4 +89,4 @@ CustomerData <- merged[,column_names]
 
 # cleanup!
 merged <- NULL
-UrbanInfluenceCode_means <- NULL
+#UrbanInfluenceCode_means <- NULL
