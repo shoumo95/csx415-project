@@ -65,7 +65,7 @@ control <- trainControl(method="repeatedcv", number=5, repeats=3, classProbs=TRU
 
 ```{r}
 
-model_rf <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset, method="rf", metric="Accuracy", trControl=control, tuneGrid=data.frame(.mtry=19))
+model_rf <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="rf", metric="Accuracy", trControl=control, tuneGrid=data.frame(.mtry=19))
 
 ```
 
@@ -74,6 +74,89 @@ model_rf <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCur
 model_rf$results
 
 ```
+
+```{r, warning=FALSE}
+
+predictions <- predict(model_rf, newdata=dataset_test)
+cm <- confusionMatrix(dataset_test$CreditLimitCategory, predictions)
+
+```
+
+```{r, echo=FALSE, warning=FALSE}
+
+ggplot(data = data.frame(cm$table), aes(x=Prediction, y=Reference)) +
+  geom_tile(aes(fill=Freq)) + 
+  scale_fill_gradient(low = "white", high = "steelblue") +
+  theme(axis.text.x=element_text(angle=90,hjust=1)) +
+  xlab("Predictions") +
+  ylab("Ground Truth (Observations)") +
+  geom_text(aes(label = Freq), size = 2) +
+  ggtitle("Random Forest Confusion Matrix")
+
+```
+
+```{r, echo=FALSE}
+
+cm$byClass[,c("Sensitivity", "Specificity", "Precision", "Recall")]
+
+```
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+predictions <- predict(model_rf, newdata=dataset_test, type = "prob")
+
+```
+
+
+```{r, echo=FALSE}
+df <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("class_name", "x.values", "y.values", "x.name", "y.name"))
+
+classifications <- as.character(model_rf$levels)
+
+for (classification in classifications) {
+
+  pred <- prediction(predictions[, classification], ifelse(dataset_test$CreditLimitCategory == classification, 1, 0)) 
+  perf <- performance(pred, "tpr", "fpr")
+
+  df <- bind_rows(df,tibble(class_name=classification,
+               x.values=perf@x.values[[1]],
+               y.values=perf@y.values[[1]],
+               x.name=perf@x.name,
+               y.name=perf@y.name))
+}
+
+ggplot(df) + 
+  geom_point(aes(x = x.values, y = y.values)) +
+  facet_wrap("class_name") + 
+  xlab(perf@x.name) + 
+  ylab(perf@y.name)
+
+```
+
+```{r, echo=FALSE}
+df <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("class_name", "x.values", "y.values", "x.name", "y.name"))
+
+classifications <- as.character(model_rf$levels)
+
+for (classification in classifications) {
+
+  pred <- prediction(predictions[, classification], ifelse(dataset_test$CreditLimitCategory == classification, 1, 0)) 
+  perf <- performance(pred, "sens", "spec")
+
+  df <- bind_rows(df,tibble(class_name=classification,
+               x.values=perf@x.values[[1]],
+               y.values=perf@y.values[[1]],
+               x.name=perf@x.name,
+               y.name=perf@y.name))
+}
+
+ggplot(df) + 
+  geom_point(aes(x = x.values, y = y.values)) +
+  facet_wrap("class_name") + 
+  xlab(perf@x.name) + 
+  ylab(perf@y.name)
+
+```
+
 
 ```{r, echo=FALSE, include=FALSE}
 
