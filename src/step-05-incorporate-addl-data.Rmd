@@ -62,7 +62,7 @@ We have decided to add Retail Sales data from the U.S. Census Bureau, data set n
 
 ```{}
 data <- ECN.2012.US.44A1.with.ann
-data <- data2[data$NAICS.id=="448310",]
+data <- data[data$NAICS.id=="448310",]
 
 ```
 
@@ -307,7 +307,7 @@ ggplot(df) +
 
 ### Conclusion
 
-From the results above, we did not see a significant improvement in the Accuracy or the Kappa values. The best perfoming model (rf) perfomed slighly worse and the other model (multinomial) perfomed slightly better. The only noticable change was in the confidence intervals, since the means for each metrics got slightly smaller for the models with newly added field, the interval also got smaller for those models.
+From the results above, we did not see a significant improvement in the Accuracy or the Kappa values. The best perfoming model (rf) and the other model (multinomial) perfomed slightly better. The only noticable change was in the confidence intervals, the interval got smaller for the rf model (due to decrease in standard deviation) and the interval got bigger for the multinomial.
 
 ```{r, echo=FALSE, include=FALSE}
 
