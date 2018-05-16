@@ -155,7 +155,7 @@ df <- metric.create()
 
 ```{r, echo=FALSE, warning=FALSE}
 
-control <- trainControl(method="repeatedcv", number=5, repeats=3, classProbs=TRUE, allowParallel=TRUE)
+control <- trainControl(method="repeatedcv", number=7, repeats=1, classProbs=TRUE, allowParallel=TRUE)
 
 ```
 
@@ -419,7 +419,7 @@ Multinomial Regression model against the test data:
 
 ```{r, warning=FALSE}
 
-predictions <- predict(model_nnet, newdata=dataset_test)
+predictions <- predict(model_multinom, newdata=dataset_test)
 cm <- confusionMatrix(dataset_test$CreditLimitCategory, predictions)
 cm$overall
 
@@ -448,14 +448,14 @@ ggplot(data = data.frame(cm$table), aes(x=Prediction, y=Reference)) +
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
-predictions <- predict(model_nnet, newdata=dataset_test, type = "prob")
+predictions <- predict(model_multinom, newdata=dataset_test, type = "prob")
 
 ```
 
 ```{r, echo=FALSE}
 df <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("class_name", "x.values", "y.values", "x.name", "y.name"))
 
-classifications <- as.character(model_nnet$levels)
+classifications <- as.character(model_multinom$levels)
 
 for (classification in classifications) {
 
@@ -480,7 +480,7 @@ ggplot(df) +
 ```{r, echo=FALSE}
 df <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("class_name", "x.values", "y.values", "x.name", "y.name"))
 
-classifications <- as.character(model_nnet$levels)
+classifications <- as.character(model_multinom$levels)
 
 for (classification in classifications) {
 
