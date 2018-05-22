@@ -7,7 +7,7 @@ date: 'May 8, 2018'
 knit: (function(inputFile, encoding) { 
       rmarkdown::render(inputFile,
                         encoding=encoding, 
-                        output_file=file.path(dirname(inputFile), '../reports/', 'step-04-training-and-validation.html')) })
+                        output_file=file.path(dirname(inputFile), '../reports/', 'step-05.a-training-and-validation.html')) })
 output: html_document
 ---
 
@@ -155,7 +155,7 @@ df <- metric.create()
 
 ```{r, echo=FALSE, warning=FALSE}
 
-control <- trainControl(method="repeatedcv", number=7, repeats=1, classProbs=TRUE, allowParallel=TRUE)
+control <- trainControl(method="repeatedcv", number=5, repeats=2, classProbs=TRUE, allowParallel=TRUE)
 
 ```
 
@@ -356,6 +356,7 @@ ggplot(data = data.frame(cm$table), aes(x=Prediction, y=Reference)) +
   ggtitle("Random Forest Confusion Matrix")
 
 ```
+
 **ROC Curves**
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
@@ -388,32 +389,6 @@ ggplot(df) +
   ylab(perf@y.name)
 
 ```
-
-```{r, echo=FALSE}
-df <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("class_name", "x.values", "y.values", "x.name", "y.name"))
-
-classifications <- as.character(model_rf$levels)
-
-for (classification in classifications) {
-
-  pred <- prediction(predictions[, classification], ifelse(dataset_test$CreditLimitCategory == classification, 1, 0)) 
-  perf <- performance(pred, "sens", "spec")
-
-  df <- bind_rows(df,tibble(class_name=classification,
-               x.values=perf@x.values[[1]],
-               y.values=perf@y.values[[1]],
-               x.name=perf@x.name,
-               y.name=perf@y.name))
-}
-
-ggplot(df) + 
-  geom_point(aes(x = x.values, y = y.values)) +
-  facet_wrap("class_name") + 
-  xlab(perf@x.name) + 
-  ylab(perf@y.name)
-
-```
-
 
 Multinomial Regression model against the test data:
 
@@ -461,31 +436,6 @@ for (classification in classifications) {
 
   pred <- prediction(predictions[, classification], ifelse(dataset_test$CreditLimitCategory == classification, 1, 0)) 
   perf <- performance(pred, "tpr", "fpr")
-
-  df <- bind_rows(df,tibble(class_name=classification,
-               x.values=perf@x.values[[1]],
-               y.values=perf@y.values[[1]],
-               x.name=perf@x.name,
-               y.name=perf@y.name))
-}
-
-ggplot(df) + 
-  geom_point(aes(x = x.values, y = y.values)) +
-  facet_wrap("class_name") + 
-  xlab(perf@x.name) + 
-  ylab(perf@y.name)
-
-```
-
-```{r, echo=FALSE}
-df <- setNames(data.frame(matrix(ncol = 5, nrow = 0)), c("class_name", "x.values", "y.values", "x.name", "y.name"))
-
-classifications <- as.character(model_multinom$levels)
-
-for (classification in classifications) {
-
-  pred <- prediction(predictions[, classification], ifelse(dataset_test$CreditLimitCategory == classification, 1, 0)) 
-  perf <- performance(pred, "sens", "spec")
 
   df <- bind_rows(df,tibble(class_name=classification,
                x.values=perf@x.values[[1]],

@@ -21,7 +21,97 @@ Following documents will provide additional information about the project and th
 * /deploy/README.md
 * /reports/README.md
 
-## Installation
+## Installation - Project
+
+If you are interested in the project and want to rebuild it using the source code, you can download it to your computer by clonning it using `git` or by downloading the `packrat` bundle.
+
+### Using Git
+
+```
+git clone https://github.com/hakanegeli/csx415-project.git
+```
+
+### Using Packrat
+
+From your R command line, Install `packrat` if you already haven't done so.
+
+``` r
+install.packages("packrat)
+```
+
+Copy the `csx415-project.tar.gz` file from the `/deploy` directory to the location where you want to install and the open RStudio. In the Console set your working directory to this location and type the following commands:
+
+``` r
+library("packrat)
+packrat::unbundle("csx415-project.tar.gz", ".")
+```
+
+## Installation - Model
+
+There are several ways you can utilize the Credit Model; 
+
+* Using the Web Application
+* Using the Command Line Interface
+* Installing the packaged model as a library and using in in your own code
+
+### Web Application (recommended)
+
+#### Step 1
+From your R command line, Install `packrat` if you already haven't done so.
+
+``` r
+install.packages("packrat)
+```
+#### Step 2
+Copy the `csx415-app.tar.gz` file from the `/deploy` directory to the location where you want to install and the open RStudio. In the Console set your working directory to this location and type the following commands:
+
+``` r
+library("packrat)
+packrat::unbundle("csx415-app.tar.gz", ".")
+```
+set your working directory to the directory where the csx415-app is unbundled (for example setwd("~/R/Projects/csx415-app"))
+
+#### Step 3 (Using RStudio or R Console)
+Now that all the libraries and the source files are unbundled, you can either run the web app from the R commandline by opening the **runme_web.R** file, selecting all the lines (Ctrl-A) and running them (Ctrl-Enter), which will execute the following lines: 
+
+``` r
+source("packrat/init.R")
+
+library(plumber)
+p <- plumb("plumber.R")
+p$run(port=8000, swagger=FALSE)
+```
+#### Step 3 (Alternative - Using R Terminal)
+or, you can run it from an R Terminal:
+
+Make sure you are able to run Rscript and you have the correct version of R installed by typing the following on your command line;
+
+``` bash
+Rscript --version
+```
+and if you see the version and the date of the R scripting you currently have, then type the following at the command prompt:
+
+``` bash
+Rscript runme_web.R
+```
+#### Step 4
+Open your browser (Chrome recommended) and go to http://127.0.0.1/home and follow the instructions from there.
+
+### Command Line Interface
+Follow steps #1 and #2 from above if you haven't already done so.
+
+####Step 3
+Open up a command prompt or R terminal and make sure you can execute Rscrip by typing the following:
+
+``` bash
+Rscript --version
+```
+If you see the version and the date of the R scrip then go to the next step.
+
+#### Step 4
+Command line interface allows you to run the model by providing an input file and getting an output file with the scores appended to your input. We have provided a sample input data file 
+
+### Command Line Interface (Advanced)
 
 ### Model Package
 

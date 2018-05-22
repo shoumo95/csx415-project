@@ -18,15 +18,21 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r, echo=FALSE, include = FALSE}
 
-# load the project. This will autoload the data and also create training and test datasets
+# ProjectTemplate will autoload the data and also create training and test datasets
+
+cwd <- getwd()
+setwd("..")
+
 library('ProjectTemplate')
 load.project()
+
+setwd(cwd)
 
 ```
 
 ```{r, echo=FALSE, include=FALSE}
 
-library(caret)
+require(caret)
 
 require(gridExtra)
 

@@ -7,7 +7,7 @@ date: 'May 14, 2018'
 knit: (function(inputFile, encoding) { 
       rmarkdown::render(inputFile,
                         encoding=encoding, 
-                        output_file=file.path(dirname(inputFile), '../reports/', 'step-05-incorporate-addl-data.html')) })
+                        output_file=file.path(dirname(inputFile), '../reports/', 'step-05.b-incorporate-addl-data.html')) })
 output: html_document
 ---
 
@@ -250,7 +250,7 @@ ggplot(data, aes(x = model, y = kappa, fill = model)) +
 
 ```
 
-**Test Set Sensitivity vs Specificity of rf w/o RCPTOT**
+**Test Set True Positive Rate vs False Positive Rate of rf w/o RCPTOT**
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -266,7 +266,7 @@ classifications <- as.character(model_rf$levels)
 for (classification in classifications) {
 
   pred <- prediction(predictions[, classification], ifelse(dataset_test$CreditLimitCategory == classification, 1, 0)) 
-  perf <- performance(pred, "sens", "spec")
+  perf <- performance(pred, "tpr", "fpr")
 
   df <- bind_rows(df,tibble(class_name=classification,
                x.values=perf@x.values[[1]],
@@ -283,7 +283,7 @@ ggplot(df) +
 
 ```
 
-**Test Set Sensitivity vs Specificity of rf w/ RCPTOT**
+**Test Set True Positive Rate vs False Positive Rate of rf w/ RCPTOT**
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -299,7 +299,7 @@ classifications <- as.character(model_rf$levels)
 for (classification in classifications) {
 
   pred <- prediction(predictions[, classification], ifelse(dataset_test$CreditLimitCategory == classification, 1, 0)) 
-  perf <- performance(pred, "sens", "spec")
+  perf <- performance(pred, "tpr", "fpr")
 
   df <- bind_rows(df,tibble(class_name=classification,
                x.values=perf@x.values[[1]],

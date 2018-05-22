@@ -1,15 +1,10 @@
 # Model Markdowns
 
-* Formal Problem Statemet
-* Exploratory Data Analysis
+* Formal Problem Statemet (FPS)
+* Exploratory Data Analysis (EDA)
 * Feature Selection
   + First Regression Model (linear)
   + First Classification Model (rpart)
 * Model Training and Validation
-  + Incorporation of an additional data set
-* Model Performance and Tuning
+  + Incorporation of additional data
 * Project Performance
-
-# Final Model Standalone
-
-* model.R

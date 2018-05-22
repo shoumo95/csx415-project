@@ -47,6 +47,3 @@ print(cm)
 dataset_test$Predictions <- predictions
 
 write.csv(dataset_test, file = opt$output, row.names = FALSE)
-
-#signal success and exit.
-#q(status=0);
