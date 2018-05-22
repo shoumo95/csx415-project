@@ -21,32 +21,8 @@ Following documents will provide additional information about the project and th
 * /deploy/README.md
 * /reports/README.md
 
-## Installation - Project
 
-If you are interested in the project and want to rebuild it using the source code, you can download it to your computer by clonning it using `git` or by downloading the `packrat` bundle.
-
-### Using Git
-
-```
-git clone https://github.com/hakanegeli/csx415-project.git
-```
-
-### Using Packrat
-
-From your R command line, Install `packrat` if you already haven't done so.
-
-``` r
-install.packages("packrat)
-```
-
-Copy the `csx415-project.tar.gz` file from the `/deploy` directory to the location where you want to install and the open RStudio. In the Console set your working directory to this location and type the following commands:
-
-``` r
-library("packrat)
-packrat::unbundle("csx415-project.tar.gz", ".")
-```
-
-## Installation - Model
+## Installation
 
 There are several ways you can utilize the Credit Model; 
 
@@ -54,7 +30,7 @@ There are several ways you can utilize the Credit Model;
 * Using the Command Line Interface
 * Installing the packaged model as a library and using in in your own code
 
-### Web Application (recommended)
+### Option 1 - Web Application (recommended)
 
 #### Step 1
 From your R command line, Install `packrat` if you already haven't done so.
@@ -97,10 +73,12 @@ Rscript runme_web.R
 #### Step 4
 Open your browser (Chrome recommended) and go to http://127.0.0.1/home and follow the instructions from there.
 
-### Command Line Interface
-Follow steps #1 and #2 from above if you haven't already done so.
+### Option 2 - Command Line Interface
 
-####Step 3
+#### Step 1 & 2
+Follow Steps 1 and 2 from above if you haven't already done so.
+
+#### Step 3
 Open up a command prompt or R terminal and make sure you can execute Rscrip by typing the following:
 
 ``` bash
@@ -113,7 +91,9 @@ Command line interface allows you to run the model by providing an input file an
 
 ### Command Line Interface (Advanced)
 
-### Model Package
+TODO add steps here for the NN model and setting up Python and Keras!
+
+### Option 3 - Model Package
 
 Final version of the model is packaged and can be used by simply installing the package.
 
@@ -129,4 +109,29 @@ After the installation, please refer to the Package help for further information
 
 ``` r
 help(package="CreditLimitModel")
+```
+
+## Installation - Project
+
+If you are interested in the project and want to rebuild it using the source code, you can download it to your computer by clonning it using `git` or by downloading the `packrat` bundle.
+
+### Using Git
+
+```
+git clone https://github.com/hakanegeli/csx415-project.git
+```
+
+### Using Packrat
+
+From your R command line, Install `packrat` if you already haven't done so.
+
+``` r
+install.packages("packrat)
+```
+
+Copy the `csx415-project.tar.gz` file from the `/deploy` directory to the location where you want to install and the open RStudio. In the Console set your working directory to this location and type the following commands:
+
+``` r
+library("packrat)
+packrat::unbundle("csx415-project.tar.gz", ".")
 ```

@@ -140,32 +140,16 @@ load.project()</code></pre>
 <li>/reports/README.md</li>
 </ul>
 </div>
-<div id="installation---project" class="section level2">
-<h2>Installation - Project</h2>
-<p>If you are interested in the project and want to rebuild it using the source code, you can download it to your computer by clonning it using <code>git</code> or by downloading the <code>packrat</code> bundle.</p>
-<div id="using-git" class="section level3">
-<h3>Using Git</h3>
-<pre><code>git clone https://github.com/hakanegeli/csx415-project.git</code></pre>
-</div>
-<div id="using-packrat" class="section level3">
-<h3>Using Packrat</h3>
-<p>From your R command line, Install <code>packrat</code> if you already haven’t done so.</p>
-<pre class="r"><code>install.packages(&quot;packrat)</code></pre>
-<p>Copy the <code>csx415-project.tar.gz</code> file from the <code>/deploy</code> directory to the location where you want to install and the open RStudio. In the Console set your working directory to this location and type the following commands:</p>
-<pre class="r"><code>library(&quot;packrat)
-packrat::unbundle(&quot;csx415-project.tar.gz&quot;, &quot;.&quot;)</code></pre>
-</div>
-</div>
-<div id="installation---model" class="section level2">
-<h2>Installation - Model</h2>
+<div id="installation" class="section level2">
+<h2>Installation</h2>
 <p>There are several ways you can utilize the Credit Model;</p>
 <ul>
 <li>Using the Web Application</li>
 <li>Using the Command Line Interface</li>
 <li>Installing the packaged model as a library and using in in your own code</li>
 </ul>
-<div id="web-application-recommended" class="section level3">
-<h3>Web Application (recommended)</h3>
+<div id="option-1---web-application-recommended" class="section level3">
+<h3>Option 1 - Web Application (recommended)</h3>
 <div id="step-1" class="section level4">
 <h4>Step 1</h4>
 <p>From your R command line, Install <code>packrat</code> if you already haven’t done so.</p>
@@ -200,9 +184,12 @@ p$run(port=8000, swagger=FALSE)</code></pre>
 <p>Open your browser (Chrome recommended) and go to <a href="http://127.0.0.1/home" class="uri">http://127.0.0.1/home</a> and follow the instructions from there.</p>
 </div>
 </div>
-<div id="command-line-interface" class="section level3">
-<h3>Command Line Interface</h3>
-<p>Follow steps #1 and #2 from above if you haven’t already done so.</p>
+<div id="option-2---command-line-interface" class="section level3">
+<h3>Option 2 - Command Line Interface</h3>
+<div id="step-1-2" class="section level4">
+<h4>Step 1 &amp; 2</h4>
+<p>Follow Steps 1 and 2 from above if you haven’t already done so.</p>
+</div>
 <div id="step-3" class="section level4">
 <h4>Step 3</h4>
 <p>Open up a command prompt or R terminal and make sure you can execute Rscrip by typing the following:</p>
@@ -216,9 +203,10 @@ p$run(port=8000, swagger=FALSE)</code></pre>
 </div>
 <div id="command-line-interface-advanced" class="section level3">
 <h3>Command Line Interface (Advanced)</h3>
+<p>TODO add steps here for the NN model and setting up Python and Keras!</p>
 </div>
-<div id="model-package" class="section level3">
-<h3>Model Package</h3>
+<div id="option-3---model-package" class="section level3">
+<h3>Option 3 - Model Package</h3>
 <p>Final version of the model is packaged and can be used by simply installing the package.</p>
 <pre class="r"><code># Install the released version from source (/pkgs)
 install.packages(&quot;pkgs/CreditLimitModel&quot;, repos = NULL, type = &quot;source&quot;)
@@ -228,6 +216,22 @@ install.packages(&quot;pkgs/CreditLimitModel&quot;, repos = NULL, type = &quot;s
 devtools::install(&quot;pkgs/CreditLimitModel&quot;)</code></pre>
 <p>After the installation, please refer to the Package help for further information</p>
 <pre class="r"><code>help(package=&quot;CreditLimitModel&quot;)</code></pre>
+</div>
+</div>
+<div id="installation---project" class="section level2">
+<h2>Installation - Project</h2>
+<p>If you are interested in the project and want to rebuild it using the source code, you can download it to your computer by clonning it using <code>git</code> or by downloading the <code>packrat</code> bundle.</p>
+<div id="using-git" class="section level3">
+<h3>Using Git</h3>
+<pre><code>git clone https://github.com/hakanegeli/csx415-project.git</code></pre>
+</div>
+<div id="using-packrat" class="section level3">
+<h3>Using Packrat</h3>
+<p>From your R command line, Install <code>packrat</code> if you already haven’t done so.</p>
+<pre class="r"><code>install.packages(&quot;packrat)</code></pre>
+<p>Copy the <code>csx415-project.tar.gz</code> file from the <code>/deploy</code> directory to the location where you want to install and the open RStudio. In the Console set your working directory to this location and type the following commands:</p>
+<pre class="r"><code>library(&quot;packrat)
+packrat::unbundle(&quot;csx415-project.tar.gz&quot;, &quot;.&quot;)</code></pre>
 </div>
 </div>
 </div>
