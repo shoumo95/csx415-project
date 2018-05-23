@@ -2,7 +2,7 @@
 
 ## Overview
 
-Purpose of this project is to examine if a model can be developed to assist jewelry manufacturers with assesing the credit risk of a potential new customer (retailer) and help the manufacturer assign a credit limit for this new customer.
+Purpose of this project is to examine if a model can be developed to assist jewelry manufacturers with assesing the credit risk of a potential new customer (retailer) and help the manufacturer assign a credit limit for that new customer.
 
 ## Project Files
 
@@ -47,8 +47,8 @@ packrat::unbundle("csx415-app.tar.gz", ".")
 ```
 set your working directory to the directory where the csx415-app is unbundled (for example if you copied the csx415-app.tar.gz into your R/Projects folder and unbundeled there using the commands above, then set working directory by typing setwd("~/R/Projects/csx415-app"))
 
-#### Step 3 (Using RStudio or R Console)
-Now that all the libraries and the source files are unbundled, you can either run the web app from the R commandline by opening the **runme_web.R** file, selecting all the lines (Ctrl-A) and running them (Ctrl-Enter), which will execute the following lines: 
+#### Step 3 - Using R Console
+Now that all the libraries and the source files are unbundled, you can run the web app from the R commandline by opening the **runme_web.R** file, selecting all the lines (Ctrl-A), and running them (Ctrl-Enter). This will execute the following lines: 
 
 ``` r
 source("packrat/init.R")
@@ -57,21 +57,21 @@ library(plumber)
 p <- plumb("plumber.R")
 p$run(port=8000, swagger=FALSE)
 ```
-#### Step 3 (Alternative - Using R Terminal)
-or, you can run it from an R Terminal:
+#### Step 3 (Alternative) - Using R Terminal
+You can start the web server from an R Terminal instead of the R console.
 
-Make sure you are able to run Rscript and you have the correct version of R installed by typing the following on your command line;
+First, make sure you are able to run Rscript and you have the correct version of R installed. Type `Rscript --version` on the command line in your terminal and you should see a result similart to this:
 
-``` bash
-Rscript --version
-```
-and if you see the version and the date of the R scripting you currently have, then type the following at the command prompt:
+![](images/Terminal.png)
 
-``` bash
-Rscript runme_web.R
-```
+
+If you see the version of the R script you currently have, then type the following at the command prompt:
+
+
+![](images/TerminalRunWeb.png)
+
 #### Step 4
-Open your browser (Chrome recommended) and go to http://127.0.0.1/home and follow the instructions from there.
+Open your browser and go to the address http://127.0.0.1:8000/home and follow the instructions from the main page.
 
 ### Option 2 - Command Line Interface
 
