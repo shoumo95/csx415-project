@@ -39,13 +39,22 @@ From your R command line, Install `packrat` if you already haven't done so.
 install.packages("packrat)
 ```
 #### Step 2
-Copy the `csx415-app.tar.gz` file from the `/deploy` directory to the location where you want to install and open RStudio. In the Console set your working directory to this location and type the following commands:
+Copy the `csx415-app.tar.gz` file from the `/deploy` directory to the location where you want to install and open RStudio. In the Console set your working directory to this location.
+
+```r
+setwd("~/R/Projects"))
+```
+and execute the following commands:
 
 ``` r
 library("packrat)
 packrat::unbundle("csx415-app.tar.gz", ".")
 ```
-set your working directory to the directory where the csx415-app is unbundled (for example if you copied the csx415-app.tar.gz into your R/Projects folder and unbundeled there using the commands above, then set working directory by typing setwd("~/R/Projects/csx415-app"))
+then set your working directory to the directory where the csx415-app is unbundled.
+
+```r
+setwd("~/R/Projects/csx415-app"))
+```
 
 #### Step 3 - Using R Console
 Now that all the libraries and the source files are unbundled, you can run the web app from the R commandline by opening the **runme_web.R** file, selecting all the lines (Ctrl-A), and running them (Ctrl-Enter). This will execute the following lines: 
@@ -62,13 +71,16 @@ You can start the web server from an R Terminal instead of the R console.
 
 First, make sure you are able to run Rscript and you have the correct version of R installed. Type `Rscript --version` on the command line in your terminal and you should see a result similart to this:
 
-![](Terminal.png)
-
-
+``` r
+$ Rscript --version
+  R scripting front-end version 3.4.4 (2018-03-15)
+```
 If you see the version of the R script you currently have, then type the following at the command prompt:
 
-
-![](TerminalRunWeb.png)
+``` r
+$ Rscript runme_web.R
+  Starting server to listen on port 8000
+```
 
 #### Step 4
 Open your browser and go to the address http://127.0.0.1:8000/home and follow the instructions from the main page.
