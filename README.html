@@ -158,18 +158,16 @@ load.project()</code></pre>
 <div id="step-2" class="section level4">
 <h4>Step 2</h4>
 <p>Copy the <code>csx415-app.tar.gz</code> file from the <code>/deploy</code> directory to the location where you want to install and open RStudio. In the Console set your working directory to this location.</p>
-<p>Ex:</p>
 <pre class="r"><code>setwd(&quot;~/R/Projects&quot;))</code></pre>
 <p>and execute the following commands:</p>
 <pre class="r"><code>library(&quot;packrat)
 packrat::unbundle(&quot;csx415-app.tar.gz&quot;, &quot;.&quot;)</code></pre>
 <p>then set your working directory to the directory where the csx415-app is unbundled.</p>
-<p>Ex:</p>
 <pre class="r"><code>setwd(&quot;~/R/Projects/csx415-app&quot;))</code></pre>
 </div>
 <div id="step-3---using-r-console" class="section level4">
 <h4>Step 3 - Using R Console</h4>
-<p>Now that all the libraries and the source files are unbundled, you can run the web app from the R commandline by opening the <strong>runme_web.R</strong> file, selecting all the lines (Ctrl-A), and running them (Ctrl-Enter). This will execute the following lines:</p>
+<p>Now that all the libraries and the source files are unbundled, you can run the web app from the R commandline by opening the <code>runme_web.R</code> file, selecting all the lines (Ctrl-A), and running them (Ctrl-Enter). This will execute the following lines:</p>
 <pre class="r"><code>source(&quot;packrat/init.R&quot;)
 
 library(plumber)
@@ -178,7 +176,7 @@ p$run(port=8000, swagger=FALSE)</code></pre>
 </div>
 <div id="step-3-alternative---using-r-terminal" class="section level4">
 <h4>Step 3 (Alternative) - Using R Terminal</h4>
-<p>You can start the web server from an R Terminal instead of the R console.</p>
+<p>You can run the <code>runme_web.R</code> directly from an R Terminal instead of the R console.</p>
 <p>First, make sure you are able to run Rscript and you have the correct version of R installed. Type <code>Rscript --version</code> on the command line in your terminal and you should see a result similart to this:</p>
 <pre class="r"><code>$ Rscript --version
   R scripting front-end version 3.4.4 (2018-03-15)</code></pre>
@@ -199,13 +197,16 @@ p$run(port=8000, swagger=FALSE)</code></pre>
 </div>
 <div id="step-3" class="section level4">
 <h4>Step 3</h4>
-<p>Open up a command prompt or R terminal and make sure you can execute Rscrip by typing the following:</p>
-<pre class="bash"><code>Rscript --version</code></pre>
+<p>First, make sure you are able to run Rscript and you have the correct version of R installed. Type <code>Rscript --version</code> on the command line in your terminal and you should see a result similart to this:</p>
+<pre class="r"><code>$ Rscript --version
+  R scripting front-end version 3.4.4 (2018-03-15)</code></pre>
 <p>If you see the version and the date of the R scrip then go to the next step.</p>
 </div>
 <div id="step-4-1" class="section level4">
 <h4>Step 4</h4>
-<p>Command line interface allows you to run the model by providing an input file and getting an output file with the scores appended to your input. We have provided a sample input data file</p>
+<p>Command line interface allows you to run the model by providing an input file and getting an output file with the scores appended to your input. We have provided a sample input data file called <code>NewCustomers.csv</code> which is located in the <code>marketing</code> folder. So, try the following on your terminal:</p>
+<pre class="r"><code>$ Rscript runme_cli.R -i 'marketing/NewCustomers.csv' -o 'marketing/NewCustomerScores.csv'</code></pre>
+<p>Once the program finishes running, you can open the <code>NewCustomerScores.csv</code> file in Excel and examine the results!</p>
 </div>
 </div>
 <div id="command-line-interface-advanced" class="section level3">
@@ -230,7 +231,7 @@ devtools::install(&quot;pkgs/CreditLimitModel&quot;)</code></pre>
 <p>If you are interested in the project and want to rebuild it using the source code, you can download it to your computer by clonning it using <code>git</code> or by downloading the <code>packrat</code> bundle.</p>
 <div id="using-git" class="section level3">
 <h3>Using Git</h3>
-<pre><code>git clone https://github.com/hakanegeli/csx415-project.git</code></pre>
+<pre class="r"><code>$ git clone https://github.com/hakanegeli/csx415-project.git</code></pre>
 </div>
 <div id="using-packrat" class="section level3">
 <h3>Using Packrat</h3>

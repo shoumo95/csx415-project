@@ -57,7 +57,7 @@ setwd("~/R/Projects/csx415-app"))
 ```
 
 #### Step 3 - Using R Console
-Now that all the libraries and the source files are unbundled, you can run the web app from the R commandline by opening the **runme_web.R** file, selecting all the lines (Ctrl-A), and running them (Ctrl-Enter). This will execute the following lines: 
+Now that all the libraries and the source files are unbundled, you can run the web app from the R commandline by opening the `runme_web.R` file, selecting all the lines (Ctrl-A), and running them (Ctrl-Enter). This will execute the following lines: 
 
 ``` r
 source("packrat/init.R")
@@ -67,7 +67,7 @@ p <- plumb("plumber.R")
 p$run(port=8000, swagger=FALSE)
 ```
 #### Step 3 (Alternative) - Using R Terminal
-You can run the **runme_web.R** directly from an R Terminal instead of the R console.
+You can run the `runme_web.R` directly from an R Terminal instead of the R console.
 
 First, make sure you are able to run Rscript and you have the correct version of R installed. Type `Rscript --version` on the command line in your terminal and you should see a result similart to this:
 
@@ -91,15 +91,21 @@ Open your browser and go to the address http://127.0.0.1:8000/home and follow th
 Follow Steps 1 and 2 from above if you haven't already done so.
 
 #### Step 3
-Open up a command prompt or R terminal and make sure you can execute Rscrip by typing the following:
+First, make sure you are able to run Rscript and you have the correct version of R installed. Type `Rscript --version` on the command line in your terminal and you should see a result similart to this:
 
-``` bash
-Rscript --version
+``` r
+$ Rscript --version
+  R scripting front-end version 3.4.4 (2018-03-15)
 ```
 If you see the version and the date of the R scrip then go to the next step.
 
 #### Step 4
-Command line interface allows you to run the model by providing an input file and getting an output file with the scores appended to your input. We have provided a sample input data file 
+Command line interface allows you to run the model by providing an input file and getting an output file with the scores appended to your input. We have provided a sample input data file called `NewCustomers.csv` which is located in the `/marketing` folder. So, try the following on your terminal:
+
+``` r
+$ Rscript runme_cli.R -i 'marketing/NewCustomers.csv' -o 'marketing/NewCustomerScores.csv'
+```
+Once the program finishes running, you can open the `NewCustomerScores.csv` file in Excel and examine the results!
 
 ### Command Line Interface (Advanced)
 
@@ -129,8 +135,8 @@ If you are interested in the project and want to rebuild it using the source cod
 
 ### Using Git
 
-```
-git clone https://github.com/hakanegeli/csx415-project.git
+```r
+$ git clone https://github.com/hakanegeli/csx415-project.git
 ```
 
 ### Using Packrat
