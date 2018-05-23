@@ -62,13 +62,13 @@ You can start the web server from an R Terminal instead of the R console.
 
 First, make sure you are able to run Rscript and you have the correct version of R installed. Type `Rscript --version` on the command line in your terminal and you should see a result similart to this:
 
-![](images/Terminal.png)
+![](Terminal.png)
 
 
 If you see the version of the R script you currently have, then type the following at the command prompt:
 
 
-![](images/TerminalRunWeb.png)
+![](TerminalRunWeb.png)
 
 #### Step 4
 Open your browser and go to the address http://127.0.0.1:8000/home and follow the instructions from the main page.
