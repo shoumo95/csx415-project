@@ -39,13 +39,13 @@ From your R command line, Install `packrat` if you already haven't done so.
 install.packages("packrat)
 ```
 #### Step 2
-Copy the `csx415-app.tar.gz` file from the `/deploy` directory to the location where you want to install and the open RStudio. In the Console set your working directory to this location and type the following commands:
+Copy the `csx415-app.tar.gz` file from the `/deploy` directory to the location where you want to install and open RStudio. In the Console set your working directory to this location and type the following commands:
 
 ``` r
 library("packrat)
 packrat::unbundle("csx415-app.tar.gz", ".")
 ```
-set your working directory to the directory where the csx415-app is unbundled (for example setwd("~/R/Projects/csx415-app"))
+set your working directory to the directory where the csx415-app is unbundled (for example if you copied the csx415-app.tar.gz into your R/Projects folder and unbundeled there using the commands above, then set working directory by typing setwd("~/R/Projects/csx415-app"))
 
 #### Step 3 (Using RStudio or R Console)
 Now that all the libraries and the source files are unbundled, you can either run the web app from the R commandline by opening the **runme_web.R** file, selecting all the lines (Ctrl-A) and running them (Ctrl-Enter), which will execute the following lines: 
