@@ -105,7 +105,7 @@ Command line interface allows you to run the model by providing an input file an
 ``` r
 $ Rscript runme_cli.R -i 'marketing/NewCustomers.csv' -o 'marketing/NewCustomerScores.csv'
 ```
-Once the program finishes running, you can open the `NewCustomerScores.csv` file in Excel and examine the results!
+Once the program finishes running, you can open the `NewCustomerScores.csv` file located in the `/marketing` folder using Excel or a text editor and examine the results!
 
 ### Command Line Interface (Advanced)
 
