@@ -67,7 +67,7 @@ p <- plumb("plumber.R")
 p$run(port=8000, swagger=FALSE)
 ```
 #### Step 3 (Alternative) - Using R Terminal
-You can start the web server from an R Terminal instead of the R console.
+You can run the **runme_web.R** directly from an R Terminal instead of the R console.
 
 First, make sure you are able to run Rscript and you have the correct version of R installed. Type `Rscript --version` on the command line in your terminal and you should see a result similart to this:
 
