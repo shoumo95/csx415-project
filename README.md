@@ -28,7 +28,7 @@ There are several ways you can utilize the Credit Model;
 
 * Using the Web Application
 * Using the Command Line Interface
-* Installing the packaged model as a library and using in in your own code
+* Installing the packaged model as a library and using it in your own code
 
 ### Option 1 - Web Application (recommended)
 
