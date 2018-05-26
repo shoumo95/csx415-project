@@ -10,7 +10,7 @@ install.packages("pkgs/CreditLimitModel", repos = NULL, type = "source")
 # install.packages("devtools")
 devtools::install("pkgs/CreditLimitModel")
 ```
-After the installation, please refer to the Package help for further information
+After the installation, please refer to the Package help for further information on how to use the library in your code.
 
 ``` r
 help(package="CreditLimitModel")

@@ -1,4 +1,4 @@
-## Deployment
+## Installation
 
 There are several ways you can utilize the Credit Model; 
 
@@ -62,13 +62,13 @@ Open your browser and go to the address http://127.0.0.1:8000/home and follow th
 Follow Steps 1 and 2 from above if you haven't already done so.
 
 #### Step 3
-First, make sure you are able to run Rscript and you have the correct version of R installed. Type `Rscript --version` on the command line in your terminal and you should see a result similart to this:
+First, make sure you are able to run Rscript and you have the correct version of R installed. Type `Rscript --version` on the R command line in your terminal and you should see a result similart to this:
 
 ``` r
 $ Rscript --version
   R scripting front-end version 3.4.4 (2018-03-15)
 ```
-If you see the version and the date of the R scrip then go to the next step.
+If you see the version and the date of the R script then go to the next step.
 
 #### Step 4
 Command line interface allows you to run the model by providing an input file and getting an output file with the scores appended to your input. We have provided a sample input data file called `NewCustomers.csv` which is located in the `/marketing` folder. So, try the following on your terminal:
