@@ -7,7 +7,7 @@ date: 'May 8, 2018'
 knit: (function(inputFile, encoding) { 
       rmarkdown::render(inputFile,
                         encoding=encoding, 
-                        output_file=file.path(dirname(inputFile), '../reports/', 'step-05.a-training-and-validation.html')) })
+                        output_file=file.path(dirname(inputFile), '../reports/', '05-training-and-validation.html')) })
 output: html_document
 ---
 
