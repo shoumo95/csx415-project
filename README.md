@@ -56,8 +56,8 @@ then set your working directory to the directory where the csx415-app is unbundl
 setwd("~/R/Projects/csx415-app"))
 ```
 
-#### Step 3 - Using R Console
-Now that all the libraries and the source files are unbundled, you can run the web app from the R commandline by opening the `runme_web.R` file, selecting all the lines (Ctrl-A), and running them (Ctrl-Enter). This will execute the following lines: 
+#### Step 3
+You can run the web app from the R Console (Using RStudio or RGui) by opening the `runme_web.R` file, selecting all the lines (Ctrl-A), and running them (Ctrl-Enter). This will execute the following lines: 
 
 ``` r
 source("packrat/init.R")
@@ -66,6 +66,12 @@ library(plumber)
 p <- plumb("plumber.R")
 p$run(port=8000, swagger=FALSE)
 ```
+You should see the following message after the last command executes:
+
+```r
+Starting server to listen on port 8000
+```
+
 #### Step 4
 Open your browser and go to the address http://127.0.0.1:8000/home and follow the instructions from the main page to use the application.
 
@@ -91,7 +97,7 @@ $ Rscript runme_cli.R -i 'marketing/NewCustomers.csv' -o 'marketing/NewCustomerS
 ```
 Once the program finishes running, you can open the `NewCustomerScores.csv` file located in the `/marketing` folder using Excel or a text editor and examine the results!
 
-### Command Line Interface (Advanced)
+### Option 2 - Command Line Interface (Advanced)
 
 TODO add steps here for the NN model and setting up Python and Keras!
 
