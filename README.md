@@ -2,7 +2,7 @@
 
 ## Overview
 
-Purpose of this project is to examine if a model can be developed to assist jewelry manufacturers with assesing the credit risk of a potential new customer (retailer) and help the manufacturer assign a credit limit for that new customer.
+Purpose of this project is to examine if a model can be developed to assist jewelry manufacturers with assesing the credit risk of a potential new customer (retailer) and help the manufacturer assign a credit limit for that new customer. This credit limit establishes how much a retailer can purcase from the manufacturer without making a payment during their payment term.
 
 ## Project Files
 
