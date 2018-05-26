@@ -1,5 +1,3 @@
-# CSX415 Project: Assigning Credit Limits to New Accounts
-
 ## Package Installation
 
 Final version of the model is packaged and can be used by simply installing the package.
