@@ -1,5 +1,3 @@
-# CSX415 Project: Assigning Credit Limits to New Accounts
-
 ## Deployment
 
 There are several ways you can utilize the Credit Model; 
