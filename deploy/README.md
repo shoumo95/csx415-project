@@ -8,6 +8,11 @@ There are several ways you can utilize the Credit Model;
 * Using the **Command Line Interface**
 * Installing the packaged model as a **library** and using it in your own code
 
+### Prerequisites
+
+* You will need R version 3.4.4 or above. You can download and install the R for your specific platfrom from CRAN  [here](https://cran.r-project.org/)
+* You will also need RTools version 3.4 or above for Windows from CRAN [here](https://cran.r-project.org/bin/windows/Rtools/)
+
 ### Option 1 - Web Application (recommended)
 
 #### Step 1
