@@ -21,7 +21,7 @@ Purpose of this project is to examine if a model can be developed to assist jewe
 
 The **opportunity** here is, if we can develop a way to determine how much credit can be extended to a customer that we don't have an existing relationship, then we can increase our brand's market share by targeting the right new leads/prospects while we reduce the risk and maximize the return on our investment.
 
-Between 35% to 45% of customers are assigned a fixed lower credit limit and their accounts are not revisited unless the retailer initiates a request to review this limit. Assigning correct credit limits could potentially mean higher sales for some of these customers and correctly assigning a credit limit to those where only the JBT Rating information was used to make the determination could potentially reduce the default losses.
+Between 35% to 45% of customers are assigned a fixed lower credit limit and their accounts are not revisited unless the retailer initiates a request to review this limit. Assigning correct credit limits could potentially mean higher sales for some of these customers and could potentially reduce the default losses for those where only the Credit Rating information was used to make their credit limit determination.
 
 # Background
 
@@ -78,7 +78,7 @@ Because a credit limit on a retailer can reduce the sales potential of that reta
 
 ### Model Success Metrics
 
-Assigning credit limits to customers could result in higher defaults or collections for the manufacturer and at the same time assigning lower credit limits could potentially reduce sales. Eventhough the overall accuracy of the model is important, the model has to achive certain percentage of accuracy detecting True Positives and True Negatives for each credit limit class. We will use the Accuracy metric to evalue the success of the model as well as the Sensitivity (or Recall) and the Specificity of the model. 
+Assigning higher credit limits to customers could result in higher defaults or collections and conversely, assigning lower credit limits could potentially reduce sales, therefore the model has to be accurate. Eventhough the overall accuracy of the model is important, the model has to achive certain percentage of accuracy detecting True Positives and True Negatives for each credit limit class. We will use the Accuracy metric to evalue the success of the model as well as the Sensitivity (or Recall) and the Specificity of the model. 
 
 We will consider the model a success if
 
@@ -104,7 +104,7 @@ If the **Model Success Metrics** is not met, then the client will use this model
 
 ## Delivery/Deployment
 
-Ease of use and access to the model is critical for the acceptance of the solution. Currently, all the customer, prospect data and the sales history for the current customers reside in a cloud-based ERP system (NetSuite). A web based solution where the two systems integrate is desirable. The web based system will:
+Ease of use and access to the model is critical for the acceptance of the solution. Currently, all the customer, prospect data and the sales history for the current customers reside in a cloud-based ERP system (NetSuite). A web based solution where the two systems integrate is desirable. The web based system shall:
 
 a) Accept customer data export from the ERP system into the model to perfom predictions
 b) Allow sales reps to obtain one-off credit limits for potential new customers while they are travelling to sign customers
@@ -115,10 +115,10 @@ We will perform the following major project tasks to complete the project
 
 * Formalize the Problem
 * Model Development
-  + Collect Data
-  + Exploratory Data Analysis
-  + Feature Generation/Selection
-  + Train and Validate Model
++ Collect Data
++ Exploratory Data Analysis
++ Feature Generation/Selection
++ Train and Validate Model
 * Model Deployment
 
 In addition, there would be an on going Model Management and Maintenance after the deployment of the model.
@@ -130,4 +130,5 @@ Besides the development cost of the project, there will be cost associated with 
 * Development: Time and Material, estimated 2 Man-Months of development
 * Web Server Charges for a small clound instance: Monthly
 * Maintenace and Support for the Model and the Server: Annually, 20% of Development Cost
+
 
