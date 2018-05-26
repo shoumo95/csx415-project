@@ -2,7 +2,7 @@
 
 ## Overview
 
-Purpose of this project is to examine if a model can be developed to assist jewelry manufacturers with assesing the credit risk of a potential new customer (retailer) and help the manufacturer assign a credit limit for this new customer.
+Purpose of this project is to examine if a model can be developed to assist jewelry manufacturers with assesing the credit risk of a potential new customer (retailer) and help the manufacturer assign a credit limit for that new customer.
 
 ## Project Files
 
@@ -17,26 +17,5 @@ load.project()
 
 Following documents will provide additional information about the project and the artifacts:
 
-* ASSETS.md 
-* /deploy/README.md
-* /reports/README.md
-
-## Installation
-
-### Model Package
-
-Final version of the model is packaged and can be used by simply installing the package.
-
-``` r
-# Install the released version from source (/pkgs)
-install.packages("pkgs/CreditLimitModel", repos = NULL, type = "source")
-
-# Or the development version from source using devtools:
-# install.packages("devtools")
-devtools::install("pkgs/CreditLimitModel")
-```
-After the installation, please refer to the Package help for further information
-
-``` r
-help(package="CreditLimitModel")
-```
+* `ASSETS.md` information about the project data, code, and reports  
+* `deploy/README.md` about how you can install different components of the project including the standalone web application and the model package.
