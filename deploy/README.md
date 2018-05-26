@@ -2,11 +2,11 @@
 
 ## Deployment
 
-There are several deployment options that you can choose from; 
+There are several ways you can utilize the Credit Model; 
 
-* Web Application
-* Command Line Interface
-* Installing the model as a library and using it directly in your own code
+* Using the **Web Application**
+* Using the **Command Line Interface**
+* Installing the packaged model as a **library** and using it in your own code
 
 ### Option 1 - Web Application (recommended)
 
@@ -44,24 +44,8 @@ library(plumber)
 p <- plumb("plumber.R")
 p$run(port=8000, swagger=FALSE)
 ```
-#### Step 3 (Alternative) - Using R Terminal
-You can run the `runme_web.R` directly from an R Terminal instead of the R console.
-
-First, make sure you are able to run Rscript and you have the correct version of R installed. Type `Rscript --version` on the command line in your terminal and you should see a result similart to this:
-
-``` r
-$ Rscript --version
-  R scripting front-end version 3.4.4 (2018-03-15)
-```
-If you see the version of the R script you currently have, then type the following at the command prompt:
-
-``` r
-$ Rscript runme_web.R
-  Starting server to listen on port 8000
-```
-
 #### Step 4
-Open your browser and go to the address http://127.0.0.1:8000/home and follow the instructions from the main page.
+Open your browser and go to the address http://127.0.0.1:8000/home and follow the instructions from the main page to use the application.
 
 ### Option 2 - Command Line Interface
 
@@ -101,7 +85,7 @@ install.packages("pkgs/CreditLimitModel", repos = NULL, type = "source")
 # install.packages("devtools")
 devtools::install("pkgs/CreditLimitModel")
 ```
-After the installation, please refer to the Package help for further information
+After the installation, please refer to the Package help for further information on how to use the library in your code.
 
 ``` r
 help(package="CreditLimitModel")
