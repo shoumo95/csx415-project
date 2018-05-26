@@ -1,51 +1,60 @@
 # DEPENDENCIES
 
-library('ProjectTemplate')
-For project organization and automation of several task (auto loading libraries and data munging)
+## R
+This project was developed using R version 3.4.4 and it has been tested on version 3.5.
 
-library(caTools)
-For splitting training and test data (needed by sample.split())
+## RTools
+Some of the libraries require Rtools to be installed during their installation in Windows. You will need RTools 3.5 or above if you are using windows.
 
-library(ggplot2)
-For charts and plotting
+## Project Template
+This project follows the organizational structure of [Project Template](http://projecttemplate.net/) and uses some of the automation functionality provided by the library, therefore you must install `projectTemplate` in order to be able to run the code (Rmarkdown documents). 
 
-library(rpart)
-For rpart function, Decision Tree modeling
+## Packrat
+Deployable standalone application requires `packrat` for installation and this library must be installed in order to install the library dependencies.
 
-library(rattle)
-For enhanced Decision Tree plotting
+## Packages
+Full list of libraries and their dependencies can be fount in `packrat/packrat.lock` 
 
-library(caret)
-For CrossValdation
+# DATA
 
-library(gridExtra)
-For grid.layout, in order to be able to plot charts side by side or by rows.
+## CustomerData.csv
+This is the main data source for our project which is used to train and test the model(s), located in the `data` folder. This data gets auto loaded by ProjectTemplate. 
 
-# INPUTS
-/data/CustomerData.csv
-This is the main data source for our project. This data get auto loaded by ProjectTemplate. 
+## ECN_2012_US_44A1_with_ann.csv
+U.S. Census Bureau data set named **EC1244A1 - Retail Trade: Geographic Area Series: Summary Statistics for the U.S., States, Metro Areas, Counties, and Places: 2012**. This dataset contains information on Number of Establishments, Sales, and Annual Payroll for various NAICS codes on economic census geographies (CBSACode).
 
-/munge/01-A.R
-ProjectTemplate runs the scripts in this file to pre-process the data loaded. It created two datasets, dataset_train and dataset_test.
+## CBSACodeUrbanInfluenceCode.csv
+Mapping of the CBSA Codes to Urban Influence Codes. 
 
-/lib/helpers.R
-This file contains our common helper functions that we use across .R and .Rmd files.
+CBSA Code, core-based statistical area, is a U.S. geographic area defined by the Office of Management and Budget (OMB) that consists of one or more counties (or equivalents) anchored by an urban center of at least 10,000 people plus adjacent counties that are socioeconomically tied to the urban center by commuting.
 
-/project-performance.Rmd
-Our initial Naive model
+Urban Influence Codes form a classification scheme that distinguishes metropolitan counties by population size of their metro area, and nonmetropolitan counties by size of the largest city or town and proximity to metro and micropolitan areas, subdivided into two metro and 10 nonmetro categories, resulting in a 12-part county classification.
 
-/project-performance-linear.Rmd
-Our first iteartion of a linear model for our data
+## dataset_train and dataset_test
+ProjectTemplate runs the scripts `01-AddlFeatures.R` and `02-PrepareDataSets.R` located in `munge` folder to pre-process the data loaded (CustomerData) and it creates two datasets, dataset_train and dataset_test, split by 80-20.
 
-/project-performance-rpart.Rmd
-Our first iteartion of a decision tree model for our data
+# CODE
 
-# OUPUTS
-/project-performance.html
-Our Naive model results and report
+## Exploratory Data Analysis (EDA)
 
-/project-performance-linear.html
-Our first linear model results and report
+## Feature Selection
 
-/project-performance-rpart.html
-Our first decision tree model results and report
+### First Regression Model (linear)
+
+### First Classification Model (rpart)
+
+## Model Training and Validation
+
+### Incorporation of Additional Data
+
+## Deep Learning Model with Keras and Tensorflow
+
+# DOCUMENTS
+
+## Formal Problem Statemet (FPS)
+
+## Exploratory Data Analysis (EDA)
+
+## Feature Selection
+
+## Model Training and Validation
