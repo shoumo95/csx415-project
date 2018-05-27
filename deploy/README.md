@@ -20,7 +20,7 @@ From your R command line, Install `packrat` if you already haven't done so.
 install.packages("packrat")
 ```
 #### Step 2
-Copy the `csx415-app.tar.gz` file from the `/deploy` directory to the location where you want to install and open RStudio (for example you can create a Projects directory under your "Documents/R". In the Console set your working directory to this location.
+Copy the `csx415-app.tar.gz` file from the `/deploy` directory to the location where you want to install and open RStudio (for example you can create a Projects directory under your "~/Documents/R" folder if one doesn't exist. In the Console set your working directory to this location (or to another location you would like to install).
 
 ```r
 setwd("~/R/Projects")
