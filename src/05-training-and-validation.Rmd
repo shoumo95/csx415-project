@@ -55,7 +55,7 @@ registerDoParallel(cl)
 
 ```
 
-## Regression Models
+### Regression Model Training and Validation
 
 ```{r, echo=FALSE, warning=FALSE}
 
@@ -119,19 +119,18 @@ df[with(df, order(RMSE)),]
 
 ```
 
-## Regression Tests Accuracy
+### Regression Model Tests Accuracy
 
 RMSE, $R^2$ and MAE results using the test dataset.
 
-```{r, warning=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 
 predictions <- predict(model_glm, newdata=dataset_test)
 postResample(dataset_test$CreditLimit, predictions)
 
 ```
 
-
-## Classification Models
+### Classification Model Training and Validation
 
 ```{r, echo=FALSE, warning=FALSE}
 
@@ -327,22 +326,25 @@ ggplot(data, aes(x = model, y = kappa, fill = model)) +
 
 We looked at the Accuracy and Kappa model performance metrics and the confidence interval for each model and determined that the Random Forest model and the Multinomial Regression model were the top two performers. Then, we cheched the performance metics for these two top models against the test dataset that we have set aside (which as not used during the training) to re-evaluate their performance.
 
-## Classification Test Accuracy for the Top Two Models
+### Classification Test Accuracy for the Top Two Models
 
-Random Rorest model against the test data:
+#### Random Rorest model against the test data:
 
-```{r, warning=FALSE}
+```{r, echo=FALSE}
 
 predictions <- predict(model_rf, newdata=dataset_test)
 cm <- confusionMatrix(dataset_test$CreditLimitCategory, predictions)
 cm$overall
 
 ```
+
 ```{r, echo=FALSE}
 
 cm$byClass[,c("Sensitivity", "Specificity", "Precision", "Recall")]
 
 ```
+
+**Confusion Matrix**
 
 ```{r, echo=FALSE, warning=FALSE}
 
@@ -390,9 +392,9 @@ ggplot(df) +
 
 ```
 
-Multinomial Regression model against the test data:
+#### Multinomial Regression model against the test data:
 
-```{r, warning=FALSE}
+```{r, echo=FALSE}
 
 predictions <- predict(model_multinom, newdata=dataset_test)
 cm <- confusionMatrix(dataset_test$CreditLimitCategory, predictions)
@@ -405,6 +407,8 @@ cm$overall
 cm$byClass[,c("Sensitivity", "Specificity", "Precision", "Recall")]
 
 ```
+
+**Confusion Matrix**
 
 ```{r, echo=FALSE, warning=FALSE}
 
@@ -452,7 +456,7 @@ ggplot(df) +
 
 ```
 
-## Final Model
+### Final Model
 
 From the last two model tests, we have confirmed that the model built using the random forest was the one with the best accuracy and the best Kappa performance metrics.
 
@@ -464,7 +468,7 @@ model_rf <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCur
 
 ```
 
-Final Accuracy and Kappa values and Standard Deviations
+#### Final Accuracy and Kappa values and Standard Deviations
 
 ```{r, echo=FALSE, warning=FALSE}
 

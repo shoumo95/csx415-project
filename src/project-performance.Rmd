@@ -12,14 +12,14 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, root.dir = "..")
 ```
 
 ## Project Setup
 
-We chose to go with the ProjectTemplate package and structured our project accordingly. With this setup, our data gets automatically loaded from the data directory and using the munge feature we also automatically build a **training set** and a **test set** by dividing the original dataset using a 70/30 ratio. To make sure that both the training and the test sets have similar distributions, we used the `sample.split()` function and split the data over the **CreditLimit** variable.
+We chose to go with the ProjectTemplate package and structured our project accordingly. With this setup, our data gets automatically loaded from the data directory and using the munge feature we also automatically build a **training set** and a **test set** by dividing the original dataset using a 80/20 ratio. To make sure that both the training and the test sets have similar distributions, we used the `createDataPartition()` function and split the data over the **CreditLimit** variable.
 
-We also set the seed to a fixed number so that we can produce the same sequence of random numbers between runs and our results are not effected by the changes in the datasets.
+We also set the `seed` to a fixed number so that we can produce the same sequence of random numbers between runs and our results are not effected by the changes in the datasets.
 
 ```{r, echo=FALSE, include = FALSE}
 
@@ -33,10 +33,6 @@ load.project()
 setwd(cwd)
 
 ```
-
-## Pre-Model Work
-
-We developed our own functions to be able to calculate the errors for our model and our future models. These error functions include **R-squared**, **Adjusted R-squared** and the **Root Mean Square Error (RMSE)**. We will make use of these functions to track the fitness and the performance of our models, and we will be able to compare models to each other.
 
 ```{r, echo=FALSE, include = FALSE}
 #
@@ -82,9 +78,9 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 }
 ```
 
-## Initial Model
+## Naive Model
 
-We wanted to see if Sales would be a good indicator to predict Credit Limits. We chose the Last Year&apos;s Sales (SalesLastYr) column and build a linear regression model with one independent variable. Our goal is to see whether we can formulate the Credit Limit with a simple equation as the following and whether this realtionship is good enough to get acceptable predictions for Credit Limits:
+Instead of using a mean value for the credit limit for our Naive model, we chose Last Year&apos;s Sales (SalesLastYr) independent variable to predict Credit Limits. Our goal is to see whether we can formulate the Credit Limit with a simple equation as the following and whether this realtionship is good enough to get acceptable predictions for Credit Limits:
 
 $$Credit Limit = w*Previous Years Sales+b$$ 
 
@@ -99,15 +95,15 @@ modelSummary <-summary(model)
 print(modelSummary)
 ```
 
-The `summary()` results of this model trained using the **training set** shows that both the intercept (b) and the coefficient (w) are significant (P values are much less than 0.05). This might be a good start but how good of a fit is this model to our data?
+The **summary** results of this model trained using the **training set** shows that both the intercept (b) and the coefficient (w) are significant (P values are much less than 0.05). This might be a good start but how good of a fit is this model to our data?
 
 R-squared paramater indicates the the fitness of a model and we want this value to be closer to 1, aka we want the ratio of the sum of the square of the residuals ($SS_r$) over the sum of the square of the averages ($SS_t$) to be small so that $R^2$ becomes larger.
 
 $$R^2 = 1 - SS_r/SS_t$$ 
 
-The value 0.03102 for the $R^2$ seemed low which is indicating that the model is not a good fit. And at this time we are not concerned with the Adjusted $R^2$ since we have only one independent variable in our model.
+The value `r modelSummary$r.squared` for the $R^2$ seemed low which is indicating that the model is not a good fit. And at this time we are not concerned with the Adjusted $R^2$ since we have only one independent variable in our model.
 
-The three of the indicators that we are planning on using for this model and for all of our future models are; $R^2$, Adjusted $R^2$ and the RMSE and below is a recap of these three indicators for our **trained model**:
+The three perfomance metrics, $R^2$, Adjusted $R^2$ and the RMSE, for the **training set** are:
 
 ```{r, echo=FALSE, include = FALSE}
 y <- dataset_train$CreditLimit
@@ -138,7 +134,7 @@ cat('Abs diff between summary$adj.r.squared and RSquaredAdjsuted() is less than 
 
 ```
 
-And below are the results of the same three indicators for our model using the **test set**:
+And same metrics for the **test set** are:
 
 ```{r, echo=FALSE, include = FALSE}
 y <- dataset_test$CreditLimit
@@ -161,11 +157,11 @@ cat('Root Mean Square Error: ', rmse, "\n")
 
 ```
 
-The $R^2$ value is slightly better for the test set than the training set but in both cases these values still indicate not a good fit. The RSME values for both the raining and the test sets seems to be close to each other and we hope to see this number go lower as we build better models.
+The $R^2$ values are very close to eachother for the test set than the training set but in both cases these values still indicate not a good fit. The RSME values for both the raining and the test sets seems to be close to each other as well and we hope to see these numbers (RSME) go lower and the $R^2$ values go higher as we build better models.
 
-## Data Insights
+## Interpretation of the Model and the Data
 
-We have performed other exploratory analysis on our data and we began our examination with the **Sales** numbers for the last calender year. We looked at the min, max, std dev and the quintiles to understand the spread of the data as well as to be able to do a comparison between the training and the test sets.
+We have performed a preliminary data analysis and we began our examination of the data with the **Sales** numbers for the last calender year. We looked at the min, max, std dev and the quintiles to understand the spread of the data as well as to be able to do a comparison between the training and the test sets.
 
 #### Training Set Summary
 
@@ -252,10 +248,10 @@ It is possible that the Credit Limit cannot be explained by one varaible and a l
 
 ## Next Step
 
-We will try to improve our linear model by examining all other variables that we have in our dataset and use a **Backward Elimitaion** to find out the most significant variables which might help us to build a better model. As we add more variables to describe our model we will also utilize the Adjusted $R^2$ predictor to account for the impact of the added variables to the $R^2$ value.
+We will try to improve our linear model by examining all other variables that we have in our dataset and use a **Backward Elimitaion** to find out the most significant variables which might help us to build a better model. As we add more variables to describe our model we will also utilize the $Adjusted R^2$ predictor to account for the impact of the added variables to the $R^2$ value.
 
-Future steps might also include adding non-linear terms to the model or building other non-linear models such as one which uses a **Decision Tree** or take advantage of ensemble learning by building a model using **Random Forest**.
+Future steps will also include adding non-linear terms to the model or building other classification models such as one which uses a **Decision Tree** or take advantage of ensemble learning by building a model using **Random Forest**.
 
-We will evaluate the performance of these models by comparing the RMSE values to see which model will be able to reduce the error the most.
+We will evaluate the performance of these models against our performance metrics which we have established in the FPS document.
 
 

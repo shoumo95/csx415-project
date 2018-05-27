@@ -2,7 +2,8 @@
 set.seed(415)
 
 # CustomerData should be auto loaded so select the features/independent variables from the Customerdata
-dataset <- CustomerData[,9:39]
+columns_in_dataset <- ncol(CustomerData)
+dataset <- CustomerData[,9:columns_in_dataset]
 
 # create categorical values for the credit limit for logistic regression models
 dataset$CreditLimitCategory <- factor(dataset$CreditLimit)

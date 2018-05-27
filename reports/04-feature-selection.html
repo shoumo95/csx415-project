@@ -125,9 +125,11 @@ $(document).ready(function () {
 </div>
 
 
-<div id="build-a-linear-model" class="section level1">
-<h1>Build a Linear Model</h1>
-<p>Using all the variables (except JBT Rating), we examined revelance of the variables in our dataset. The reason we exluded the JBT Rating is because we want to be able to make predictions for the new customers who do not have a Credit Rating, so we did not want this variable to play a role in our model.</p>
+<div id="linear-model" class="section level2">
+<h2>Linear Model</h2>
+<div id="relevance-of-the-independent-variables" class="section level3">
+<h3>Relevance of the Independent Variables</h3>
+<p>Using all the variables, we examined revelance of the variables in our dataset to the Credit Limit.</p>
 <pre><code>## 
 ## Call:
 ## lm(formula = CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + 
@@ -186,18 +188,19 @@ $(document).ready(function () {
 ##   (62 observations deleted due to missingness)
 ## Multiple R-squared:  0.2483, Adjusted R-squared:  0.2297 
 ## F-statistic: 13.34 on 32 and 1292 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>After viewing the summary and looking at the significance of the coefficients we notice tha the coefficient with the highest P value is the intercept.</p>
+</div>
 <div id="remove-the-intercept" class="section level3">
-<h3>Remove the intercept</h3>
+<h3>Remove the Intercept</h3>
+<p>We wanted to see the impact of removing the intercept and whether this would improve the model performance.</p>
 <pre><code>## 
 ## Call:
-## lm(formula = CreditLimit ~ 1 + SalesCurrentYr + SalesLastYr + 
-##     PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + 
-##     AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + 
-##     NumberOfStoreLocations + AvgDaysOfPayCategory + AvgDaysOfPay + 
-##     MaxDaysPastDue + MaxAmtPastDue + AvgAmtPastDue + ReturnedPaymentCount + 
-##     MaxReturnedPaymentAmt + RuralUrbanContinuumCode + UrbanInfluenceCode + 
-##     MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + 
+## lm(formula = CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + 
+##     DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + 
+##     TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + 
+##     AvgDaysOfPayCategory + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + 
+##     AvgAmtPastDue + ReturnedPaymentCount + MaxReturnedPaymentAmt + 
+##     RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + 
+##     TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + 
 ##     TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + 
 ##     NumberOfJewelryStoresState + JewelryStoreSalesState - 1, 
 ##     data = dataset_train)
@@ -323,14 +326,14 @@ summary(predictions)</code></pre>
 ##   292.5  2141.5  3035.0  2867.3  3550.5  7117.8</code></pre>
 <p>We calculated the <span class="math inline">\(RMSE\)</span> value for our <strong>Training Set</strong> predictions:</p>
 <pre><code>## Root Mean Square Error:  1626.644</code></pre>
-<p>The <span class="math inline">\(RMSE\)</span> for our <strong>Naive Model’s</strong> training set was 4312.198. So it looks like our new model improved slightly for our training set values.</p>
+<p>The <span class="math inline">\(RMSE\)</span> for our <strong>Naive Model’s</strong> training set was 1827.308. So it looks like our new model improved slightly for our training set values.</p>
 <p>Using our <strong>Test Set</strong>, we obtained a new set of predictions and calculated the <span class="math inline">\(RMSE\)</span> value for our test predictions:</p>
 <pre><code>## Root Mean Square Error:  1728.796</code></pre>
-<p>The <span class="math inline">\(RMSE\)</span> for our <strong>Naive Model’s</strong> test set was 4106.185. Based on these <span class="math inline">\(RMSE\)</span> values, our new model did not improve for our test set!</p>
+<p>The <span class="math inline">\(RMSE\)</span> for our <strong>Naive Model’s</strong> test set was 1828.77. Based on these <span class="math inline">\(RMSE\)</span> values, our new model also improved for our test set!</p>
 </div>
 </div>
-<div id="decision-tree-model" class="section level1">
-<h1>Decision Tree Model</h1>
+<div id="decision-tree-model" class="section level2">
+<h2>Decision Tree Model</h2>
 <p>Similart to building our intial linear model, we have examined the relevance of all the dependent variables. We identified the most relevant variables so that we can build our initial decision tree model accordingly.</p>
 <div id="what-are-the-most-relevant-variables" class="section level3">
 <h3>What are the most relevant variables?</h3>
@@ -346,164 +349,15 @@ summary(predictions)</code></pre>
 <div id="backward-elimitaion-to-find-the-significant-coefficients-1" class="section level3">
 <h3>Backward Elimitaion to find the significant coefficients</h3>
 <p>We perfomed a Backward Elimination; remove the least relevant (highest p) variables (MedianEarnings, TotalHouseholds, NumberOfJewelryStores, TotalPopulation, RuralUrbanContinuumCode) and rebuild the model.</p>
-<pre><code>## Call:
-## rpart(formula = CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + 
-##     SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + 
-##     SalesCurrentYr + PlainBandSalesLast12Mo + MedianIncomeHouseholds, 
-##     data = dataset_train, control = rpart.control(cp = 0.01))
-##   n= 1387 
-## 
-##           CP nsplit rel error    xerror       xstd
-## 1 0.16864567      0 1.0000000 1.0020554 0.01719856
-## 2 0.02262200      1 0.8313543 0.8353833 0.02313029
-## 3 0.01715148      2 0.8087323 0.8188400 0.02431765
-## 4 0.01339995      3 0.7915808 0.8127802 0.02472989
-## 5 0.01000000      4 0.7781809 0.8055662 0.02510724
-## 
-## Variable importance
-##          AvgDaysOfPayCategory            TotalSalesLast12Mo 
-##                            73                             9 
+<pre><code>##          AvgDaysOfPayCategory            TotalSalesLast12Mo 
+##                     904235213                     116766623 
 ##        PlainBandSalesLast12Mo                SalesCurrentYr 
-##                             5                             5 
+##                      63950287                      56687132 
 ##                   SalesLastYr       DesignBandSalesLast12Mo 
-##                             4                             2 
-## AlternativeMetalSalesLast12Mo 
-##                             1 
-## 
-## Node number 1: 1387 observations,    complexity param=0.1686457
-##   mean=2867.34, MSE=3408501 
-##   left son=2 (355 obs) right son=3 (1032 obs)
-##   Primary splits:
-##       AvgDaysOfPayCategory   splits as  LRRRLRR,     improve=0.16864570, (0 missing)
-##       PlainBandSalesLast12Mo &lt; 2490    to the left,  improve=0.02827045, (0 missing)
-##       SalesCurrentYr         &lt; 771.5   to the left,  improve=0.02578445, (0 missing)
-##       SalesLastYr            &lt; 10783.5 to the left,  improve=0.02469578, (0 missing)
-##       TotalSalesLast12Mo     &lt; 13569.5 to the left,  improve=0.02432816, (0 missing)
-## 
-## Node number 2: 355 observations
-##   mean=1574.648, MSE=1602174 
-## 
-## Node number 3: 1032 observations,    complexity param=0.022622
-##   mean=3312.016, MSE=3257297 
-##   left son=6 (676 obs) right son=7 (356 obs)
-##   Primary splits:
-##       AvgDaysOfPayCategory          splits as  -LRL-LL,     improve=0.03181514, (0 missing)
-##       PlainBandSalesLast12Mo        &lt; 691.5   to the left,  improve=0.01996707, (0 missing)
-##       SalesCurrentYr                &lt; 49      to the left,  improve=0.01968466, (0 missing)
-##       AlternativeMetalSalesLast12Mo &lt; 780     to the left,  improve=0.01567130, (0 missing)
-##       TotalSalesLast12Mo            &lt; 733     to the left,  improve=0.01525107, (0 missing)
-##   Surrogate splits:
-##       DesignBandSalesLast12Mo &lt; 45686   to the left,  agree=0.657, adj=0.006, (0 split)
-##       SalesLastYr             &lt; 203103  to the left,  agree=0.657, adj=0.006, (0 split)
-##       TotalSalesLast12Mo      &lt; 136148  to the left,  agree=0.657, adj=0.006, (0 split)
-##       PlainBandSalesLast12Mo  &lt; -60     to the right, agree=0.657, adj=0.006, (0 split)
-## 
-## Node number 6: 676 observations,    complexity param=0.01339995
-##   mean=3078.402, MSE=3187640 
-##   left son=12 (490 obs) right son=13 (186 obs)
-##   Primary splits:
-##       PlainBandSalesLast12Mo        &lt; 2409    to the left,  improve=0.02939862, (0 missing)
-##       SalesCurrentYr                &lt; 963.5   to the left,  improve=0.01807810, (0 missing)
-##       TotalSalesLast12Mo            &lt; 13157.5 to the left,  improve=0.01363382, (0 missing)
-##       SalesLastYr                   &lt; 25024.5 to the left,  improve=0.01246849, (0 missing)
-##       AlternativeMetalSalesLast12Mo &lt; 1228    to the left,  improve=0.01076961, (0 missing)
-##   Surrogate splits:
-##       TotalSalesLast12Mo            &lt; 7509    to the left,  agree=0.877, adj=0.554, (0 split)
-##       SalesLastYr                   &lt; 13667   to the left,  agree=0.833, adj=0.392, (0 split)
-##       DesignBandSalesLast12Mo       &lt; 3757    to the left,  agree=0.820, adj=0.344, (0 split)
-##       SalesCurrentYr                &lt; 2807    to the left,  agree=0.806, adj=0.296, (0 split)
-##       AlternativeMetalSalesLast12Mo &lt; 2743    to the left,  agree=0.775, adj=0.183, (0 split)
-## 
-## Node number 7: 356 observations,    complexity param=0.01715148
-##   mean=3755.618, MSE=3089154 
-##   left son=14 (47 obs) right son=15 (309 obs)
-##   Primary splits:
-##       TotalSalesLast12Mo            &lt; 718.5   to the left,  improve=0.07373131, (0 missing)
-##       SalesCurrentYr                &lt; 114     to the left,  improve=0.06329681, (0 missing)
-##       AlternativeMetalSalesLast12Mo &lt; 347.5   to the left,  improve=0.04083854, (0 missing)
-##       PlainBandSalesLast12Mo        &lt; 80      to the left,  improve=0.03560973, (0 missing)
-##       MedianIncomeHouseholds        &lt; 58525   to the right, improve=0.03011640, (0 missing)
-##   Surrogate splits:
-##       SalesCurrentYr         &lt; 27.5    to the left,  agree=0.930, adj=0.468, (0 split)
-##       SalesLastYr            &lt; 713     to the left,  agree=0.916, adj=0.362, (0 split)
-##       MedianIncomeHouseholds &lt; 31462   to the left,  agree=0.871, adj=0.021, (0 split)
-## 
-## Node number 12: 490 observations
-##   mean=2889.796, MSE=3253161 
-## 
-## Node number 13: 186 observations
-##   mean=3575.269, MSE=2674442 
-## 
-## Node number 14: 47 observations
-##   mean=2531.915, MSE=3780896 
-## 
-## Node number 15: 309 observations
-##   mean=3941.748, MSE=2721526</code></pre>
+##                      54792471                      22398492 
+## AlternativeMetalSalesLast12Mo        MedianIncomeHouseholds 
+##                      11580009                       1725217</code></pre>
 </div>
-</div>
-<div id="build-a-linear-model-2.a" class="section level1">
-<h1>Build a linear model #2.a</h1>
-<p>We came back to our linear model after we built our Decision-Tree model to see if we can build a similar linear model and if that would perform better. Using the same relevant variables which we have used in our decision tree as a start, and going through the Backward Elimination process, we came up with the following model:</p>
-<pre><code>## 
-## Call:
-## lm(formula = CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPay + 
-##     SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + 
-##     MedianIncomeHouseholds + SalesCurrentYr + PlainBandSalesLast12Mo + 
-##     MedianEarnings + RuralUrbanContinuumCode, data = dataset_train)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -6419.4 -1475.1  -243.6  1951.3  2882.6 
-## 
-## Coefficients:
-##                                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)                    2.089e+03  3.992e+02   5.233 1.93e-07 ***
-## DesignBandSalesLast12Mo       -1.379e-02  3.072e-02  -0.449 0.653580    
-## AvgDaysOfPay                   1.874e+01  2.815e+00   6.657 4.04e-11 ***
-## SalesLastYr                    1.454e-02  7.500e-03   1.939 0.052660 .  
-## TotalSalesLast12Mo             5.290e-04  2.737e-02   0.019 0.984583    
-## AlternativeMetalSalesLast12Mo  1.507e-03  2.921e-02   0.052 0.958856    
-## MedianIncomeHouseholds        -1.540e-02  9.828e-03  -1.566 0.117464    
-## SalesCurrentYr                 9.698e-03  1.452e-02   0.668 0.504426    
-## PlainBandSalesLast12Mo        -8.882e-03  2.688e-02  -0.330 0.741103    
-## MedianEarnings                 2.417e-02  2.152e-02   1.123 0.261684    
-## RuralUrbanContinuumCode        1.300e+02  3.685e+01   3.528 0.000433 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 1788 on 1364 degrees of freedom
-##   (12 observations deleted due to missingness)
-## Multiple R-squared:  0.06861,    Adjusted R-squared:  0.06178 
-## F-statistic: 10.05 on 10 and 1364 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>The <span class="math inline">\(R^2 Adjusted\)</span> value for this model was <strong>significantly lower</strong> than the model we came up with earlier!</p>
-</div>
-<div id="build-a-linear-model-2.b" class="section level1">
-<h1>Build a linear model #2.b</h1>
-<p>We also wanted to examine if we could build a better linear model using non-sales variables. We started with all non-sales related variables which we have obtained from census.gov and went through the backward elimination and removed the least significant coefficient until we have reached an <span class="math inline">\(R^2 Adjusted\)</span> value which did not improve any further.</p>
-<pre><code>## 
-## Call:
-## lm(formula = CreditLimit ~ RuralUrbanContinuumCode + MetroIndicator + 
-##     MedianEarnings + MedianIncomeHouseholds + NumberOfJewelryStores - 
-##     1, data = dataset_train)
-## 
-## Residuals:
-##    Min     1Q Median     3Q    Max 
-##  -3932  -1677     -8   2034   3110 
-## 
-## Coefficients:
-##                          Estimate Std. Error t value Pr(&gt;|t|)    
-## RuralUrbanContinuumCode 394.33677   43.41716   9.083  &lt; 2e-16 ***
-## MetroIndicator          880.64586  209.90784   4.195 2.90e-05 ***
-## MedianEarnings            0.08720    0.01971   4.424 1.05e-05 ***
-## MedianIncomeHouseholds   -0.02936    0.01021  -2.875  0.00411 ** 
-## NumberOfJewelryStores    -0.13744    0.07946  -1.730  0.08395 .  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 1841 on 1332 degrees of freedom
-##   (50 observations deleted due to missingness)
-## Multiple R-squared:  0.7082, Adjusted R-squared:  0.7071 
-## F-statistic: 646.4 on 5 and 1332 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 
 

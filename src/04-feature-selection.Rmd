@@ -38,10 +38,11 @@ require(rpart)
 
 ```
 
+## Linear Model
 
-# Build a Linear Model 
+### Relevance of the Independent Variables
 
-Using all the variables (except JBT Rating), we examined revelance of the variables in our dataset. The reason we exluded the JBT Rating is because we want to be able to make predictions for the new customers who do not have a Credit Rating, so we did not want this variable to play a role in our model.
+Using all the variables, we examined revelance of the variables in our dataset to the Credit Limit.
 
 ```{r, echo=FALSE}
 
@@ -51,13 +52,13 @@ summary(model)
 
 ```
 
-After viewing the summary and looking at the significance of the coefficients we notice tha the coefficient with the highest P value is the intercept.
+### Remove the Intercept
 
-### Remove the intercept
+We wanted to see the impact of removing the intercept and whether this would improve the model performance.
 
 ```{r, echo=FALSE}
 
-model <- lm(formula = CreditLimit ~ 1 + SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + AvgDaysOfPayCategory + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + AvgAmtPastDue + ReturnedPaymentCount + MaxReturnedPaymentAmt + RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState - 1, data = dataset_train)
+model <- lm(formula = CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + AvgDaysOfPayCategory + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + AvgAmtPastDue + ReturnedPaymentCount + MaxReturnedPaymentAmt + RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState - 1, data = dataset_train)
 
 summary(model)
 
@@ -112,7 +113,7 @@ rmse <- helper.RMSE(y, y_hat)
 cat('Root Mean Square Error: ', rmse, "\n")
 
 ```
-The $RMSE$ for our **Naive Model's** training set was 4312.198. So it looks like our new model improved slightly for our training set values.
+The $RMSE$ for our **Naive Model's** training set was 1827.308. So it looks like our new model improved slightly for our training set values.
 
 
 Using our **Test Set**, we obtained a new set of predictions and calculated the $RMSE$ value for our test predictions:
@@ -131,10 +132,10 @@ cat('Root Mean Square Error: ', rmse, "\n")
 
 ```
 
-The $RMSE$ for our **Naive Model's** test set was 4106.185. Based on these $RMSE$ values, our new model did not improve for our test set!
+The $RMSE$ for our **Naive Model's** test set was 1828.77. Based on these $RMSE$ values, our new model also improved for our test set!
 
 
-# Decision Tree Model
+## Decision Tree Model
 
 Similart to building our intial linear model, we have examined the relevance of all the dependent variables. We identified the most relevant variables so that we can build our initial decision tree model accordingly.
 
@@ -165,35 +166,6 @@ model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + Sa
 
 ```{r, echo=FALSE}
 
-summary(model)
+model$variable.importance
 
 ```
-
-
-# Build a linear model #2.a
-
-We came back to our linear model after we built our Decision-Tree model to see if we can build a similar linear model and if that would perform better. Using the same relevant variables which we have used in our decision tree as a start, and going through the Backward Elimination process, we came up with the following model:
-
-```{r, echo=FALSE}
-
-model <- lm(formula = CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPay + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + MedianIncomeHouseholds + SalesCurrentYr + PlainBandSalesLast12Mo + MedianEarnings + RuralUrbanContinuumCode, data = dataset_train)
-
-summary(model)
-
-```
-
-The $R^2 Adjusted$ value for this model was **significantly lower** than the model we came up with earlier!
-
-# Build a linear model #2.b
-
-We also wanted to examine if we could build a better linear model using non-sales variables. We started with all non-sales related variables which we have obtained from census.gov and went through the backward elimination and removed the least significant coefficient until we have reached an $R^2 Adjusted$ value which did not improve any further.
-
-```{r, echo=FALSE}
-
-model <- lm(formula = CreditLimit ~ RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds + NumberOfJewelryStores - 1, data = dataset_train)
-
-summary(model)
-
-```
-
-

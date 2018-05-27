@@ -38,10 +38,7 @@ require(gridExtra)
 
 ```
 
-
-# Exploratory Data Analysis.
-
-## Sales Attributes and Possible Correlations
+## Examination of Sales Attributes
 
 ### Correlation of Sales Summaries and Credit Limit
 
@@ -165,9 +162,17 @@ print(nzv[nzv$nzv,][1:5,])
 
 We have observed that the near zero variance parameters were returns related and We did not further investigate the remaining Returns related variables in our dataset. 
 
-## Non-Sales Attributes and Possible Correlations
+## Examination of Non-Sales Attributes
 
-We enhanced our dataset by bringing in Census data for **Retail Trade: Geographic Area Series: Summary Statistics for the U.S., States, Metro Areas, Counties, and Places**, **Annual Estimates of the Resident Population**, **MEDIAN INCOME IN THE PAST 12 MONTHS (IN 2016 INFLATION-ADJUSTED DOLLARS)**, **TOTAL POPULATION**, and **INDUSTRY BY MEDIAN EARNINGS IN THE PAST 12 MONTHS (IN 2016 INFLATION-ADJUSTED DOLLARS) FOR THE CIVILIAN EMPLOYED POPULATION 16 YEARS AND OVER** and mapped these values to our customer records via StateFIPS, CountyFIPS and CBSA Codes (for metro areas).
+We enhanced our dataset by bringing in Census data for 
+
+* Retail Trade: Geographic Area Series: Summary Statistics for the U.S., States, Metro Areas, Counties, and Places
+* Annual Estimates of the Resident Population
+* MEDIAN INCOME IN THE PAST 12 MONTHS (IN 2016 INFLATION-ADJUSTED DOLLARS)
+* TOTAL POPULATION
+* INDUSTRY BY MEDIAN EARNINGS IN THE PAST 12 MONTHS (IN 2016 INFLATION-ADJUSTED DOLLARS) FOR THE CIVILIAN EMPLOYED POPULATION 16 YEARS AND OVER
+
+and mapped these values to our customer records via StateFIPS, CountyFIPS and CBSA Codes (for metro areas).
 
 ### Avg Days of Pay and Median Household Income 
 
@@ -183,7 +188,7 @@ ggplot(dataset, aes(x = AvgDaysOfPayCategory, y = MedianIncomeHouseholds, color 
   ylab('Median Income Households')
 ```
 
-And finally we wanted to examine if there was any kind of correlation between the ** Total Sales Last 12 Mos** and the **Urban Influence**. Urban Influence is an indicator which describes a statistical area whether it is a Major Metro Area, Micro Metro Area, Micro Metro Adjesent to a Major Metro Area, or more Rural.
+And finally we wanted to examine if there was any kind of correlation between the **Total Sales Last 12 Mos** and the **Urban Influence**. Urban Influence is an indicator which describes a statistical area whether it is a Major Metro Area, Micro Metro Area, Micro Metro Adjesent to a Major Metro Area, or more Rural.
 
 Additionally, we have examined the correlation between the **Total Population** and the **Number of Jewelry Stores** (via the NAICS Code 4483 - Jewelry Stores) associated with that customer's location.
 
