@@ -115,7 +115,7 @@ $ git clone https://github.com/hakanegeli/csx415-project.git
 From your R command line, Install `packrat` if you already haven't done so.
 
 ``` r
-install.packages("packrat)
+install.packages("packrat")
 ```
 
 Copy the `csx415-project.tar.gz` file from the `/deploy` directory to the location where you want to install and the open RStudio. In the Console set your working directory to this location and type the following commands:
