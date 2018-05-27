@@ -17,24 +17,24 @@ There are several ways you can utilize the Credit Model;
 From your R command line, Install `packrat` if you already haven't done so.
 
 ``` r
-install.packages("packrat)
+install.packages("packrat")
 ```
 #### Step 2
-Copy the `csx415-app.tar.gz` file from the `/deploy` directory to the location where you want to install and open RStudio. In the Console set your working directory to this location.
+Copy the `csx415-app.tar.gz` file from the `/deploy` directory to the location where you want to install and open RStudio (for example you can create a Projects directory under your "Documents/R". In the Console set your working directory to this location.
 
 ```r
-setwd("~/R/Projects"))
+setwd("~/R/Projects")
 ```
 and execute the following commands:
 
 ``` r
-library("packrat)
+library("packrat")
 packrat::unbundle("csx415-app.tar.gz", ".")
 ```
 then set your working directory to the directory where the csx415-app is unbundled.
 
 ```r
-setwd("~/R/Projects/csx415-app"))
+setwd("~/R/Projects/csx415-app")
 ```
 
 #### Step 3
