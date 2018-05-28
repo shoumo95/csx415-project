@@ -17,25 +17,26 @@ knitr::opts_chunk$set(echo = TRUE, root.dir = "..")
 
 # Executive Summary
 
-Purpose of this project is to examine if a model can be developed to assist jewelry manufacturers with assesing the credit risk of a potential new customer (retailer) and help the manufacturer assign a credit limit for that new customer. This credit limit establishes how much a retailer can purcase from the manufacturer without making a payment during their payment term (usually Net 30).
-
-The **opportunity** here is, if we can develop a way to determine how much credit can be extended to a customer that we don't have an existing relationship, then we can increase our brand's market share by targeting the right new leads/prospects while we reduce the risk and maximize the return on our investment.
-
-Between 35% to 45% of customers are assigned a fixed lower credit limit and their accounts are not revisited unless the retailer initiates a request to review this limit. Assigning correct credit limits could potentially mean higher sales for some of these customers and could potentially reduce the default losses for those where only the Credit Rating information was used to make their credit limit determination.
-
-# Background
-
 Benchmark is a U.S. based jewelry manufacturer that primarily focuses on wedding rings. As a manufacturer, Benchmark sells to retailers and wholesalers but not directly to consumers.
 
-The retailers are the frontlines to the consumers and It is critical for Benchmark to carefully select the retailers and continuously assist them with product and sales support. Consumers who visit the brick and mortar stores want to see the actual product before making a purchase. Retailers also have to showcase the latest products for that brand and what is trending in the industry in order to make a sale.  
+Purpose of this project is to examine if a model can be developed to assist Benchmark with assesing the credit risk of potential new customers (retailers) and help Benchmark assign credit limits for those new customers. This credit limit establishes how much a retailer can purcase from the manufacturer without making a payment for the duration of their payment term (usually Net 30).
+
+The **missed opportunity** for Benchmark is:
+
+- Failure to do business with a retail store customer for erroneous risk assessment is loss of opportunity to make money
+- Failure to offer right credit line to the retail store, before payments are settled, may result in loss of profit
+ 
+Currently, between 35% to 45% of customers are assigned a fixed lower credit limit and their accounts are not revised unless the retailer requests it. Assigning correct credit limits could potentially mean higher sales for some of these customers and this could also reduce the default losses for those where only the Credit Rating information was used to make their credit limit determination.
+
+If we can develop a way to determine how much credit can be extended to a customer, then we can increase Benchmark's market share, and their profits while we reduce the customer default risk.
 
 # Problem
 
 Oftentimes closing a sales depends on the look, touch and feel of the actual product, therefore, retailers do have to make purchases from the manufacturer before they make an actual sale to a consumer and this requires a considerable investment by the retailer. 
 
-To alleviate the problem, the manufacturer offers payment terms where an immediate payment is not required from the retailer. But that poses a potential financial risk to the manufacturer since every retailers ability to pay their bills vary. Establishing a credit limit for the retailers mitigates this problem by limiting the risk for the manufacturer and allowing the retailers to make a purchase without paying for it up front.
+To alleviate the problem, the manufacturer offers payment terms where an immediate payment is not required from the retailer. But that poses a potential financial risk to the manufacturer since every retailers ability to pay their bills vary; the store may default on payment, or the store may go out of business without returning the jewellery. Establishing a credit limit for the retailers mitigates this problem by limiting the risk for the manufacturer and allowing the retailers to make a purchase without paying for it up front.
 
-Determining the right credit limit amount, which reduces the manufacturer's risk and maximizes the retailer's purchasing power in return directly impact their store sales, depend on many factors and business intuition and there is no exact formula that can be applied to determine a credit limit for a potential customer.
+Determining the right credit limit amount, which reduces the manufacturer's risk and maximizes the retailer's purchasing power which directly impacts the store sales, depend on many factors and business intuition. At this time, there is no exact formula which can be applied to determine credit limits for potential customers.
 
 # Project
 
@@ -43,27 +44,34 @@ At Benchmark, determining credit limits is done through the Jewelers Board of Tr
 
 The purpose of this project is to build a model which can make a credit limit determinatin for a customer. The project plans to do this by examining correlations between the credit limits and other factors such as credit ratings, past sales history, and market data for the existing customers so that a model can be build where all the relationships and business intuition is incapsulated.
 
+## Scope
+
+The model will be limited to estimate the risk and credit lines for smaller jewellery store customers who are in vast majority.
+
+For bigger retailers like Amazon and Zales the business model is different. Also data points are very different which likely will not help making a robust model.
+
+## Model Usage
+
+Model will be primarily used by the sales managers of Benchmark and the president who is an engineer himself and shows keen interest.
+
+Once the model is deployed and validated, model will quantify the risk assessment based on the model inference, and a credit line to customers will be determined. 
+
+This is quite a shift from the sales management team having a free reign in determining the risks and credit worthiness of the customers. It will likely have some resentment. But the president of Benchmark Rings is on board and driving this change. 
+
 ## Stakeholders
 
-We have identified the Management, Sales Team as the key stakeholders for this project.
+We have identified the Management, Sales Manager, Sales Team, and the Marketing Manager as the key stakeholders for this project.
 
-* Management team; Members of this team currently determine credit limits for customer and they will vet the proposed model
+* Management; President of Benchmark
+* Sales Manager; determine credit limits for customers and will be responsible vetting the proposed model
 * Sales team; provide the necessary data during the prospect development as an input to the model
-* Marketing Managers; obtain relavant demographic/census information related to the retailers and the markets where the retailers are located
+* Marketing Manager; obtain relavant demographic/census information related to the retailers and the markets where the retailers are located
 
 ## Objectives
 
 * Establish a reliable model that determines a credit limit for a new customer.
-
 * Be able to do these predictions based on data that can be obtained relatively easy from the potential customer and from publicly avaiable market data.
-
 * Make the model easily accessible to the sales team so that they use this model to assign credit limits instead of manually assigning one.
-
-## Assumptions
-
-* Dependent and the independent variables are correlated and a model can be build.
-
-* Majors and Wholesalers may behave differently in sales, units sold, payments and credit limits compared to the Retailer segment, therefore they will be excluded from the problem and the model development.
 
 ## Critical Success Factors
 
@@ -71,8 +79,8 @@ We have identified the Management, Sales Team as the key stakeholders for this p
 
 We will consider this project a success if we can reduce customer defaults without reducing sales. The metric which we will use to evaluate this are:
 
-a) Accounts Receivable Turnover KPI; 5% or more improvement, reduction in defaults or collections.
-b) Sales Growth Metric; 7% to 10% expected annual growth or better
+a. Accounts Receivable Turnover KPI; 20% or more improvement, reduction in defaults or collections.
+b. Sales Growth Metric; 7% to 10% expected annual growth plus a 10% increase
 
 Because a credit limit on a retailer can reduce the sales potential of that retailer while it reduces the risk on the seller, these two metricies will give us the insight to the avoided risk and the impact on the overall sales.
 
@@ -82,15 +90,17 @@ Assigning higher credit limits to customers could result in higher defaults or c
 
 We will consider the model a success if
 
-a) Overall Accuracy 90% or better
-b) Sensitivity (or Recall) 90% or better
-c) Specificity 80% or better
+a. Overall Accuracy 90% or better
+b. Sensitivity (or Recall) 90% or better
+c. Specificity 80% or better
 
 ## Risks
 
 If the **Project Success Metrics** are not met, then the client will go back to determining credit limits based on business intuition by the Admin team. Losses will be limited to the project development and the difference between the sales gains and the default losses, which will be closely monitored using the Accounts Receivable Turnover KPI metric and the Sales Growth Metric.
 
 If the **Model Success Metrics** is not met, then the client will use this model as a guidence to their manual decision making process until a better model is developed.
+
+**Adoption Failure** by the organization is also a concern. During initial deployment of the model, a human vetting of model decision will help alleviate concerns and likely generate more confidence in model performance. This will be done by evaluating the model performance with new data every week and the model will be updated with version control.
 
 ## Requirements
 
@@ -106,20 +116,20 @@ If the **Model Success Metrics** is not met, then the client will use this model
 
 Ease of use and access to the model is critical for the acceptance of the solution. Currently, all the customer, prospect data and the sales history for the current customers reside in a cloud-based ERP system (NetSuite). A web based solution where the two systems integrate is desirable. The web based system shall:
 
-a) Accept customer data export from the ERP system into the model to perfom predictions
-b) Allow sales reps to obtain one-off credit limits for potential new customers while they are travelling to sign customers
+a. Accept customer data export from the ERP system into the model to perfom predictions
+b. Allow sales reps to obtain one-off credit limits for potential new customers while they are travelling to sign customers
 
 ## Project Plan
 
 We will perform the following major project tasks to complete the project
 
-* Formalize the Problem
-* Model Development
-+ Collect Data
-+ Exploratory Data Analysis
-+ Feature Generation/Selection
-+ Train and Validate Model
-* Model Deployment
+* Formalize the Problem - Est. 1 week
+* Model Development - Est. 7 weeks
+    + Collect Data
+    + Exploratory Data Analysis
+    + Feature Generation/Selection
+    + Train and Validate Model
+* Model Deployment - Est. 2 weeks
 
 In addition, there would be an on going Model Management and Maintenance after the deployment of the model.
 
