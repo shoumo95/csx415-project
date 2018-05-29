@@ -1,0 +1,55 @@
+---
+title: 'Collect and Shape Data'
+author:
+  - name: Hakan Egeli
+  - name: Soumyendu Sarkar
+date: 'May 28, 2018'
+knit: (function(inputFile, encoding) { 
+      rmarkdown::render(inputFile,
+                        encoding=encoding, 
+                        output_file=file.path(dirname(inputFile), '../reports/', '02-collect-and-shape-data.html')) })
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, root.dir = "..")
+```
+
+# Introduction
+
+The data used developing this model originated from Benchmark's own ERP system. We have removed customer identifiable information such as business name, contact names and addresses and pre joined some of the relevant information using the ERP system's realtional database so that the private information would not be exposed. Below is the explanation of the main data and all the additional data we bought in to supplement it.
+
+## CustomerData
+
+This dataset conatins active customers who had a sales transaction both last year and the current year. From this dataset, we have removed large retailers, online retailers, and wholesalers (as mentioned in the FPS - Scope) since the credit ratings and credit limits as well as risk assesments for these types of customers would be different than the regular relailers. We have performed the following tasks in the ERP system before we brought in the data for model development:
+
+* Aggregated each of the remaining customers' net sales by year and by month and calculate total sales for the current year, last year and the last 12 months
+
+* Aggregate payment records for each customer to calculate their average days of pay, number of returned payments (bounced checks or declined credit cards)
+
+* Go back to historical information to get their JBT rating at the date when the customer was assigned a credit limit (system by default has the most current rating)
+
+* Using each customer's state, county and zip we have extracted RuralUrbanContinuumCode, UrbanInfluenceCode, TotalPopulation, MedianEarnings, MedianRetailTradeEarnings, TotalHouseholds, MedianIncomeHouseholds, NumberOfJewelryStores, NumberOfJewelryStoresState, JewelryStoreSalesState from the following US Census data files:
+
+    + Retail Trade: Geographic Area Series: Summary Statistics for the U.S., States, Metro Areas, Counties, and Places (**EC1244A1**)
+    + Annual Estimates of the Resident Population
+    + MEDIAN INCOME IN THE PAST 12 MONTHS (IN 2016 INFLATION-ADJUSTED DOLLARS)
+    + TOTAL POPULATION
+    + INDUSTRY BY MEDIAN EARNINGS IN THE PAST 12 MONTHS (IN 2016 INFLATION-ADJUSTED DOLLARS) FOR THE CIVILIAN EMPLOYED POPULATION 16 YEARS AND OVER
+
+## Additional Explanation on Census.gov EC1244A1 Dataset
+
+This dataset contains information on Number of Establishments, Sales, and Annual Payroll for various NAICS codes on economic census geographies (CBSACode).
+
+CBSA Code, core-based statistical area, is a U.S. geographic area defined by the Office of Management and Budget (OMB) that consists of one or more counties (or equivalents) anchored by an urban center of at least 10,000 people plus adjacent counties that are socioeconomically tied to the urban center by commuting.
+
+We were primarily interested in the NAICS code 448310, Jewelry Stores and our original dataset already had CBSA Codes for each record. However, some of the entries for the Sales column in the EC1244A1 dataset contained a letter D instead of a numeric value in order to avoid disclosing data for individual companies. When we joined the two datasets we had to come up with a value to replece these "D" values.
+
+The standard approach here could have been replacing the "D" values with a $mean$ value for the Sales column, however the sales values from large cities would influence the mean in a way that this mean would be much higher than the largest sales value from some of the rural (non-urban) areas. Therefore, we have decided to map the CBSA codes to Urban Influence Codes (Urban Influence Codes form a classification scheme that distinguishes metropolitan counties by population size of their metro area, and nonmetropolitan counties by size of the largest city or town and proximity to metro and micropolitan areas, subdivided into two metro and 10 nonmetro categories, resulting in a 12-part county classification).
+
+Joining the EC1244A1 dataset for the NAICS code 448310 withe the Urban Influence Codes gave us the ability to calculate means for each Urban Influence Code and we used these means to replace missing values for the sales numbers when we joined the EC1244A1 dataset to our original customer data.
+
+## CBSA Code to UrbanInfluence Codes
+
+CBSA Codes already existed in the ERP system for each customer since this information is already a part for the Zipcode database for the internal system. From the same Zipcode database, we were able to extract County information which had a list of RuralUrbanContinuumCodes and UrbanInfluenceCodes for each of the CBSA Code. We have prepared a lookup/join table to be able to add more fields to our dataset in the future and exported it as a .CSV file to the data directory.
+
