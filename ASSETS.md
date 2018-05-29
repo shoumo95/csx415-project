@@ -18,7 +18,9 @@ Full list of libraries and their dependencies can be fount in `packrat/packrat.l
 # DATA
 
 ## CustomerData.csv
-This is the main data source for our project which is used to train and test the model(s), located in the `data` folder. This data gets auto loaded by ProjectTemplate. 
+This is the main data source for our project which is used to train and test the model(s), located in the `data` folder. This data gets auto loaded by ProjectTemplate.
+
+This dataset conatins active customers who had a sales transaction both last year and the current year. Large retailers, online retailers, and wholesalers are removed from this dataset since the credit ratings and credit limits as well as risk assesments for these types of customers would be different than the regular relailers.
 
 ## ECN_2012_US_44A1_with_ann.csv
 U.S. Census Bureau data set named **EC1244A1 - Retail Trade: Geographic Area Series: Summary Statistics for the U.S., States, Metro Areas, Counties, and Places: 2012**. This dataset contains information on Number of Establishments, Sales, and Annual Payroll for various NAICS codes on economic census geographies (CBSACode).
@@ -35,25 +37,24 @@ ProjectTemplate runs the scripts `01-AddlFeatures.R` and `02-PrepareDataSets.R` 
 
 # CODE
 
+## Collect and Shape Data
+
 ## Exploratory Data Analysis (EDA)
 
 ## Feature Selection
 
-### First Regression Model (linear)
-
-### First Classification Model (rpart)
-
 ## Model Training and Validation
-
-### Incorporation of Additional Data
-
-## Deep Learning Model with Keras and Tensorflow
 
 # DOCUMENTS
 
 ## Formal Problem Statemet (FPS)
+This report contains detailed information about the problem, the project, project's scope, usage, stakeholders, success factors, risks, deployment options, project plan and cost estimate. Click [here](https://htmlpreview.github.com/?https://github.com/hakanegeli/csx415-project/blob/master/reports/01-FPS.html) to view the report 01-FPS.html.
+
+## Collect and Shape Data
 
 ## Exploratory Data Analysis (EDA)
+
+## Model Performance Evaluation
 
 ## Feature Selection
 

@@ -21,7 +21,7 @@ The data used developing this model originated from Benchmark's own ERP system. 
 
 ## CustomerData
 
-This dataset conatins active customers who had a sales transaction both last year and the current year. From this datase, we have removed large retailers, online retailers, and wholesalers (as mentioned in the FPS - Scope) since the credit ratings and credit limits as well as risk assesments for these types of customers would be different than the regular relailers. We have performed the following tasks in the ERP system before we brought in the data for model development:
+This dataset conatins active customers who had a sales transaction both last year and the current year. From this dataset, we have removed large retailers, online retailers, and wholesalers (as mentioned in the FPS - Scope) since the credit ratings and credit limits as well as risk assesments for these types of customers would be different than the regular relailers. We have performed the following tasks in the ERP system before we brought in the data for model development:
 
 * Aggregated each of the remaining customers' net sales by year and by month and calculate total sales for the current year, last year and the last 12 months
 
