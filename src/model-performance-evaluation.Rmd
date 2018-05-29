@@ -1,5 +1,5 @@
 ---
-title: "First Model"
+title: "Model Performance Evaluation"
 author:
   - name: Hakan Egeli
   - name: Soumyendu Sarkar
@@ -7,7 +7,7 @@ date: 'April 17, 2018'
 knit: (function(inputFile, encoding) { 
       rmarkdown::render(inputFile,
                         encoding=encoding, 
-                        output_file=file.path(dirname(inputFile), '../reports/', 'project-performance.html')) })
+                        output_file=file.path(dirname(inputFile), '../reports/', 'model-performance-evaluation.html')) })
 output: html_document
 ---
 

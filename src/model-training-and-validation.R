@@ -1,5 +1,6 @@
 #plyr, reshape2, ggplot2, dplyr, tidyr, gridExtra, caret
 
+suppressPackageStartupMessages(require(plyr))
 suppressPackageStartupMessages(require(e1071))
 suppressPackageStartupMessages(require(ggplot2))
 suppressPackageStartupMessages(require(dplyr))
@@ -13,17 +14,15 @@ suppressPackageStartupMessages(library(Hmisc))
 # for multinom and nnet methods
 suppressPackageStartupMessages(library(nnet))
 
-# optional parallelism to be used by caret's trainControl 
-suppressPackageStartupMessages(library(doParallel))
 
 CustomerData <- read.csv(file="data/CustomerData.csv", header = TRUE, sep = ",")
 
 source("munge/02-PrepareDataSets.R")
 
-
-cl <- makeCluster(detectCores())
-registerDoParallel(cl)
-
+# optional parallelism to be used by caret's trainControl 
+#suppressPackageStartupMessages(library(doParallel))
+#cl <- makeCluster(detectCores())
+#registerDoParallel(cl)
 
 metric.create <- function(){
   setNames(data.frame(matrix(ncol = 4, nrow = 0)), c("Accuracy", "AccuracySD", "Kappa", "KappaSD"))
@@ -110,4 +109,4 @@ cat("\n")
 cat("Best Model Details","\n")
 print(get(paste("model", rownames(df[with(df, order(-Accuracy)),][1,]), sep="_")))
 
-stopCluster(cl)
+#stopCluster(cl)

@@ -48,10 +48,10 @@ library(nnet)
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 # optional parallelism to be used by caret's trainControl 
-library(doParallel);
+#library(doParallel);
 
-cl <- makeCluster(detectCores())
-registerDoParallel(cl)
+#cl <- makeCluster(detectCores())
+#registerDoParallel(cl)
 
 ```
 
@@ -184,9 +184,11 @@ df <- metric.append(df, model_rpart2, "rpart2")
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
-model_steplda <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="stepLDA", metric="Accuracy", trControl=control, trace=FALSE)
+# uncomment to run this model...this is a very long running training
 
-df <- metric.append(df, model_steplda, "steplda")
+#model_steplda <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="stepLDA", metric="Accuracy", trControl=control, trace=FALSE)
+
+#df <- metric.append(df, model_steplda, "steplda")
 
 ```
 
@@ -232,17 +234,21 @@ df <- metric.append(df, model_multinom, "multi")
 
 ```{r, echo=FALSE, warning=FALSE}
 
-model_avNNet <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="avNNet", metric="Accuracy", trControl=control, maxit=600, trace=FALSE)
+# uncomment to run this model...this is a very long running training
 
-df <- metric.append(df, model_avNNet, "avNNet")
+#model_avNNet <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="avNNet", metric="Accuracy", trControl=control, maxit=600, trace=FALSE)
+
+#df <- metric.append(df, model_avNNet, "avNNet")
 
 ```
 
 ```{r, echo=FALSE, warning=FALSE}
 
-model_nnet <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="nnet", trControl=control, tuneGrid=data.frame(.size=20, .decay=1.0e-1), rang=0.1, maxit=10000, trace=FALSE)
+# uncomment to run this model...this is a very long running training
 
-df <- metric.append(df, model_nnet, "nnet")
+#model_nnet <- train(CreditLimitCategory ~ JBTRating + CreditLimitLocked + SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data=dataset_train, method="nnet", trControl=control, tuneGrid=data.frame(.size=20, .decay=1.0e-1), rang=0.1, maxit=10000, trace=FALSE)
+
+#df <- metric.append(df, model_nnet, "nnet")
 
 ```
 
@@ -272,15 +278,15 @@ df[with(df, order(-Accuracy)),]
 data <- data.frame(naive=model_naive$resample$Accuracy,
                    rpart=model_rpart$resample$Accuracy,
                    rpart2=model_rpart2$resample$Accuracy,
-                   steplda=model_steplda$resample$Accuracy,
+                   #steplda=model_steplda$resample$Accuracy,
                    svmLinear=model_svmLinear$resample$Accuracy,
                    svmRad=model_svmRad$resample$Accuracy,
                    svmPoly=model_svmPoly$resample$Accuracy,
                    rf=model_rf$resample$Accuracy,
-                   multinom=model_multinom$resample$Accuracy,
-                   avNNet=model_avNNet$resample$Accuracy,
-                   nnet=model_nnet$resample$Accuracy)
-data <- gather(data, model, accuracy, naive:nnet)
+                   #avNNet=model_avNNet$resample$Accuracy,
+                   #nnet=model_nnet$resample$Accuracy,
+                   multinom=model_multinom$resample$Accuracy)
+data <- gather(data, model, accuracy, naive:multinom)
 
 ```
 
@@ -300,15 +306,15 @@ ggplot(data, aes(x = model, y = accuracy, fill = model)) +
 data <- data.frame(naive=model_naive$resample$Kappa,
                    rpart=model_rpart$resample$Kappa,
                    rpart2=model_rpart2$resample$Kappa,
-                   steplda=model_steplda$resample$Kappa,
+                   #steplda=model_steplda$resample$Kappa,
                    svmLinear=model_svmLinear$resample$Kappa,
                    svmRad=model_svmRad$resample$Kappa,
                    svmPoly=model_svmPoly$resample$Kappa,
                    rf=model_rf$resample$Kappa,
-                   multinom=model_multinom$resample$Kappa,
-                   avNNet=model_avNNet$resample$Kappa,
-                   nnet=model_nnet$resample$Kappa)
-data <- gather(data, model, kappa, naive:nnet)
+                   #avNNet=model_avNNet$resample$Kappa,
+                   #nnet=model_nnet$resample$Kappa,
+                   multinom=model_multinom$resample$Kappa)
+data <- gather(data, model, kappa, naive:multinom)
 
 ```
 
@@ -489,6 +495,6 @@ model_rf$results
 
 ```{r, echo=FALSE}
 
-stopCluster(cl)
+#stopCluster(cl)
 
 ```
