@@ -48,7 +48,7 @@ ProjectTemplate runs the scripts `01-AddlFeatures.R` and `02-PrepareDataSets.R` 
 # DOCUMENTS
 
 ## Formal Problem Statemet (FPS)
-This report contains detailed information about the problem, the project, project's scope, usage, stakeholders, success factors, risks, deployment options, project plan and cost estimate. Click [here](https://htmlpreview.github.com/?https://github.com/hakanegeli/csx415-project/blob/master/reports/01-FPS.html) to view the report 01-FPS.html.
+This report contains detailed information about the problem, the project, project's scope, usage, stakeholders, success factors, risks, deployment options, project plan and cost estimate. Click <a href="https://htmlpreview.github.com/?https://github.com/hakanegeli/csx415-project/blob/master/reports/01-FPS.html" target="_blank">here</a> to view the report 01-FPS.html.
 
 ## Collect and Shape Data
 
