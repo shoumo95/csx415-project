@@ -124,6 +124,8 @@ install.packages("pkgs/CreditLimitModel", repos = NULL, type = "source")
 # Or using devtools:
 # install.packages("devtools")
 devtools::install("pkgs/CreditLimitModel")
+# or from github if you do not have the CreditLimitModel source locally under the pkgs folder
+# devtools::install_github("hakanegeli/csx415-project/pkgs/CreditLimitModel")
 ```
 After the installation, please refer to the Package help for further information on how to use the library in your code.
 
