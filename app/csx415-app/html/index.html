@@ -1,0 +1,513 @@
+﻿<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="CSX415-Final Project">
+	<meta name="author" content="Hakan Egeli, Soumyendu Sarkar">
+	<title>CSX415-Final Project (Credit Limit Model)</title>
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+		<a class="navbar-brand" href="#">CSX415 PROJECT</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" href="#">Home </a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/info">Info </a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/model">Model </a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/data">Data </a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="javascript:scrollToAnchor()">Try It!</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<main role="main" ng-controller="creditLimitController">
+		<!-- Main jumbotron -->
+		<div class="jumbotron">
+			<div class="container">
+				<h1 class="display-3">Predicting Credit Limits for Small Jewelery Retail Stores</h1>
+				<p>Purpose of this project is to examine if a model can be developed to assist Benchmark with assesing the credit risk of potential new customers (retailers) and help Benchmark assign credit limits for those new customers. This credit limit establishes how much a retailer can purcase from Benchmark without making a payment for the duration of their payment term.</p>
+				<p><a class="btn btn-primary btn-lg" href="/info" role="button">Learn more &raquo;</a></p>
+			</div>
+		</div>
+		<div class="container">
+			<!-- Example row of columns -->
+			<div class="row">
+				<div class="col-md-4">
+					<h2>About the Model</h2>
+					<p>We have trained several models using Decision Tree, Linear Discriminant Analysis, Neural Networks, Multinomial Regression, Random Forest, and Support Vector Machines and selected the best performing model based on the highest Accurracy and Kappa performance metrics. </p>
+					<p><a class="btn btn-secondary" href="/model" role="button">View details &raquo;</a></p>
+				</div>
+				<div class="col-md-4">
+					<h2>The Data</h2>
+					<p>We have added Retail Trade: Geographic Area Series: Summary Statistics for the U.S., States, Metro Areas, Counties, and Places: 2012 dataset from the U.S. Census Bureau to our own data to add features to enhance our model. </p>
+					<p><a class="btn btn-secondary" href="/data" role="button">View details &raquo;</a></p>
+				</div>
+				<div class="col-md-4">
+					<h2>Try it!</h2>
+					<p>We have provided a sample data for you to try or we have instructions how you can upload a .CSV file and see the results on the screen. </p>
+					<p><a class="btn btn-secondary" href="javascript:scrollToAnchor()" role="button">Try it! &raquo;</a></p>
+				</div>
+			</div>
+			<hr />
+			<a class="tryit" href="#try"></a>
+			<div class="row">
+				<h1>Try it!</h1>
+			</div>
+
+			<div class="row">
+				<h2>USE CASE #1: Sales and Marketing Manager</h2>
+				<p>In this use case, you are going to assume the responsibility of a Sales or Marketing manager and you have just done your research and identified several potential new customers.</p>
+				<ul>
+					<li>You have obtained some past sales information for these potential customers</li>
+					<li>You have done your due deligence and ran a credit report for each potential accounts</li>
+				</ul>
+				<p>And now you need to figure out what credit limit you should assign to each of these potential customers but you don not want to type this information one at a time because you have lots of records (100s or even more). Luckily, you were able to extract the information needed for the analysis from your ERP system and you have already saved it as .CSV file!</p>
+				<p>Open the <strong>NewCustomers.csv</strong> file located in the <strong>marketing</strong> folder of this web application <em>(the file should be located in ~/R/Projects/csx415-app/marketing folder of your system if you followed the defaults while installing the application)</em> and click on the <strong>Upload</strong> button.</p>
+				<ul>
+					<li>The system will read your file</li>
+					<li>Run the model and process the data</li>
+					<li>Append the predictions with a new column appropriately named <strong>Prediction</strong> and display it back on the page</li>
+				</ul>
+				<p>You can also view the diagnostic console log outputs on RStudio if you like!</p>
+			</div>
+			<div class="row">
+				<div>
+					<input type="file" id="file1" name="file" multiple ng-files="getTheFiles($files)" />
+					<input type="button" class="btn btn-primary" ng-click="uploadFiles()" value="Upload" />
+				</div>
+			</div>
+			<div class="row">
+				<p>&nbsp;</p>
+			</div>
+			<div class="row">
+				<div class="mb-4" style="height:600px; overflow: auto">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<td scope="col">State</td>
+								<td scope="col">City</td>
+								<td scope="col">Curr $</td>
+								<td scope="col">Last $</td>
+								<td scope="col">Design $</td>
+								<td scope="col">Stores</td>
+								<td scope="col">JBT Rating</td>
+								<td scope="col">Avg Days Of Pay</td>
+								<td scope="col">Ret Pmts</td>
+								<td scope="col">Locked</td>
+								<td scope="col">Credit Limit</td>
+								<td scope="col">Prediction</td>
+							</tr>
+						</thead>
+						<tbody ng-repeat="item in predictions">
+							<tr>
+								<td scope="row" ng-bind="item.State"></td>
+								<td ng-bind="item.City"></td>
+								<td ng-bind="item.SalesCurrentYr"></td>
+								<td ng-bind="item.SalesLastYr"></td>
+								<td ng-bind="item.DesignBandSalesLast12Mo"></td>
+								<td ng-bind="item.NumberOfStoreLocations"></td>
+								<td ng-bind="item.JBTRating"></td>
+								<td ng-bind="item.AvgDaysOfPayCategory"></td>
+								<td ng-bind="item.ReturnedPaymentCount"></td>
+								<td ng-bind="item.CreditLimitLocked"></td>
+								<td ng-bind="item.CreditLimit"></td>
+								<td ng-bind="item.Predictions"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div>
+					<input type="button" class="btn btn-secondary btn-lg" ng-click="resetTable()" value="Reset" />
+				</div>
+			</div>
+			<hr />
+			<div class="row">
+				<h2>USE CASE #2: Sales Rep</h2>
+				<p>In this use case, you are the sales representative who just visited a potential new client, and you are back at your hotel room with your laptop on and you are ready to do some analysis and so that you can close this account. You just ran their JBT credit report and the last thing you need to figure out is how much credit limit your company can extend to this new customer.</p>
+				<p>Please follow the steps below. <span style="color: red;">A VALUE IS REQUIRED FOR ALL FIELDS!</span></p>
+				<p><em>Hint: You can use one of the records from above, if you need help to figure out what would be a good input value for some of the fields below! In general FIN1 is a better rating than an RPT1 and tends to yield to a higher credit limit. Also, locking a credit limit means you want to be a little bit conservative and lock your risk. Try the same values with locking the limit and unlocking it and see the difference!</em></p>
+			</div>
+			<div class="row">
+				<h5>Please enter the location of the store:</h5>
+			</div>
+			<div class="row">
+				<form>
+					<div class="form-row">
+						<div class="form-group mb-2">
+							<label class="col-form-label">State</label>
+							<select class="form-control" ng-options="cityAndState.StateName for cityAndState in citiesAndStates | unique:'StateName' | orderBy:'StateName'" ng-model="selectedState"></select>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group mb-2">
+							<label class="col-form-label">City and County</label>
+							<select class="form-control" ng-options="cityAndState.CityName + ' - ' + cityAndState.CountyName + ' County' for cityAndState in citiesAndStates | filter:{StateName:selectedState.StateName} | orderBy:'CityName'" ng-model="selectedCityAndState"></select>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="row">
+				<h5>Please enter the information you have obtained from the store:</h5>
+			</div>
+			<div class="row">
+				<form>
+					<div class="form-row">
+						<div class="form-group mb-2">
+							<label class="col-form-label">Sales $ This Year (whole number only)</label>
+							<input type="text" class="form-control col-md-8" ng-model="customer.salesThisYear" placeholder="ex. 5000">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group mb-2">
+							<label class="col-form-label">Sales $ Last Year (whole number only)</label>
+							<input type="text" class="form-control col-md-8" ng-model="customer.salesLastYear" placeholder="ex. 42000">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group mb-2">
+							<label class="col-form-label">Design Ring Sales $ Last 12 Mos (whole number only)</label>
+							<input type="text" class="form-control col-md-6" ng-model="customer.designBandSalesLast12Mo" placeholder="ex. 11000">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group mb-2">
+							<label class="col-form-label">Number of Store Locations (whole number only)</label>
+							<input type="text" class="form-control col-md-4" ng-model="customer.numberOfStoreLocations" placeholder="ex. 1">
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="row">
+				<h5>Please enter the information you have obtained from the JBT Credit Bureau:</h5>
+			</div>
+			<div class="row">
+				<form>
+					<div class="form-row">
+						<div class="form-group mb-2">
+							<label class="col-form-label">JBT Rating</label>
+							<select class="form-control" ng-options="rating.JBTRating for rating in jbtRatings" ng-model="selectedJbtRating"></select>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group mb-2">
+							<label class="col-form-label">Avg Days of Pay</label>
+							<select class="form-control" ng-options="pay.AvgDaysOfPayCategory for pay in avgDaysOfPay" ng-model="selectedAvgDaysOfPayCategory"></select>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group mb-2">
+							<label class="col-form-label">Returned Payment Count (# of bounced checks or declined credit cards last 12 mo.)</label>
+							<input type="text" class="form-control col-md-3" ng-model="customer.returnedPaymentCount" placeholder="Ex. 0">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group ml-4 mb-2">
+							<input type="checkbox" class="form-check-input" ng-model="selectedCreditLimitLocked" ng-true-value="1" ng-false-value="0"><label>Lock Credit Limit?</label>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group mb-2">
+							<input type="button" class="btn btn-primary btn-lg" ng-click="getCreditLimit()" value="Get Credit Limit" />&nbsp;&nbsp;<input type="button" class="btn btn-secondary btn-lg" ng-click="resetForm()" value="Reset" />
+						</div>
+					</div>
+				</form>
+			</div>
+
+			<div class="row">
+				<p>Suggested Credit Limit:</p>
+			</div>
+			<div class="row">
+				<form>
+					<div class="form-row">
+						<div class="form-group mb-2">
+							<input type="text" class="form-control" ng-model="customer.creditLimit" placeholder="Credit Limit Offered">
+						</div>
+					</div>
+				</form>
+			</div>
+			<hr>
+		</div> <!-- /container -->
+	</main>
+	<footer class="container">
+		<p>&copy; Hakan Egeli-Soumyendu Sarkar 2018</p>
+	</footer>
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular.min.js"></script>
+
+	<script>
+		angular.module('app', [])
+			.directive('ngFiles', ['$parse', function ($parse) {
+
+				function fn_link(scope, element, attrs) {
+					var onChange = $parse(attrs.ngFiles);
+					element.on('change', function (event) {
+						onChange(scope, { $files: event.target.files });
+					});
+				};
+
+				return {
+					link: fn_link
+				}
+			}])
+			.controller('creditLimitController', ['$scope', '$http', 'creditLimitSvc', function ($scope, $http, creditLimitSvc) {
+
+				$scope.predictions = [{
+					AvgDaysOfPayCategory: "",
+					City: "",
+					CreditLimit: null,
+					CreditLimitLocked: null,
+					DesignBandSalesLast12Mo: null,
+					JBTRating: "",
+					MedianEarnings: null,
+					MedianIncomeHouseholds: null,
+					MetroIndicator: null,
+					NumberOfStoreLocations: null,
+					PlainBandSalesLast12Mo: null,
+					Predictions: "",
+					ReturnedPaymentCount: null,
+					RuralUrbanContinuumCode: null,
+					SalesCurrentYr: null,
+					SalesLastYr: null,
+					State: "",
+					Zip: null
+				}];
+
+				$scope.customer = {
+					creditLimit: "",
+					state: "",
+					city: "",
+					salesThisYear: null,
+					salesLastYear: null,
+					designBandSalesLast12Mo: null,
+					numberOfStoreLocations: null,
+					jbtRating: "",
+					avgDaysOfPayCategory: "",
+					returnedPaymentCount: 0,
+					creditLimitLocked: 0,
+					medianEarnings: null,
+					medianIncomeHouseholds: null,
+					ruralUrbanContinuumCode: null,
+					metroIndicator: null
+				};
+
+				$scope.selectedCreditLimitLocked = 0;
+
+				creditLimitSvc.getCitiesAndStates().then(
+					function (results) {
+						$scope.citiesAndStates = results.data;
+					}, function (result) {
+						$scope.citiesAndStates = [];
+					});
+
+				creditLimitSvc.getJbtRatings().then(
+					function (results) {
+						$scope.jbtRatings = results.data;
+					}, function (result) {
+						$scope.jbtRatings = [];
+					});
+
+				creditLimitSvc.getAvgDaysOfPay().then(
+					function (results) {
+						$scope.avgDaysOfPay = results.data;
+					}, function (result) {
+						$scope.avgDaysOfPay = [];
+					});
+
+				$scope.getTheFiles = function ($files) {
+					fr = new FileReader();
+					fr.onload = $scope.receivedText;
+					fr.readAsText($files[0]);
+				};
+
+				$scope.receivedText = function (e) {
+					$scope.fileData = e.target.result.replace(/(\r\n|\n|\r)/gm, "|");
+				}
+
+				$scope.uploadFiles = function () {
+
+					var request = {
+						method: 'POST',
+						url: '/fileupload',
+						data: 'userdata=' + $scope.fileData,
+						headers: {
+							'Content-Type': 'text/plain'
+						}
+					};
+
+					$http(request)
+						.then(function (response) {
+							$scope.predictions = response.data;
+						}, function (error) {
+
+						});
+				}
+
+				$scope.getCreditLimit = function () {
+					$scope.customer.creditLimit = "";
+					$scope.customer.city = $scope.selectedCityAndState.CityName;
+					$scope.customer.state = $scope.selectedCityAndState.StateName;
+					$scope.customer.jbtRating = $scope.selectedJbtRating.JBTRating;
+					$scope.customer.avgDaysOfPayCategory = $scope.selectedAvgDaysOfPayCategory.AvgDaysOfPayCategory;
+					$scope.customer.creditLimitLocked = $scope.selectedCreditLimitLocked;
+					$scope.customer.ruralUrbanContinuumCode = $scope.selectedCityAndState.RuralUrbanContinuumCode;
+					$scope.customer.metroIndicator = $scope.selectedCityAndState.MetroIndicator;
+					$scope.customer.medianEarnings = $scope.selectedCityAndState.MedianEarnings;
+					$scope.customer.medianIncomeHouseholds = $scope.selectedCityAndState.MedianIncomeHouseholds;
+
+					if (!isNaN($scope.customer.salesThisYear) && angular.isNumber(+$scope.customer.salesThisYear)) {
+						$scope.customer.salesThisYear = parseInt($scope.customer.salesThisYear);
+					}
+
+					if (!isNaN($scope.customer.salesLastYear) && angular.isNumber(+$scope.customer.salesLastYear)) {
+						$scope.customer.salesLastYear = parseInt($scope.customer.salesLastYear);
+					}
+
+					if (!isNaN($scope.customer.designBandSalesLast12Mo) && angular.isNumber(+$scope.customer.designBandSalesLast12Mo)) {
+						$scope.customer.designBandSalesLast12Mo = parseInt($scope.customer.designBandSalesLast12Mo);
+					}
+
+					if (!isNaN($scope.customer.numberOfStoreLocations) && angular.isNumber(+$scope.customer.numberOfStoreLocations)) {
+						$scope.customer.numberOfStoreLocations = parseInt($scope.customer.numberOfStoreLocations);
+					}
+
+					if (!isNaN($scope.customer.returnedPaymentCount) && angular.isNumber(+$scope.customer.returnedPaymentCount)) {
+						$scope.customer.returnedPaymentCount = parseInt($scope.customer.returnedPaymentCount);
+					}
+
+					if (!isNaN($scope.customer.ruralUrbanContinuumCode) && angular.isNumber(+$scope.customer.ruralUrbanContinuumCode)) {
+						$scope.customer.ruralUrbanContinuumCode = parseInt($scope.customer.ruralUrbanContinuumCode);
+					}
+
+					if (!isNaN($scope.customer.metroIndicator) && angular.isNumber(+$scope.customer.metroIndicator)) {
+						$scope.customer.metroIndicator = parseInt($scope.customer.metroIndicator);
+					}
+
+					$http.post('/getcreditlimit', $scope.customer)
+						.then(function (response) {
+							console.log(response.data);
+							$scope.customer.creditLimit = response.data.creditLimit;
+						}, function (error) {
+							$scope.customer.creditLimit = "Unknown ERR!";
+						});
+				}
+
+				$scope.resetForm = function () {
+					selectedState = [0];
+					selectedCityAndState = [0];
+					$scope.customer = {
+						creditLimit: "",
+						state: "",
+						city: "",
+						salesThisYear: null,
+						salesLastYear: null,
+						designBandSalesLast12Mo: null,
+						numberOfStoreLocations: null,
+						jbtRating: "",
+						avgDaysOfPayCategory: "",
+						returnedPaymentCount: 0,
+						creditLimitLocked: 0,
+						medianEarnings: null,
+						medianIncomeHouseholds: null,
+						ruralUrbanContinuumCode: null,
+						metroIndicator: null
+					};
+				}
+
+				$scope.resetTable = function () {
+					$scope.predictions = [{
+						AvgDaysOfPayCategory: "",
+						City: "",
+						CreditLimit: null,
+						CreditLimitLocked: null,
+						DesignBandSalesLast12Mo: null,
+						JBTRating: "",
+						MedianEarnings: null,
+						MedianIncomeHouseholds: null,
+						MetroIndicator: null,
+						NumberOfStoreLocations: null,
+						PlainBandSalesLast12Mo: null,
+						Predictions: "",
+						ReturnedPaymentCount: null,
+						RuralUrbanContinuumCode: null,
+						SalesCurrentYr: null,
+						SalesLastYr: null,
+						State: "",
+						Zip: null
+					}];
+				}
+
+			}])
+			.factory('creditLimitSvc', [
+				'$http',
+				'$q',
+				function ($http, $q) {
+					var getCitiesAndStates = function () {
+						return $http.get("/getcitiesandstates");
+					};
+
+					var getJbtRatings = function () {
+						return $http.get("/getjbtratings");
+					};
+
+					var getAvgDaysOfPay = function () {
+						return $http.get("/getavgdaysofpay");
+					};
+
+					var getCreditLimit = function (model) {
+						return $http.post("/getcreditlimit", model);
+					};
+					return {
+						getCitiesAndStates: getCitiesAndStates,
+						getCreditLimit: getCreditLimit,
+						getJbtRatings: getJbtRatings,
+						getAvgDaysOfPay: getAvgDaysOfPay
+					};
+				}
+			])
+			.filter('unique', function () {
+			return function (input, key) {
+				var unique = {};
+				var uniqueList = [];
+				if (typeof input == 'undefined') { return; }
+				for (var i = 0; i < input.length; i++) {
+					if (typeof unique[input[i][key]] == "undefined") {
+						unique[input[i][key]] = "";
+						uniqueList.push(input[i]);
+					}
+				}
+				return uniqueList;
+				};
+			});
+	</script>
+	<script>
+		function scrollToAnchor() {
+			var element = $('.tryit')[0];
+			element.scrollIntoView();
+		}
+	</script>
+
+</body>
+</html>

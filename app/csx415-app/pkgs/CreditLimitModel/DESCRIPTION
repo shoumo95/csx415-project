@@ -1,0 +1,12 @@
+Package: CreditLimitModel
+Title: Model for Determining Customer Credit Limits 
+Version: 1.0.1
+Authors@R: c(person("Hakan", "Egeli", email = "hakanegeli@gmail.com", role = c("aut", "cre")), person("Soumyendu", "Sarkar", role = c("aut")))
+Description: This model determines customer credit limits based on customer's JBT rating, sales figures for the last 12 months and regional Census information related to income.
+Depends: R (>= 3.4.4)
+Imports: randomForest
+License: MIT
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Suggests: 
