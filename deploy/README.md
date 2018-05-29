@@ -20,7 +20,7 @@ From your R command line, Install `packrat` if you already haven't done so.
 install.packages("packrat")
 ```
 #### Step 2
-Copy the `csx415-app.tar.gz` file from the `/deploy` directory to the location where you want to install and open RStudio (for example you can create a Projects directory under your "~/Documents/R" folder if one doesn't exist. In the Console set your working directory to this location (or to another location you would like to install).
+Copy the `csx415-app.tar.gz` file from the `/deploy` directory to the location where you want to install and open RStudio. For example, you can create a `Projects` directory under your `~/R` folder if one doesn't exist. In the R Console set your working directory to this location (or to another location which you would like to install the app).
 
 ```r
 setwd("~/R/Projects")
@@ -38,7 +38,19 @@ setwd("~/R/Projects/csx415-app")
 ```
 
 #### Step 3
-You can run the web app from the R Console (Using RStudio or RGui) by opening the `runme_web.R` file, selecting all the lines (Ctrl-A), and running them (Ctrl-Enter). This will execute the following lines: 
+You can run the web app from the R Console (Using RStudio or RGui) by typing the following command
+
+``` r
+source('runme_web.R')
+```
+
+or alternatively by:
+
+* opening the `runme_web.R` file using RStudio, 
+* selecting all lines (Ctrl-A), 
+* and running them (Ctrl-Enter). 
+
+This will execute the following lines on your R console: 
 
 ``` r
 source("packrat/init.R")
@@ -55,6 +67,9 @@ Starting server to listen on port 8000
 
 #### Step 4
 Open your browser and go to the address http://127.0.0.1:8000/home and follow the instructions from the main page to use the application.
+
+#### Step 5
+When you are finished, you can click on the stop icon to stop running the web server.
 
 ### Option 2 - Command Line Interface
 
@@ -78,19 +93,33 @@ $ Rscript runme_cli.R -i 'marketing/NewCustomers.csv' -o 'marketing/NewCustomerS
 ```
 Once the program finishes running, you can open the `NewCustomerScores.csv` file located in the `/marketing` folder using Excel or a text editor and examine the results!
 
-### Option 2 - Command Line Interface (Advanced)
-
-TODO add steps here for the NN model and setting up Python and Keras!
-
 ### Option 3 - Model Package
 
 Final version of the model is packaged and can be used by simply installing the package.
+
+#### Step 1
+
+Create a new folder under `~/R/Projects` called `csx415-model` as a simple test project folder.
+
+#### Step 2
+
+Copy the entire `pkgs` folder from the `csx415-project` into `csx415-model` folder (or wherever you have created your new directory).
+
+#### Step 3
+
+Open Rstudio and set your working directory to your new project folder
+
+```r
+setwd("~/R/Projects/csx415-model")
+```
+
+#### Step 4
 
 ``` r
 # Install the released version from source (/pkgs)
 install.packages("pkgs/CreditLimitModel", repos = NULL, type = "source")
 
-# Or the development version from source using devtools:
+# Or using devtools:
 # install.packages("devtools")
 devtools::install("pkgs/CreditLimitModel")
 ```
@@ -98,6 +127,15 @@ After the installation, please refer to the Package help for further information
 
 ``` r
 help(package="CreditLimitModel")
+```
+#### Step 5
+Create a new R script file and copy and paste the following content from below, and then run it.
+
+```r
+data("creditlimittestdata")
+credit_limit_model <- getCreditModel()
+predictions <- predict(credit_limit_model, newdata=dataset_test)
+print(predictions)
 ```
 
 ## Installation - Project
