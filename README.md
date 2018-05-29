@@ -8,7 +8,7 @@ Purpose of this project is to examine if a model can be developed to assist jewe
 
 This project uses ProjectTemplate and the project assets are stored acording to the ProjectTemplate folder structure.
 
-Running the following commands will load and munge the necessary data to run the project and make a certain set of helper functions available for use. Each `.Rmd` file already calls the following two lines so this is not a requred step.
+Running the following commands will load and munge the necessary data to run the project and make a certain set of helper functions available for use. Each `.Rmd` file already calls the following two lines so this is not a required step.
 
 ``` r
 library('ProjectTemplate')

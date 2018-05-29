@@ -33,3 +33,6 @@ vignettes/*.pdf
 *.knit.md
 .Rproj.user
 packrat/lib*/
+
+# app packrat temporary files
+app/csx415-app/packrat/lib*/
