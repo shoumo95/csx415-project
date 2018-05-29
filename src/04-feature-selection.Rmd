@@ -1,0 +1,171 @@
+---
+title: "Feature Selection"
+author:
+  - name: Hakan Egeli
+  - name: Soumyendu Sarkar
+date: 'May 8, 2018'
+knit: (function(inputFile, encoding) { 
+      rmarkdown::render(inputFile,
+                        encoding=encoding, 
+                        output_file=file.path(dirname(inputFile), '../reports/', '04-feature-selection.html')) })
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, root.dir = "..")
+```
+
+
+```{r, echo=FALSE, include = FALSE}
+
+# ProjectTemplate will autoload the data and also create training and test datasets
+
+cwd <- getwd()
+setwd("..")
+
+library('ProjectTemplate')
+load.project()
+
+setwd(cwd)
+
+```
+
+```{r, echo=FALSE, include=FALSE}
+
+require(gridExtra)
+require(caret)
+require(rpart)
+
+```
+
+## Linear Model
+
+### Relevance of the Independent Variables
+
+Using all the variables, we examined revelance of the variables in our dataset to the Credit Limit.
+
+```{r, echo=FALSE}
+
+model <- lm(formula = CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + AvgDaysOfPayCategory + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + AvgAmtPastDue + ReturnedPaymentCount + MaxReturnedPaymentAmt + RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState, data = dataset_train)
+
+summary(model)
+
+```
+
+### Remove the Intercept
+
+We wanted to see the impact of removing the intercept and whether this would improve the model performance.
+
+```{r, echo=FALSE}
+
+model <- lm(formula = CreditLimit ~ SalesCurrentYr + SalesLastYr + PlainBandSalesLast12Mo + DesignBandSalesLast12Mo + DiamondBandSalesLast12Mo + AlternativeMetalSalesLast12Mo + TotalSalesLast12Mo + BuyingGroupMember + NumberOfStoreLocations + AvgDaysOfPayCategory + AvgDaysOfPay + MaxDaysPastDue + MaxAmtPastDue + AvgAmtPastDue + ReturnedPaymentCount + MaxReturnedPaymentAmt + RuralUrbanContinuumCode + UrbanInfluenceCode + MetroIndicator + TotalPopulation + MedianEarnings + MedianRetailTradeEarnings + TotalHouseholds + MedianIncomeHouseholds + NumberOfJewelryStores + NumberOfJewelryStoresState + JewelryStoreSalesState - 1, data = dataset_train)
+
+summary(model)
+
+```
+
+Using **Backward Elimitaion**, we started going through the list of coefficients and removed the largest value coefficient one at a time and re-ran the model and the model summary.
+
+### Backward Elimitaion to find the significant coefficients
+
+After removing the coefficient the $R^2 Adjusted$ value went up significantly. Next coefficient in the list was the **Average Days of Pay Category** and even though the P values for the categorical coefficients were high/highest, removing this variable actually reduced the $R^2 Adjusted$ value of the model. Looking at our earlier graphs, we thought that there is some correlation between the Average Days of Pay Categories of 0-10 Days, 10-30 Days and 30-60 Days vs the Credit Limit so we have decided to keep this variable and remove the next lowest P value coefficient.
+
+We went through the iteration of removing coefficients until we could no longer reduce the $R^2 Adjusted$ value.
+
+```{r, echo=FALSE}
+RSqrPerformance <- data.frame(
+  Iterations = 1:22,
+  Action = c('All Variables', 'Remove intercept', 'Remove AvgDaysOfPayCategory', 'Add AvgDaysOfPayCategory', 'Remove TotalHouseholds', 'Removed TotalPopulation', 'Remove MaxAmtPastDue', 'Remove AlternativeMetalSalesLast12Mo', 'Remove TotalSalesLast12Mo', 'Remove UrbanInfluenceCode', 'Remove MaxDaysPastDue', 'Remove DiamondBandSalesLast12Mo', 'Remove MaxReturnedPaymentAmt', 'Remove AvgDaysOfPay', 'Remove NumberOfJewelryStoresState', 'Remove JewelryStoreSalesState', 'Remove AvgAmtPastDue', 'Remove MedianRetailTradeEarnings', 'Remove PlainBandSalesLast12Mo', 'Remove NumberOfJewelryStores', 'Remove BuyingGroupMember', 'Remove ReturnedPaymentCount'),
+  RSqrAdjValues = c(0.1201, 0.4704, 0.4455, 0.4704, 0.4708, 0.4713, 0.4717, 0.472, 0.4724, 0.4728, 0.4731, 0.4735, 0.4738, 0.474, 0.4743, 0.4746, 0.4749, 0.475, 0.4751, 0.4774, 0.4776, 0.4774)
+)
+
+print(RSqrPerformance)
+```
+
+Our final linear model became the following after our **Backward Elimitaion** process:
+
+```{r}
+
+model <- lm(formula = CreditLimit ~ SalesCurrentYr + SalesLastYr + DesignBandSalesLast12Mo + NumberOfStoreLocations + AvgDaysOfPayCategory + ReturnedPaymentCount + RuralUrbanContinuumCode + MetroIndicator + MedianEarnings + MedianIncomeHouseholds - 1, data = dataset_train)
+
+summary(model)
+
+```
+
+```{r}
+
+predictions <- predict(model, dataset_train)
+
+summary(predictions)
+
+```
+```{r, echo=FALSE, include = FALSE}
+y <- dataset_train$CreditLimit
+y_hat <- predict(model, dataset_train)
+
+```
+
+We calculated the $RMSE$ value for our **Training Set** predictions:
+
+```{r, echo=FALSE}
+# calculate Root Mean Squared error
+rmse <- helper.RMSE(y, y_hat)
+cat('Root Mean Square Error: ', rmse, "\n")
+
+```
+The $RMSE$ for our **Naive Model's** training set was 1827.308. So it looks like our new model improved slightly for our training set values.
+
+
+Using our **Test Set**, we obtained a new set of predictions and calculated the $RMSE$ value for our test predictions:
+
+```{r, echo=FALSE, include = FALSE}
+y <- dataset_test$CreditLimit
+y_hat <- predict(model, dataset_test)
+
+```
+
+
+```{r, echo=FALSE}
+# calculate Root Mean Squared error
+rmse <- helper.RMSE(y, y_hat)
+cat('Root Mean Square Error: ', rmse, "\n")
+
+```
+
+The $RMSE$ for our **Naive Model's** test set was 1828.77. Based on these $RMSE$ values, our new model also improved for our test set!
+
+
+## Decision Tree Model
+
+Similart to building our intial linear model, we have examined the relevance of all the dependent variables. We identified the most relevant variables so that we can build our initial decision tree model accordingly.
+
+```{r, echo=FALSE}
+
+model <- rpart(CreditLimit ~ ., data = dataset_train)
+
+```
+
+### What are the most relevant variables?
+
+```{r, echo=FALSE}
+
+model$variable.importance
+
+```
+
+
+### Backward Elimitaion to find the significant coefficients
+
+We perfomed a Backward Elimination; remove the least relevant (highest p) variables (MedianEarnings, TotalHouseholds, NumberOfJewelryStores, TotalPopulation, RuralUrbanContinuumCode) and rebuild the model.
+
+```{r, echo=FALSE}
+
+model <- rpart(CreditLimit ~ DesignBandSalesLast12Mo + AvgDaysOfPayCategory + SalesLastYr + TotalSalesLast12Mo + AlternativeMetalSalesLast12Mo + SalesCurrentYr + PlainBandSalesLast12Mo + MedianIncomeHouseholds, data = dataset_train, control = rpart.control(cp = 0.01))
+
+```
+
+```{r, echo=FALSE}
+
+model$variable.importance
+
+```
