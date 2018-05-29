@@ -99,21 +99,23 @@ Final version of the model is packaged and can be used by simply installing the 
 
 #### Step 1
 
-Create a new folder under `~/R/Projects` called `csx415-model` as a simple test project folder.
+Create a new folder under `~/R/Projects` called `csx415-model`. This is where we will copy the model source and create an R script file as our test application which will use the CreditLimitModel library.
 
 #### Step 2
 
-Copy the entire `pkgs` folder from the `csx415-project` into `csx415-model` folder (or wherever you have created your new directory).
+Copy the entire `pkgs` folder from the `csx415-project` into the `csx415-model` folder (or wherever you have created your new directory).
 
 #### Step 3
 
-Open Rstudio and set your working directory to your new project folder
+Open Rstudio and set your working directory to your new project folder.
 
 ```r
 setwd("~/R/Projects/csx415-model")
 ```
 
 #### Step 4
+
+Install the package.
 
 ``` r
 # Install the released version from source (/pkgs)
@@ -129,7 +131,7 @@ After the installation, please refer to the Package help for further information
 help(package="CreditLimitModel")
 ```
 #### Step 5
-Create a new R script file and copy and paste the following content from below, and then run it.
+Create a new R script file, copy and paste the following content from below, and then run it.
 
 ```r
 data("creditlimittestdata")
@@ -144,21 +146,92 @@ If you are interested in the project and want to rebuild it using the source cod
 
 ### Using Git
 
+#### Step 1
+
+Our project uses ProjectTemplate so we have to first create a blank project so that we can copy our code into it. Open RStudio and set your working directory to your `~/R/Projects` folder. You may have to create the `Projects` folder first if one does not exist under your `~/R` directory.
+
 ```r
-$ git clone https://github.com/hakanegeli/csx415-project.git
+setwd("~/R/Projects")
 ```
+Then we will need to create a blank project with our project name:
+
+```r
+#install ProjectTemplate if you haven't already done so
+#install.packages("ProjectTemplate")
+
+library("ProjectTemplate")
+create.project("csx415-project", template = "minimal")
+```
+Now, completely exit out of RStudio!
+
+#### Step 2
+
+Open up a Git Bash and change your directory to the `csx415-project` folder which should be located at `~/R/Projects/csx415-project` in your system. When you are in the `csx415-project` folder, type (or copy paste) the following commands one at a time at the $ prompt:
+
+```r
+$ git init
+$ git remote add origin https://github.com/hakanegeli/csx415-project.git
+$ git fetch
+$ git branch master origin/master
+$ git checkout -f master
+$ git add -A
+$ git commit -m "my eval commit"
+```
+#### Step 3
+
+Open RStudio and set your working directory to the project folder.
+
+```r
+setwd("~/R/Projects/csx415-project")
+```
+Now we need to restore the libraries we need using packrat. Type the following commands at the R Console:
+
+```r
+#install packrat if you haven't already done so
+#install.packages("packrat")
+
+source("packrat/init.R")
+packrat::restore()
+```
+If packrat successfully restored the libraries, we strongly suggest you exit out of RStudio (not just Restart R) and open RStudio again. Then set your working directory to the project folder and run the following command so that all the required libraries are available to the project: 
+
+```r
+setwd("~/R/Projects/csx415-project")
+source("packrat/init.R")
+```
+All the source files (.R and .Rmd) are located under the `src` folder. You can check out the ASSETS.md file to lear more about each of the source files and what they contain!
+
 
 ### Using Packrat
 
-From your R command line, Install `packrat` if you already haven't done so.
+Using this approach, you can have access to all the source files and the reports but you can only run the .R files under the `src` folder since this is not a properly initialized ProjectTemplate project. However, at the end of the installation, you should be able to run the model-training-and-validation.R file!
+
+#### Step 1
+
+Download the `csx415-project.tar.gz` file from the `/deploy` directory in GitHub to the location where you want to install, for example `~/R/Projects` folder. You may have to create the `Projects` folder first if one does not exist under your `~/R` directory. Open RStudio and in the R Console set your working directory to this location and type the following commands:
 
 ``` r
-install.packages("packrat")
-```
+setwd("~/R/Projects")
 
-Copy the `csx415-project.tar.gz` file from the `/deploy` directory to the location where you want to install and the open RStudio. In the Console set your working directory to this location and type the following commands:
+#install packrat if you haven't already done so
+#install.packages("packrat")
 
-``` r
 library("packrat)
 packrat::unbundle("csx415-project.tar.gz", ".")
 ```
+#### Step 2
+
+Set your working directory to the project folder and run the following command so that all the required libraries are available to the project:
+
+```r
+setwd("~/R/Projects/csx415-project")
+source("packrat/init.R")
+```
+#### Step 3
+
+Run the `model-training-and-validation.R` file:
+
+```r
+source("src/model-training-and-validation.R")
+```
+You should see console logs as the model training runs and a summary of the evaluation at the end of the run.
