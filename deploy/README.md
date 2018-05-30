@@ -20,7 +20,7 @@ From your R command line, Install `packrat` if you already haven't done so.
 install.packages("packrat")
 ```
 #### Step 2
-Copy the `csx415-app.tar.gz` file from the `/deploy` directory to the location where you want to install and open RStudio. For example, you can create a `Projects` directory under your `~/R` folder if one doesn't exist. In the R Console set your working directory to this location (or to another location which you would like to install the app).
+Download the `csx415-app.tar.gz` file from the `/deploy` directory in GitHub to the location where you want to install and open RStudio. For example, you can create a `Projects` directory under your `~/R` folder if one doesn't exist. In the R Console set your working directory to this location (or to a location where you would like to install the app).
 
 ```r
 setwd("~/R/Projects")
@@ -38,7 +38,7 @@ setwd("~/R/Projects/csx415-app")
 ```
 
 #### Step 3
-You can run the web app from the R Console (Using RStudio or RGui) by typing the following command
+You can run the web app from the R Console (using RStudio or RGui) by typing the following command:
 
 ``` r
 source('runme_web.R')
@@ -69,7 +69,7 @@ Starting server to listen on port 8000
 Open your browser and go to the address http://127.0.0.1:8000/home and follow the instructions from the main page to use the application.
 
 #### Step 5
-When you are finished, you can click on the stop icon to stop running the web server.
+When you are finished, you can click on the stop icon on the R Console to stop running the web server.
 
 ### Option 2 - Command Line Interface
 
@@ -181,7 +181,7 @@ $ git commit -m "my eval commit"
 ```
 #### Step 3
 
-Open RStudio and set your working directory to the project folder.
+Launch RStudio and set your working directory to the project folder.
 
 ```r
 setwd("~/R/Projects/csx415-project")
@@ -195,7 +195,7 @@ Now we need to restore the libraries we need using packrat. Type the following c
 source("packrat/init.R")
 packrat::restore()
 ```
-If packrat successfully restored the libraries, we strongly suggest you exit out of RStudio (not just Restart R) and open RStudio again. Then set your working directory to the project folder and run the following command so that all the required libraries are available to the project: 
+If packrat successfully restored the libraries, we strongly suggest you exit out of RStudio (not just Restart R) and relaunch RStudio again. Then set your working directory to the project folder and run the following command so that all the required libraries are available to the project: 
 
 ```r
 setwd("~/R/Projects/csx415-project")
