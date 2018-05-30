@@ -172,7 +172,7 @@ Open up a Git Bash and change your directory to the `csx415-project` folder whic
 
 ```r
 $ git init
-$ git remote add origin https://github.com/hakanegeli/csx415-project.git
+$ git remote add origin https://github.com/shoumo95/csx415-project.git
 $ git fetch
 $ git branch master origin/master
 $ git checkout -f master
