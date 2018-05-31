@@ -131,7 +131,7 @@ Or from GitHub: If you do not have the source code in the `pkgs` folder, or if y
 #install.packages("devtools")
 
 # downlaod and install the package directly from the GitHub repository
-devtools::install_github("hakanegeli/csx415-project/pkgs/CreditLimitModel")
+devtools::install_github("shoumo95/csx415-project/pkgs/CreditLimitModel")
 ```
 
 After the installation, please refer to the Package help for further information on how to use the library in your code.
@@ -179,7 +179,7 @@ Open up a Git Bash and change your directory to the `csx415-project` folder whic
 
 ```r
 $ git init
-$ git remote add origin https://github.com/hakanegeli/csx415-project.git
+$ git remote add origin https://github.com/shoumo95/csx415-project.git
 $ git fetch
 $ git branch master origin/master
 $ git checkout -f master
