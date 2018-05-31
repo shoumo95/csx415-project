@@ -77,7 +77,7 @@ When you are finished, you can click on the stop icon on the R Console to stop r
 Follow Steps 1 and 2 from above if you haven't already done so.
 
 #### Step 3
-First, make sure you are able to run Rscript and you have the correct version of R installed. Type `Rscript --version` on the R command line in your terminal and you should see a result similart to this:
+First, make sure you are able to run Rscript and you have the correct version of R installed. From a command line in your terminal (in RStudio click on the Terminal tab, or from the Tools menu either select Terminal/Move Focus to Terminal or Terminal/New Terminal) type `Rscript --version` and you should see a result similart to this:
 
 ``` r
 $ Rscript --version
@@ -103,7 +103,7 @@ Create a new folder under `~/R/Projects` called `csx415-model`. This is where we
 
 #### Step 2
 
-Copy the entire `pkgs` folder from the `csx415-project` into the `csx415-model` folder (or wherever you have created your new directory).
+If you have already followed instructions to install the Web Applicatin and have the `csx415-app` folder then copy the entire `pkgs` folder from the `csx415-app` into the `csx415-model` folder (or wherever you have created your new directory). If you do not have the `csx415-app` downloaded you can skip this step and later follow the instructions to install the package from GitHub using devtools in **Step 4**!
 
 #### Step 3
 
@@ -117,16 +117,23 @@ setwd("~/R/Projects/csx415-model")
 
 Install the package.
 
+From Source: If you have the source code copied to the the `pkgs` folder then type the following:
+
 ``` r
 # Install the released version from source (/pkgs)
 install.packages("pkgs/CreditLimitModel", repos = NULL, type = "source")
-
-# Or using devtools:
-# install.packages("devtools")
-devtools::install("pkgs/CreditLimitModel")
-# or from github if you do not have the CreditLimitModel source locally under the pkgs folder
-# devtools::install_github("hakanegeli/csx415-project/pkgs/CreditLimitModel")
 ```
+
+Or from GitHub: If you do not have the source code in the `pkgs` folder, or if you like to install it directly from GitHub type the following command:`
+
+``` r
+# install the devtools package if you don't have it by uncommenting the line below
+#install.packages("devtools")
+
+# downlaod and install the package directly from the GitHub repository
+devtools::install_github("hakanegeli/csx415-project/pkgs/CreditLimitModel")
+```
+
 After the installation, please refer to the Package help for further information on how to use the library in your code.
 
 ``` r
@@ -144,7 +151,7 @@ print(predictions)
 
 ## Installation - Project
 
-If you are interested in the project and want to rebuild it using the source code, you can download it to your computer by clonning it using `git` or by downloading the `packrat` bundle.
+If you are interested in the project and want to rebuild it using the source code, you can download it to your computer by using `git` or by downloading the `packrat` bundle.
 
 ### Using Git
 
@@ -172,7 +179,7 @@ Open up a Git Bash and change your directory to the `csx415-project` folder whic
 
 ```r
 $ git init
-$ git remote add origin https://github.com/shoumo95/csx415-project.git
+$ git remote add origin https://github.com/hakanegeli/csx415-project.git
 $ git fetch
 $ git branch master origin/master
 $ git checkout -f master
@@ -186,7 +193,7 @@ Launch RStudio and set your working directory to the project folder.
 ```r
 setwd("~/R/Projects/csx415-project")
 ```
-Now we need to restore the libraries we need using packrat. Type the following commands at the R Console:
+Now we need to restore the libraries using packrat. Type the following commands at the R Console:
 
 ```r
 #install packrat if you haven't already done so
@@ -201,8 +208,14 @@ If packrat successfully restored the libraries, we strongly suggest you exit out
 setwd("~/R/Projects/csx415-project")
 source("packrat/init.R")
 ```
-All the source files (.R and .Rmd) are located under the `src` folder. You can check out the ASSETS.md file to lear more about each of the source files and what they contain!
+All the source files (.R and .Rmd) are located under the `src` folder. You can check out the ASSETS.md file to learn more about each of the source files and what they contain!
 
+We recommend that you run the `model-training-and-validation.R` file (which takes about 5 minutes to run). This runs the training and the evaluation and you can see the results on the console. To do this, type the following command on the console:
+
+```r
+source("src/model-training-and-validation.R")
+```
+You should see console logs as the model training runs and a summary of the evaluation at the end of the run.
 
 ### Using Packrat
 
@@ -231,7 +244,7 @@ source("packrat/init.R")
 ```
 #### Step 3
 
-Run the `model-training-and-validation.R` file:
+Run the `model-training-and-validation.R` file (which takes about 5 minutes to run):
 
 ```r
 source("src/model-training-and-validation.R")
